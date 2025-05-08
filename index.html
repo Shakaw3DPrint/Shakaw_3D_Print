@@ -3,24 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Catálogo Shakaw 3D Print</title>
+  <title>Shakaw 3D Print</title>
   <style>
+    /* ESTILOS GERAIS */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background: #00303f; /* Azul petróleo */
+      background: #00303f;
     }
+
+    /* CABEÇALHO ATUALIZADO */
     .header {
       text-align: center;
       padding: 40px 20px 20px;
       color: white;
       position: relative;
     }
-    .header img {
+    .header img.logo {
       width: 180px;
       border-radius: 50%;
       margin-bottom: 10px;
-      border: 4px solid white;
+      /* Removida a borda preta */
+      border: none;
     }
     .header h1 {
       margin: 10px 0 5px;
@@ -33,20 +37,33 @@
       margin-top: 15px;
     }
     .header a {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: white;
       font-weight: bold;
       text-decoration: none;
       background: rgba(255, 255, 255, 0.1);
-      padding: 6px 12px;
+      padding: 8px 15px;
       border-radius: 20px;
       transition: background 0.3s;
+      height: 32px;
+      box-sizing: border-box;
     }
     .header a:hover {
       background: rgba(255, 255, 255, 0.25);
     }
+    .header a img.instagram-icon {
+      width: 20px;
+      height: 20px;
+      /* Centraliza o ícone verticalmente */
+      vertical-align: middle;
+      /* Remove qualquer borda */
+      border: none;
+      margin-right: 6px;
+    }
     
-    /* Estilos do Carrossel */
+    /* CARROSSEL */
     .carousel-container {
       max-width: 1000px;
       margin: 30px auto;
@@ -81,10 +98,11 @@
       z-index: 10;
       border-radius: 50%;
       font-size: 18px;
-      transition: background 0.3s;
+      transition: background 0.3s, opacity 0.3s;
     }
     .carousel-btn:hover {
       background: rgba(0,0,0,0.8);
+      opacity: 0.9;
     }
     .carousel-btn.prev {
       left: 10px;
@@ -113,6 +131,7 @@
       background: white;
     }
     
+    /* CATÁLOGO DE PRODUTOS */
     .catalog-page {
       display: flex;
       flex-direction: column;
@@ -191,6 +210,33 @@
       font-weight: bold;
       color: #009688;
     }
+    
+    /* CONTROLES DE QUANTIDADE */
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 10px 0;
+    }
+    .qty-btn {
+      width: 25px;
+      height: 25px;
+      border: none;
+      background: #0077cc;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .qty-btn:hover {
+      background: #005fa3;
+    }
+    .quantity {
+      width: 40px;
+      text-align: center;
+    }
+    
+    /* MODAL DE IMAGEM */
     .modal {
       display: none;
       position: fixed;
@@ -240,10 +286,11 @@
       z-index: 10;
       border-radius: 50%;
       font-size: 18px;
-      transition: background 0.3s;
+      transition: background 0.3s, opacity 0.3s;
     }
     .modal-nav:hover {
       background: rgba(0,0,0,0.8);
+      opacity: 0.9;
     }
     .modal-prev {
       left: 20px;
@@ -251,7 +298,8 @@
     .modal-next {
       right: 20px;
     }
-    /* Estilos para os controles de zoom */
+    
+    /* CONTROLES DE ZOOM */
     .zoom-controls {
       position: fixed;
       bottom: 20px;
@@ -271,27 +319,14 @@
       padding: 5px 10px;
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
     }
-    @media (max-width: 768px) {
-      .product {
-        flex-direction: column;
-        align-items: center;
-      }
-      .product-details {
-        max-width: 100%;
-      }
-      .carousel-container {
-        height: 250px;
-      }
-      .modal-nav {
-        padding: 10px;
-        font-size: 16px;
-      }
-      .zoom-controls {
-        bottom: 10px;
-      }
+    .zoom-controls button:hover {
+      background: #ddd;
+      transform: scale(1.05);
     }
-
+    
+    /* BOTÃO VOLTAR AO TOPO */
     #backToTopBtn {
       position: fixed;
       bottom: 30px;
@@ -307,11 +342,11 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       display: none;
     }
-
     #backToTopBtn:hover {
       background-color: #005fa3;
     }
     
+    /* PAINEL DE INTERESSES */
     #interestPanel {
       display: none;
       position: fixed;
@@ -323,6 +358,8 @@
       max-width: 300px;
       box-shadow: 0 0 15px rgba(0,0,0,0.3);
       z-index: 1001;
+      max-height: 70vh;
+      overflow-y: auto;
     }
     
     #interestList {
@@ -332,6 +369,7 @@
       overflow-y: auto;
     }
     
+    /* BOTÃO DE INTERESSES */
     .interest-btn {
       position: fixed;
       bottom: 30px;
@@ -345,9 +383,14 @@
       font-size: 14px;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background 0.3s, transform 0.2s;
+    }
+    .interest-btn:hover {
+      background: #218838;
+      transform: scale(1.05);
     }
     
-    /* Estilos para o modal de contato */
+    /* MODAL DE CONTATO */
     .contact-modal {
       display: none;
       position: fixed;
@@ -361,11 +404,13 @@
     
     .contact-modal-content {
       background-color: #fefefe;
-      margin: 10% auto;
+      margin: 5% auto;
       padding: 20px;
       border-radius: 10px;
-      width: 80%;
+      width: 90%;
       max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     
     .contact-modal-content h2 {
@@ -395,10 +440,11 @@
       margin-top: 10px;
       border-radius: 4px;
       cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
     }
-    
     .contact-modal-content button:hover {
-      background-color: #004494;
+      background: #004494;
+      transform: scale(1.02);
     }
     
     .close-contact {
@@ -408,7 +454,6 @@
       cursor: pointer;
     }
     
-    /* Novos estilos para o formulário */
     .form-section {
       margin-bottom: 20px;
       padding: 15px;
@@ -417,7 +462,7 @@
     }
     
     .items-summary {
-      max-height: 200px;
+      max-height: 150px;
       overflow-y: auto;
       padding: 10px;
       background-color: white;
@@ -440,7 +485,7 @@
       min-width: 50px;
     }
     
-    /* Loader */
+    /* LOADER */
     .loader {
       border: 5px solid #f3f3f3;
       border-top: 5px solid #0057b7;
@@ -456,15 +501,46 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-  </style>
+    
+    /* RESPONSIVIDADE */
+    @media (max-width: 768px) {
+      .product {
+        flex-direction: column;
+        align-items: center;
+      }
+      .product-details {
+        max-width: 100%;
+      }
+      .carousel-container {
+        height: 250px;
+      }
+      .modal-nav {
+        padding: 10px;
+        font-size: 16px;
+      }
+      .zoom-controls {
+        bottom: 10px;
+      }
+      #interestPanel {
+        right: 10px;
+        bottom: 70px;
+        max-width: 280px;
+      }
+      .contact-modal-content {
+        margin: 10% auto;
+        width: 95%;
+      }
+    }
+ </style>
 </head>
 <body>
+  <!-- CABEÇALHO ATUALIZADO -->
   <div class="header">
-    <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/logo.webp" alt="Logo Shakaw 3D Print">
+    <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
     <h1>Shakaw 3D Print</h1>
     <div class="header-links">
       <a href="https://www.instagram.com/shakaw3dprint" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" style="width: 20px; vertical-align: middle; margin-right: 6px;">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="instagram-icon">
         @shakaw3dprint
       </a>
       <a href="outros-projetos.html" target="_blank">
@@ -473,7 +549,7 @@
     </div>
   </div>
 
-  <!-- Carrossel de imagens -->
+  <!-- CARROSSEL DE IMAGENS -->
   <div class="carousel-container">
     <div class="carousel" id="carousel"></div>
     <button class="carousel-btn prev" onclick="moveSlide(-1)">❮</button>
@@ -481,10 +557,13 @@
     <div class="carousel-indicators" id="carouselIndicators"></div>
   </div>
 
+  <!-- INDICADOR DE CARREGAMENTO -->
   <div class="loader" id="loader"></div>
+
+  <!-- ÁREA PRINCIPAL DO CATÁLOGO -->
   <div class="catalog-page" id="catalog"></div>
 
-  <!-- Modal para imagens ampliadas -->
+  <!-- MODAL PARA IMAGENS AMPLIADAS -->
   <div id="imgModal" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
     <button class="modal-nav modal-prev" onclick="navigateModal(-1)">❮</button>
@@ -492,7 +571,6 @@
       <img id="modalImg" src="" alt="Imagem ampliada">
     </div>
     <button class="modal-nav modal-next" onclick="navigateModal(1)">❯</button>
-    <!-- Controles de zoom -->
     <div class="zoom-controls">
       <button onclick="zoomImage(0.2)">+</button>
       <button onclick="zoomImage(-0.2)">-</button>
@@ -500,7 +578,7 @@
     </div>
   </div>
 
-  <!-- Modal para formulário de contato -->
+  <!-- MODAL PARA FORMULÁRIO DE CONTATO -->
   <div id="contactModal" class="contact-modal">
     <div class="contact-modal-content">
       <span class="close-contact" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
@@ -509,7 +587,7 @@
         <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
         <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
         <input type="hidden" name="_template" value="box">
-        <input type="hidden" name="_next" value="https://shakaw3dprint.github.io/Shakaw_3D_Print/obrigado.html">
+        <input type="hidden" name="_next" value="https://shakaw67.github.io/Homol_Shakaw3DPrint/obrigado.html">
         <input type="hidden" id="itemsData" name="items_data">
         
         <div class="form-section">
@@ -538,163 +616,144 @@
     </div>
   </div>
 
-  <!-- Botão flutuante de voltar ao topo -->
+  <!-- BOTÃO "VOLTAR AO TOPO" -->
   <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn" title="Voltar ao topo">⬆️ Topo</button>
 
-  <!-- Painel de interesses -->
+  <!-- PAINEL DE INTERESSES -->
   <div id="interestPanel">
     <h3>Lista de interesses</h3>
     <ul id="interestList"></ul>
     <button onclick="showContactModal()" style="margin-top: 10px; padding: 8px 12px; background: #0077cc; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar Interesses</button>
   </div>
 
-  <!-- Botão flutuante -->
+  <!-- BOTÃO PARA ABRIR PAINEL DE INTERESSES -->
   <button onclick="toggleInterestPanel()" class="interest-btn">💚 Ver interesses</button>
 
+  <!-- SCRIPT JAVASCRIPT -->
   <script>
+    // =============================================
+    // VARIÁVEIS GLOBAIS
+    // =============================================
     const catalog = document.getElementById("catalog");
     const loader = document.getElementById("loader");
-    const interests = [];
-    let currentSlide = 0;
-    let carouselItems = [];
-    let carouselInterval;
-    let currentModalImageIndex = 0;
-    let modalImages = [];
-    let currentZoom = 1; // Variável para controlar o zoom
+    const interests = []; // Armazena todos os itens de interesse
+    let currentSlide = 0; // Slide atual do carrossel
+    let carouselItems = []; // Itens do carrossel
+    let carouselInterval; // Intervalo do carrossel automático
+    let currentModalImageIndex = 0; // Índice da imagem no modal
+    let modalImages = []; // Imagens no modal
+    let currentZoom = 1; // Nível de zoom atual
 
-    // Objeto com os preços especiais
-    const precosEspeciais = {
-      44: 'R$ 45,00',
-      45: 'R$ 45,00',
-      46: 'Por favor consultar com vendedor',
-      47: 'Por favor consultar com vendedor',
-      48: 'Por favor consultar com vendedor',
-      60: 'R$ 90,00'
+    // Dados especiais para produtos
+    const specialData = {
+      prices: {
+        44: 'R$ 45,00',
+        45: 'R$ 45,00',
+        46: 'Consultar valor',
+        47: 'Consultar valor',
+        48: 'Consultar valor',
+        60: 'R$ 90,00'
+      },
+      descriptions: {
+        1: 'Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong> Os itens do cenário não acompanham o produto.'
+      },
+      defaultNote: '<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.'
     };
 
-    // Objeto com descrições especiais
-    const descricoesEspeciais = {
-      01: 'Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong>: Os itens do cenário não acompanham o produto.',
-      02: 'Modelo + 01 Pneu Resina <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong>: Os itens do cenário não acompanham o produto.',
-      09: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      12: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      14: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      15: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      16: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      17: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      18: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      19: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      24: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      25: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      26: 'Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong>: Os itens do cenário não acompanham o produto.',
-      29: 'Modelo + 01 Pneu Resina <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong>: Os itens do cenário não acompanham o produto.',
-      32: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      35: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      36: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      37: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      38: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      41: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      44: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      45: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      46: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      47: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-      48: 'Modelo <br> Imagem Ilustrativa <br> Escala 1/18.',
-    };
+    // =============================================
+    // FUNÇÕES DO CARROSSEL
+    // =============================================
 
-    // Observação padrão para todos os produtos
-    const observacaoPadrao = '<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.';
-
-    // Função para verificar se uma imagem existe
-    function checkImageExists(url, callback) {
-      const img = new Image();
-      img.onload = function() {
-        callback(true);
-      };
-      img.onerror = function() {
-        callback(false);
-      };
-      img.src = url;
-    }
-
-    // Funções do carrossel
+    /**
+     * Inicializa o carrossel verificando e carregando imagens disponíveis
+     */
     async function initCarousel() {
       const carousel = document.getElementById('carousel');
       const indicators = document.getElementById('carouselIndicators');
       
-      // Verifica quais imagens existem (de c_1.webp até c_50.webp)
       for (let i = 1; i <= 50; i++) {
-        const imgUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/carrossel/c_${i}.webp`;
+        const imgUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/carrossel/c_${i}.webp`;
         
-        await new Promise(resolve => {
-          checkImageExists(imgUrl, function(exists) {
-            if (exists) {
-              const img = document.createElement('img');
-              img.src = imgUrl;
-              img.alt = `Imagem de catálogo ${i}`;
-              carousel.appendChild(img);
-              
-              const indicator = document.createElement('div');
-              indicator.className = 'carousel-indicator';
-              indicator.onclick = () => goToSlide(carouselItems.length);
-              indicators.appendChild(indicator);
-              
-              carouselItems.push(img);
-            }
-            resolve();
-          });
-        });
+        const exists = await checkImageExists(imgUrl);
+        if (exists) {
+          const img = document.createElement('img');
+          img.src = imgUrl;
+          img.alt = `Imagem ${i}`;
+          carousel.appendChild(img);
+          
+          const indicator = document.createElement('div');
+          indicator.className = 'carousel-indicator';
+          indicator.onclick = () => goToSlide(carouselItems.length);
+          indicators.appendChild(indicator);
+          
+          carouselItems.push(img);
+        }
       }
       
       if (carouselItems.length > 0) {
-        // Inicia o carrossel
         updateCarousel();
         startCarousel();
-        
-        // Adiciona evento para pausar o carrossel quando o mouse está sobre ele
-        document.querySelector('.carousel-container').addEventListener('mouseenter', pauseCarousel);
-        document.querySelector('.carousel-container').addEventListener('mouseleave', startCarousel);
+        setupCarouselHover();
       } else {
-        // Se não encontrar imagens, oculta o carrossel
         document.querySelector('.carousel-container').style.display = 'none';
       }
     }
 
-    function startCarousel() {
-      if (carouselItems.length <= 1) return;
-      
-      // Limpa qualquer intervalo existente antes de iniciar um novo
-      clearInterval(carouselInterval);
-      
-      // Configura o intervalo para troca automática (5 segundos)
-      carouselInterval = setInterval(() => {
-        moveSlide(1);
-      }, 5000);
+    /**
+     * Verifica se uma imagem existe
+     */
+    function checkImageExists(url) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
     }
 
+    /**
+     * Inicia o carrossel automático
+     */
+    function startCarousel() {
+      if (carouselItems.length <= 1) return;
+      clearInterval(carouselInterval);
+      carouselInterval = setInterval(() => moveSlide(1), 5000);
+    }
+
+    /**
+     * Pausa o carrossel automático
+     */
     function pauseCarousel() {
       clearInterval(carouselInterval);
     }
 
+    /**
+     * Configura eventos de hover para pausar/iniciar carrossel
+     */
+    function setupCarouselHover() {
+      const container = document.querySelector('.carousel-container');
+      container.addEventListener('mouseenter', pauseCarousel);
+      container.addEventListener('mouseleave', startCarousel);
+    }
+
+    /**
+     * Move o carrossel na direção especificada
+     */
     function moveSlide(direction) {
       if (carouselItems.length <= 1) return;
       
       clearInterval(carouselInterval);
-      
-      currentSlide += direction;
-      if (currentSlide >= carouselItems.length) {
-        currentSlide = 0;
-      } else if (currentSlide < 0) {
-        currentSlide = carouselItems.length - 1;
-      }
-      
+      currentSlide = (currentSlide + direction + carouselItems.length) % carouselItems.length;
       updateCarousel();
       
-      // Reinicia o carrossel automático, mas apenas se o mouse não estiver sobre ele
       if (!document.querySelector('.carousel-container').matches(':hover')) {
         startCarousel();
       }
     }
 
+    /**
+     * Vai para um slide específico
+     */
     function goToSlide(index) {
       if (carouselItems.length <= 1) return;
       
@@ -702,12 +761,14 @@
       currentSlide = index;
       updateCarousel();
       
-      // Reinicia o carrossel automático, mas apenas se o mouse não estiver sobre ele
       if (!document.querySelector('.carousel-container').matches(':hover')) {
         startCarousel();
       }
     }
 
+    /**
+     * Atualiza a posição do carrossel e indicadores
+     */
     function updateCarousel() {
       const carousel = document.getElementById('carousel');
       const indicators = document.querySelectorAll('.carousel-indicator');
@@ -719,167 +780,248 @@
       });
     }
 
-    // Função para aplicar zoom
+    // =============================================
+    // FUNÇÕES DO MODAL DE IMAGEM
+    // =============================================
+
+    /**
+     * Aplica zoom na imagem do modal
+     */
     function zoomImage(zoomFactor) {
       const modalImg = document.getElementById('modalImg');
-      currentZoom += zoomFactor;
-      
-      // Limites mínimos e máximos de zoom
-      if (currentZoom < 0.5) currentZoom = 0.5;
-      if (currentZoom > 3) currentZoom = 3;
-      
+      currentZoom = Math.min(Math.max(currentZoom + zoomFactor, 0.5), 3);
       modalImg.style.transform = `scale(${currentZoom})`;
     }
 
-    // Função para resetar o zoom
+    /**
+     * Reseta o zoom da imagem
+     */
     function resetZoom() {
       currentZoom = 1;
       document.getElementById('modalImg').style.transform = 'scale(1)';
     }
-
-    // Função para navegar entre imagens no modal
-    function navigateModal(direction) {
-      currentModalImageIndex += direction;
-      
-      if (currentModalImageIndex >= modalImages.length) {
-        currentModalImageIndex = 0;
-      } else if (currentModalImageIndex < 0) {
-        currentModalImageIndex = modalImages.length - 1;
-      }
-      
-      document.getElementById('modalImg').src = modalImages[currentModalImageIndex].src;
-      resetZoom(); // Resetar zoom ao mudar de imagem
-    }
-
-    // Função para fechar o modal
+    /**
+     * Fecha o modal
+     */
     function closeModal() {
       document.getElementById('imgModal').style.display = 'none';
-      resetZoom(); // Resetar zoom ao fechar
+      resetZoom();
     }
 
-    // Função para criar um produto
+ // =============================================
+    // FUNÇÕES DE ZOOM COM TECLADO
+    // =============================================
+
+    /**
+     * Adiciona controles de zoom pelo teclado
+     */
+    document.addEventListener('keydown', function(e) {
+      const modal = document.getElementById('imgModal');
+      if (modal.style.display !== 'block') return;
+
+      switch (e.key) {
+        case '+':
+        case '=': // Considera o = que é o + sem shift
+          zoomImage(0.2);
+          e.preventDefault();
+          break;
+        case '-':
+          zoomImage(-0.2);
+          e.preventDefault();
+          break;
+        case '0':
+          resetZoom();
+          e.preventDefault();
+          break;
+        case 'Escape':
+          closeModal();
+          e.preventDefault();
+          break;
+      }
+    });
+
+    // =============================================
+    // FUNÇÕES DO MODAL DE IMAGEM (ATUALIZADAS)
+    // =============================================
+
+    /**
+     * Aplica zoom na imagem do modal
+     */
+    function zoomImage(zoomFactor) {
+      const modalImg = document.getElementById('modalImg');
+      currentZoom = Math.min(Math.max(currentZoom + zoomFactor, 0.5), 3);
+      modalImg.style.transform = `scale(${currentZoom})`;
+      
+      // Feedback visual
+      showZoomFeedback();
+    }
+
+    /**
+     * Reseta o zoom da imagem
+     */
+    function resetZoom() {
+      currentZoom = 1;
+      document.getElementById('modalImg').style.transform = 'scale(1)';
+      showZoomFeedback();
+    }
+
+    /**
+     * Mostra feedback visual do zoom atual
+     */
+    function showZoomFeedback() {
+      const zoomDisplay = document.getElementById('zoomDisplay') || createZoomDisplay();
+      zoomDisplay.textContent = `Zoom: ${Math.round(currentZoom * 100)}%`;
+      zoomDisplay.style.opacity = '1';
+      
+      setTimeout(() => {
+        zoomDisplay.style.opacity = '0';
+      }, 1000);
+    }
+
+    /**
+     * Cria o elemento de feedback do zoom
+     */
+    function createZoomDisplay() {
+      const zoomDisplay = document.createElement('div');
+      zoomDisplay.id = 'zoomDisplay';
+      zoomDisplay.style.position = 'fixed';
+      zoomDisplay.style.bottom = '60px';
+      zoomDisplay.style.left = '50%';
+      zoomDisplay.style.transform = 'translateX(-50%)';
+      zoomDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+      zoomDisplay.style.color = 'white';
+      zoomDisplay.style.padding = '5px 10px';
+      zoomDisplay.style.borderRadius = '5px';
+      zoomDisplay.style.transition = 'opacity 0.5s';
+      zoomDisplay.style.zIndex = '10001';
+      document.body.appendChild(zoomDisplay);
+      return zoomDisplay;
+    }
+
+    // =============================================
+    // FUNÇÕES DE PRODUTOS
+    // =============================================
+
+    /**
+     * Cria um elemento de produto
+     */
     async function createProduct(i) {
       const index = i.toString().padStart(2, '0');
-      const mainImageUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/${index}.webp`;
+      const mainImageUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/produtos/${index}.webp`;
       
-      return new Promise((resolve) => {
-        checkImageExists(mainImageUrl, (exists) => {
-          if (!exists) {
-            resolve(null);
-            return;
-          }
+      const exists = await checkImageExists(mainImageUrl);
+      if (!exists) return null;
 
-          const product = document.createElement('div');
-          product.className = 'product';
+      const product = document.createElement('div');
+      product.className = 'product';
 
-          const imageColumn = document.createElement('div');
-          imageColumn.className = 'image-column';
+      // Coluna da imagem
+      const imageColumn = document.createElement('div');
+      imageColumn.className = 'image-column';
 
-          const mainImg = document.createElement('img');
-          mainImg.src = mainImageUrl;
-          mainImg.alt = `Produto ${i}`;
-          mainImg.className = 'main-img';
-          mainImg.onclick = function() {
-            // Coletar todas as imagens disponíveis para este produto
-            modalImages = [mainImg];
-            
-            // Verificar miniaturas adicionais
-            const thumbnails = this.parentNode.querySelectorAll('.thumbnail-container img');
-            thumbnails.forEach(thumb => {
-              if (thumb.src !== mainImg.src) {
-                modalImages.push(thumb);
-              }
-            });
-            
-            // Encontrar o índice da imagem clicada
-            currentModalImageIndex = 0;
-            for (let j = 0; j < modalImages.length; j++) {
-              if (modalImages[j].src === this.src) {
-                currentModalImageIndex = j;
-                break;
-              }
-            }
-            
-            document.getElementById('imgModal').style.display = 'block';
-            document.getElementById('modalImg').src = this.src;
-            resetZoom(); // Resetar zoom ao abrir nova imagem
-          };
-
-          const thumbnails = document.createElement('div');
-          thumbnails.className = 'thumbnail-container';
-
-          // Adiciona a miniatura principal
-          const mainThumb = document.createElement('img');
-          mainThumb.src = mainImg.src;
-          mainThumb.alt = `Produto ${i} ângulo 0`;
-          mainThumb.onclick = function() {
-            mainImg.src = this.src;
-          };
-          thumbnails.appendChild(mainThumb);
-
-          // Verifica e adiciona miniaturas adicionais
-          for (let j = 1; j <= 5; j++) {
-            const thumbUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/${index}_${j}.webp`;
-            
-            checkImageExists(thumbUrl, function(exists) {
-              if (exists) {
-                const thumb = document.createElement('img');
-                thumb.src = thumbUrl;
-                thumb.alt = `Produto ${i} ângulo ${j}`;
-                thumb.onclick = function() {
-                  mainImg.src = this.src;
-                };
-                thumbnails.appendChild(thumb);
-              }
-            });
-          }
-
-          imageColumn.appendChild(mainImg);
-          imageColumn.appendChild(thumbnails);
-
-          const details = document.createElement('div');
-          details.className = 'product-details';
-
-          // Define descrição e preço usando os objetos de mapeamento
-          let descricao = (descricoesEspeciais[i] || 
-            'Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong>: Os itens do cenário não acompanham o produto.') + 
-            observacaoPadrao;
-          
-          let preco = precosEspeciais[i] || 'R$ 60,00';
-
-          details.innerHTML = `
-            <h2>Código ${i}</h2>
-            <p><strong>Descrição:</strong> ${descricao}</p>
-            <p class="price">${preco}</p>
-          `;
-
-          // Adiciona botão de interesse
-          const interestBtn = document.createElement('button');
-          interestBtn.textContent = 'Adicionar aos interesses';
-          interestBtn.style.marginTop = '10px';
-          interestBtn.style.padding = '8px 12px';
-          interestBtn.style.backgroundColor = '#0077cc';
-          interestBtn.style.color = 'white';
-          interestBtn.style.border = 'none';
-          interestBtn.style.borderRadius = '5px';
-          interestBtn.style.cursor = 'pointer';
-          interestBtn.onclick = function() {
-            addToInterests(i, descricao, preco, mainImg.src);
-            interestBtn.textContent = 'Adicionado!';
-            interestBtn.disabled = true;
-          };
-
-          details.appendChild(interestBtn);
-
-          product.appendChild(imageColumn);
-          product.appendChild(details);
-          
-          resolve(product);
+      // Imagem principal
+      const mainImg = document.createElement('img');
+      mainImg.src = mainImageUrl;
+      mainImg.alt = `Produto ${i}`;
+      mainImg.className = 'main-img';
+      mainImg.onclick = function() {
+        modalImages = [mainImg];
+        const thumbnails = this.parentNode.querySelectorAll('.thumbnail-container img');
+        thumbnails.forEach(thumb => {
+          if (thumb.src !== mainImg.src) modalImages.push(thumb);
         });
-      });
+        
+        currentModalImageIndex = modalImages.findIndex(img => img.src === this.src);
+        document.getElementById('imgModal').style.display = 'block';
+        document.getElementById('modalImg').src = this.src;
+        resetZoom();
+      };
+
+      // Miniaturas
+      const thumbnails = document.createElement('div');
+      thumbnails.className = 'thumbnail-container';
+
+      // Miniatura principal
+      const mainThumb = document.createElement('img');
+      mainThumb.src = mainImg.src;
+      mainThumb.alt = `Produto ${i} ângulo 0`;
+      mainThumb.onclick = function() { mainImg.src = this.src; };
+      thumbnails.appendChild(mainThumb);
+
+      // Verifica miniaturas adicionais
+      for (let j = 1; j <= 5; j++) {
+        const thumbUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/produtos/${index}_${j}.webp`;
+        const thumbExists = await checkImageExists(thumbUrl);
+        if (thumbExists) {
+          const thumb = document.createElement('img');
+          thumb.src = thumbUrl;
+          thumb.alt = `Produto ${i} ângulo ${j}`;
+          thumb.onclick = function() { mainImg.src = this.src; };
+          thumbnails.appendChild(thumb);
+        }
+      }
+
+      imageColumn.appendChild(mainImg);
+      imageColumn.appendChild(thumbnails);
+
+      // Detalhes do produto
+      const details = document.createElement('div');
+      details.className = 'product-details';
+
+      const descricao = specialData.descriptions[i] || 
+        'Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura.' + 
+        specialData.defaultNote;
+      
+      const preco = specialData.prices[i] || 'R$ 60,00';
+
+      // HTML dos detalhes do produto
+      details.innerHTML = `
+        <h2>Código ${i}</h2>
+        <p><strong>Descrição:</strong> ${descricao}</p>
+        <p class="price">${preco}</p>
+        <div class="quantity-control">
+          <button class="qty-btn minus" onclick="changeQuantity(this, -1)">-</button>
+          <input type="number" class="quantity" value="1" min="1">
+          <button class="qty-btn plus" onclick="changeQuantity(this, 1)">+</button>
+        </div>
+      `;
+
+      // Botão de interesse
+      const interestBtn = document.createElement('button');
+      interestBtn.textContent = 'Adicionar aos interesses';
+      interestBtn.style.cssText = 'margin-top: 10px; padding: 8px 12px; background: #0077cc; color: white; border: none; border-radius: 5px; cursor: pointer;';
+      interestBtn.onclick = function() {
+        const quantity = parseInt(this.parentNode.querySelector('.quantity').value);
+        addToInterests(i, descricao, preco, mainImageUrl, quantity);
+        
+        // Feedback visual
+        this.textContent = '✓ Adicionado';
+        this.disabled = true;
+        setTimeout(() => {
+          this.textContent = 'Adicionar aos interesses';
+          this.disabled = false;
+        }, 2000);
+      };
+
+      details.appendChild(interestBtn);
+      product.appendChild(imageColumn);
+      product.appendChild(details);
+      
+      return product;
     }
 
-    // Função para carregar produtos dinamicamente
+    /**
+     * Altera a quantidade do produto
+     */
+    function changeQuantity(btn, change) {
+      const input = btn.parentNode.querySelector('.quantity');
+      let newValue = parseInt(input.value) + change;
+      input.value = Math.max(newValue, 1);
+    }
+
+    /**
+     * Carrega todos os produtos disponíveis
+     */
     async function loadProducts() {
       loader.style.display = 'block';
       catalog.innerHTML = '';
@@ -893,10 +1035,7 @@
           catalog.appendChild(product);
           loadedProducts++;
           
-          // Atualiza periodicamente para não travar a UI
-          if (i % 10 === 0) {
-            await new Promise(resolve => setTimeout(resolve, 0));
-          }
+          if (i % 10 === 0) await new Promise(resolve => setTimeout(resolve, 0));
         }
       }
       
@@ -907,12 +1046,37 @@
       }
     }
 
-    // Funções para gerenciar interesses
-    function addToInterests(codigo, descricao, preco, imagem) {
-      interests.push({ codigo, descricao, preco, imagem });
+    // =============================================
+    // FUNÇÕES DE INTERESSES
+    // =============================================
+
+    /**
+     * Adiciona um item à lista de interesses
+     */
+    function addToInterests(codigo, descricao, preco, imagem, quantity = 1) {
+      // Verifica se o item já existe
+      const existingIndex = interests.findIndex(item => item.codigo === codigo);
+      
+      if (existingIndex >= 0) {
+        // Atualiza a quantidade se existir
+        interests[existingIndex].quantity += quantity;
+      } else {
+        // Adiciona novo item
+        interests.push({ 
+          codigo, 
+          descricao, 
+          preco, 
+          imagem, 
+          quantity 
+        });
+      }
+      
       updateInterestList();
     }
 
+    /**
+     * Atualiza a lista de interesses na interface
+     */
     function updateInterestList() {
       const list = document.getElementById("interestList");
       list.innerHTML = '';
@@ -930,7 +1094,12 @@
             <small>${item.descricao}</small><br>
             <strong>${item.preco}</strong><br>
             <img src="${item.imagem}" style="width: 50px; margin-top: 5px;"><br>
-            <button onclick="removeInterest(${index})" style="margin-top: 5px; padding: 4px 8px; font-size: 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Remover</button>
+            <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
+              <button onclick="adjustInterestQuantity(${index}, -1)" style="padding: 2px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">-</button>
+              <span style="padding: 2px 8px;">${item.quantity}</span>
+              <button onclick="adjustInterestQuantity(${index}, 1)" style="padding: 2px 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">+</button>
+              <button onclick="removeInterest(${index})" style="padding: 2px 8px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Remover</button>
+            </div>
           </div>
         `;
         list.appendChild(li);
@@ -939,16 +1108,38 @@
       updateContactMessage();
     }
 
+    /**
+     * Ajusta a quantidade de um item na lista de interesses
+     */
+    function adjustInterestQuantity(index, change) {
+      interests[index].quantity += change;
+      
+      if (interests[index].quantity < 1) {
+        interests.splice(index, 1);
+      }
+      
+      updateInterestList();
+    }
+
+    /**
+     * Remove um item da lista de interesses
+     */
     function removeInterest(index) {
       interests.splice(index, 1);
       updateInterestList();
     }
 
+    /**
+     * Alterna a visibilidade do painel de interesses
+     */
     function toggleInterestPanel() {
       const panel = document.getElementById("interestPanel");
       panel.style.display = panel.style.display === "none" ? "block" : "none";
     }
 
+    /**
+     * Mostra o modal de contato
+     */
     function showContactModal() {
       if (interests.length === 0) {
         alert('Por favor, adicione itens de interesse antes de enviar.');
@@ -959,95 +1150,100 @@
       updateContactMessage();
     }
 
+    /**
+     * Atualiza a mensagem de contato com os itens selecionados
+     */
     function updateContactMessage() {
-      const summaryContainer = document.getElementById('selectedItemsSummary');
-      const itemsDataField = document.getElementById('itemsData');
-      
-      summaryContainer.innerHTML = '';
+      const summary = document.getElementById('selectedItemsSummary');
+      const itemsData = document.getElementById('itemsData');
       
       if (interests.length === 0) {
-        summaryContainer.innerHTML = '<div>Nenhum item selecionado</div>';
-        itemsDataField.value = '';
+        summary.innerHTML = '<div>Nenhum item selecionado</div>';
+        itemsData.value = '';
+        document.getElementById('customMessage').value = '';
         return;
       }
       
-      const itemsGrouped = {};
+      let summaryHTML = '';
+      let itemsText = 'Itens de Interesse:\n\n';
+      let totalGeral = 0;
       
-      interests.forEach(item => {
-        if (!itemsGrouped[item.codigo]) {
-          itemsGrouped[item.codigo] = {
+      // Agrupa itens por código para somar quantidades
+      const itemsGrouped = interests.reduce((acc, item) => {
+        const valorNumerico = parseFloat(item.preco.replace(/[^\d,]/g, '').replace(',', '.'));
+        const totalItem = valorNumerico * item.quantity;
+        
+        if (!acc[item.codigo]) {
+          acc[item.codigo] = {
             ...item,
-            quantity: 1
+            total: totalItem
           };
         } else {
-          itemsGrouped[item.codigo].quantity++;
+          acc[item.codigo].quantity += item.quantity;
+          acc[item.codigo].total += totalItem;
         }
-      });
+        
+        totalGeral += totalItem;
+        return acc;
+      }, {});
       
-      let summaryHTML = '';
-      let itemsData = [];
-      
+      // Prepara o HTML para exibição
       Object.values(itemsGrouped).forEach(item => {
+        const totalFormatado = 'R$ ' + item.total.toFixed(2).replace('.', ',');
+        
         summaryHTML += `
           <div>
             <strong>Código ${item.codigo}:</strong> 
-            ${item.quantity}x - ${item.preco}
+            ${item.quantity}x - ${item.preco} (Total: ${totalFormatado})
           </div>
         `;
         
-        itemsData.push({
-          codigo: item.codigo,
-          quantidade: item.quantity,
-          preco: item.preco,
-          descricao: item.descricao
-        });
+        itemsText += `Código ${item.codigo} (${item.quantity}x) - ${item.preco}\n`;
       });
       
-      summaryContainer.innerHTML = summaryHTML;
-      itemsDataField.value = JSON.stringify(itemsData);
+      const totalGeralFormatado = 'R$ ' + totalGeral.toFixed(2).replace('.', ',');
+      summaryHTML += `<div style="margin-top: 10px; font-weight: bold;">TOTAL GERAL: ${totalGeralFormatado}</div>`;
+      itemsText += `\nTotal: ${totalGeralFormatado}`;
       
-      const defaultMessage = `Olá, tenho interesse nos seguintes produtos:\n\n${
-        Object.values(itemsGrouped).map(item => 
-          `Código: ${item.codigo} (${item.quantity}x) - ${item.preco}`
-        ).join('\n')
-      }\n\nPor favor, entre em contato comigo para mais informações.`;
+      // Atualiza a interface
+      summary.innerHTML = summaryHTML;
+      itemsData.value = itemsText;
       
-      document.getElementById('customMessage').value = defaultMessage;
+      // Preenche a mensagem automática
+      document.getElementById('customMessage').value = `${itemsText}\n\nPor favor, entre em contato para finalizar o pedido.`;
     }
 
-    // Máscara para WhatsApp
+    // =============================================
+    // FORMATAÇÃO DO WHATSAPP
+    // =============================================
+
+    /**
+     * Formata o campo de WhatsApp
+     */
     document.getElementById('whatsapp').addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
-      if (value.length > 11) value = value.substring(0, 11);
+      value = value.substring(0, 11);
       
-      if (value.length > 0) {
-        value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-        if (value.length > 10) {
-          value = value.replace(/(\d{5})(\d)/, '$1-$2');
-        }
-      }
+      let formatted = '';
+      if (value.length > 0) formatted = '(' + value.substring(0, 2);
+      if (value.length > 2) formatted += ') ' + value.substring(2, 7);
+      if (value.length > 7) formatted += '-' + value.substring(7, 11);
       
-      e.target.value = value;
+      e.target.value = formatted;
     });
 
-    // Feedback após envio do formulário
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      const whatsapp = document.getElementById('whatsapp').value.replace(/\D/g, '');
-      if (whatsapp.length < 11) {
-        alert('Por favor, insira um número de WhatsApp válido com DDD.');
-        e.preventDefault();
-        return;
-      }
-      
-      interests.length = 0;
-      updateInterestList();
-    });
+    // =============================================
+    // INICIALIZAÇÃO DA PÁGINA
+    // =============================================
 
-    // Inicializa a página
+    /**
+     * Inicializa a página quando carregada
+     */
     window.onload = function() {
       initCarousel();
       loadProducts();
       
+      // Configura o botão "Voltar ao Topo"
       const btn = document.getElementById("backToTopBtn");
       window.onscroll = function() {
         btn.style.display = window.scrollY > 200 ? "block" : "none";
