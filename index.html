@@ -536,7 +536,7 @@
 <body>
   <!-- CABEÇALHO ATUALIZADO -->
   <div class="header">
-    <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
+    <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
     <h1>Shakaw 3D Print</h1>
     <div class="header-links">
       <a href="https://www.instagram.com/shakaw3dprint" target="_blank">
@@ -672,7 +672,7 @@
       const indicators = document.getElementById('carouselIndicators');
       
       for (let i = 1; i <= 50; i++) {
-        const imgUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/carrossel/c_${i}.webp`;
+        const imgUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/carrossel/c_${i}.webp`;
         
         const exists = await checkImageExists(imgUrl);
         if (exists) {
@@ -907,7 +907,7 @@
      */
     async function createProduct(i) {
       const index = i.toString().padStart(2, '0');
-      const mainImageUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/produtos/${index}.webp`;
+      const mainImageUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/produtos/${index}.webp`;
       
       const exists = await checkImageExists(mainImageUrl);
       if (!exists) return null;
@@ -950,7 +950,7 @@
 
       // Verifica miniaturas adicionais
       for (let j = 1; j <= 5; j++) {
-        const thumbUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/img/produtos/${index}_${j}.webp`;
+        const thumbUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/produtos/${index}_${j}.webp`;
         const thumbExists = await checkImageExists(thumbUrl);
         if (thumbExists) {
           const thumb = document.createElement('img');
