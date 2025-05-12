@@ -19,7 +19,7 @@
       color: white;
       position: relative;
     }
-    .header img.logo {
+    .header img/.logo {
       width: 180px;
       border-radius: 50%;
       margin-bottom: 10px;
@@ -53,7 +53,7 @@
     .header a:hover {
       background: rgba(255, 255, 255, 0.25);
     }
-    .header a img.instagram-icon {
+    .header a img/.instagram-icon {
       width: 20px;
       height: 20px;
       /* Centraliza o ícone verticalmente */
@@ -79,7 +79,7 @@
       transition: transform 0.5s ease-in-out;
       height: 100%;
     }
-    .carousel img {
+    .carousel img/ {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -155,7 +155,7 @@
       align-items: center;
       padding: 20px;
     }
-    .main-img {
+    .main-img/ {
       width: 300px;
       height: 300px;
       object-fit: contain;
@@ -164,7 +164,7 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .main-img:hover {
+    .main-img/:hover {
       transform: scale(1.02);
     }
     .thumbnail-container {
@@ -182,7 +182,7 @@
       text-align: center;
       display: block;
     }
-    .thumbnail-container img {
+    .thumbnail-container img/ {
       width: 50px;
       height: 50px;
       object-fit: cover;
@@ -190,7 +190,7 @@
       cursor: pointer;
       border-radius: 4px;
     }
-    .thumbnail-container img:hover {
+    .thumbnail-container img/:hover {
       border-color: #0077cc;
     }
     .product-details {
@@ -256,7 +256,7 @@
       max-height: 90vh;
       text-align: center;
     }
-    .modal-content img {
+    .modal-content img/ {
       max-width: 100%;
       max-height: 80vh;
       object-fit: contain;
@@ -536,11 +536,11 @@
 <body>
   <!-- CABEÇALHO ATUALIZADO -->
   <div class="header">
-    <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
+    <img/ src="https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
     <h1>Shakaw 3D Print</h1>
     <div class="header-links">
       <a href="https://www.instagram.com/shakaw3dprint" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="instagram-icon">
+        <img/ src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="instagram-icon">
         @shakaw3dprint
       </a>
       <a href="outros-projetos.html" target="_blank">
@@ -564,11 +564,11 @@
   <div class="catalog-page" id="catalog"></div>
 
   <!-- MODAL PARA IMAGENS AMPLIADAS -->
-  <div id="imgModal" class="modal">
+  <div id="img/Modal" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
     <button class="modal-nav modal-prev" onclick="navigateModal(-1)">❮</button>
     <div class="modal-content">
-      <img id="modalImg" src="" alt="Imagem ampliada">
+      <img/ id="modalimg/" src="" alt="Imagem ampliada">
     </div>
     <button class="modal-nav modal-next" onclick="navigateModal(1)">❯</button>
     <div class="zoom-controls">
@@ -672,21 +672,21 @@
       const indicators = document.getElementById('carouselIndicators');
       
       for (let i = 1; i <= 50; i++) {
-        const imgUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/carrossel/c_${i}.webp`;
+        const img/Url = `https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/carrossel/c_${i}.webp`;
         
-        const exists = await checkImageExists(imgUrl);
+        const exists = await checkImageExists(img/Url);
         if (exists) {
-          const img = document.createElement('img');
-          img.src = imgUrl;
-          img.alt = `Imagem ${i}`;
-          carousel.appendChild(img);
+          const img/ = document.createElement('img/');
+          img/.src = img/Url;
+          img/.alt = `Imagem ${i}`;
+          carousel.appendChild(img/);
           
           const indicator = document.createElement('div');
           indicator.className = 'carousel-indicator';
           indicator.onclick = () => goToSlide(carouselItems.length);
           indicators.appendChild(indicator);
           
-          carouselItems.push(img);
+          carouselItems.push(img/);
         }
       }
       
@@ -704,10 +704,10 @@
      */
     function checkImageExists(url) {
       return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-        img.src = url;
+        const img/ = new Image();
+        img/.onload = () => resolve(true);
+        img/.onerror = () => resolve(false);
+        img/.src = url;
       });
     }
 
@@ -788,9 +788,9 @@
      * Aplica zoom na imagem do modal
      */
     function zoomImage(zoomFactor) {
-      const modalImg = document.getElementById('modalImg');
+      const modalimg/ = document.getElementById('modalimg/');
       currentZoom = Math.min(Math.max(currentZoom + zoomFactor, 0.5), 3);
-      modalImg.style.transform = `scale(${currentZoom})`;
+      modalimg/.style.transform = `scale(${currentZoom})`;
     }
 
     /**
@@ -798,13 +798,13 @@
      */
     function resetZoom() {
       currentZoom = 1;
-      document.getElementById('modalImg').style.transform = 'scale(1)';
+      document.getElementById('modalimg/').style.transform = 'scale(1)';
     }
     /**
      * Fecha o modal
      */
     function closeModal() {
-      document.getElementById('imgModal').style.display = 'none';
+      document.getElementById('img/Modal').style.display = 'none';
       resetZoom();
     }
 
@@ -816,7 +816,7 @@
      * Adiciona controles de zoom pelo teclado
      */
     document.addEventListener('keydown', function(e) {
-      const modal = document.getElementById('imgModal');
+      const modal = document.getElementById('img/Modal');
       if (modal.style.display !== 'block') return;
 
       switch (e.key) {
@@ -848,9 +848,9 @@
      * Aplica zoom na imagem do modal
      */
     function zoomImage(zoomFactor) {
-      const modalImg = document.getElementById('modalImg');
+      const modalimg/ = document.getElementById('modalimg/');
       currentZoom = Math.min(Math.max(currentZoom + zoomFactor, 0.5), 3);
-      modalImg.style.transform = `scale(${currentZoom})`;
+      modalimg/.style.transform = `scale(${currentZoom})`;
       
       // Feedback visual
       showZoomFeedback();
@@ -861,7 +861,7 @@
      */
     function resetZoom() {
       currentZoom = 1;
-      document.getElementById('modalImg').style.transform = 'scale(1)';
+      document.getElementById('modalimg/').style.transform = 'scale(1)';
       showZoomFeedback();
     }
 
@@ -907,7 +907,7 @@
      */
     async function createProduct(i) {
       const index = i.toString().padStart(2, '0');
-      const mainImageUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/produtos/${index}.webp`;
+      const mainImageUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/produtos/${index}.webp`;
       
       const exists = await checkImageExists(mainImageUrl);
       if (!exists) return null;
@@ -920,20 +920,20 @@
       imageColumn.className = 'image-column';
 
       // Imagem principal
-      const mainImg = document.createElement('img');
-      mainImg.src = mainImageUrl;
-      mainImg.alt = `Produto ${i}`;
-      mainImg.className = 'main-img';
-      mainImg.onclick = function() {
-        modalImages = [mainImg];
-        const thumbnails = this.parentNode.querySelectorAll('.thumbnail-container img');
+      const mainimg/ = document.createElement('img/');
+      mainimg/.src = mainImageUrl;
+      mainimg/.alt = `Produto ${i}`;
+      mainimg/.className = 'main-img/';
+      mainimg/.onclick = function() {
+        modalImages = [mainimg/];
+        const thumbnails = this.parentNode.querySelectorAll('.thumbnail-container img/');
         thumbnails.forEach(thumb => {
-          if (thumb.src !== mainImg.src) modalImages.push(thumb);
+          if (thumb.src !== mainimg/.src) modalImages.push(thumb);
         });
         
-        currentModalImageIndex = modalImages.findIndex(img => img.src === this.src);
-        document.getElementById('imgModal').style.display = 'block';
-        document.getElementById('modalImg').src = this.src;
+        currentModalImageIndex = modalImages.findIndex(img/ => img/.src === this.src);
+        document.getElementById('img/Modal').style.display = 'block';
+        document.getElementById('modalimg/').src = this.src;
         resetZoom();
       };
 
@@ -942,26 +942,26 @@
       thumbnails.className = 'thumbnail-container';
 
       // Miniatura principal
-      const mainThumb = document.createElement('img');
-      mainThumb.src = mainImg.src;
+      const mainThumb = document.createElement('img/');
+      mainThumb.src = mainimg/.src;
       mainThumb.alt = `Produto ${i} ângulo 0`;
-      mainThumb.onclick = function() { mainImg.src = this.src; };
+      mainThumb.onclick = function() { mainimg/.src = this.src; };
       thumbnails.appendChild(mainThumb);
 
       // Verifica miniaturas adicionais
       for (let j = 1; j <= 5; j++) {
-        const thumbUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/uploads/produtos/${index}_${j}.webp`;
+        const thumbUrl = `https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/produtos/${index}_${j}.webp`;
         const thumbExists = await checkImageExists(thumbUrl);
         if (thumbExists) {
-          const thumb = document.createElement('img');
+          const thumb = document.createElement('img/');
           thumb.src = thumbUrl;
           thumb.alt = `Produto ${i} ângulo ${j}`;
-          thumb.onclick = function() { mainImg.src = this.src; };
+          thumb.onclick = function() { mainimg/.src = this.src; };
           thumbnails.appendChild(thumb);
         }
       }
 
-      imageColumn.appendChild(mainImg);
+      imageColumn.appendChild(mainimg/);
       imageColumn.appendChild(thumbnails);
 
       // Detalhes do produto
@@ -1093,7 +1093,7 @@
             <strong>Código ${item.codigo}</strong><br>
             <small>${item.descricao}</small><br>
             <strong>${item.preco}</strong><br>
-            <img src="${item.imagem}" style="width: 50px; margin-top: 5px;"><br>
+            <img/ src="${item.imagem}" style="width: 50px; margin-top: 5px;"><br>
             <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
               <button onclick="adjustInterestQuantity(${index}, -1)" style="padding: 2px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">-</button>
               <span style="padding: 2px 8px;">${item.quantity}</span>
