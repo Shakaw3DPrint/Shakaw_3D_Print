@@ -14,7 +14,7 @@ const selectedItemsSummary = document.getElementById("selectedItemsSummary");
 const itemsDataInput = document.getElementById("itemsData");
 
 let currentImageIndex = 0;
-let currentProductImages = [];
+let currentProductImages = []; // Este será o array de imagens para o modal atual
 let currentZoomLevel = 1;
 
 // =============================================
@@ -47,9 +47,16 @@ function displayProducts(products) {
     productDiv.className = "product";
     productDiv.innerHTML = `
       <div class="image-column">
-        <img src="${product.mainImage}" alt="${product.name}" class="main-img" onclick="openModal(\'${product.mainImage}\', ['${product.mainImage}', ...${JSON.stringify(product.thumbnails)}])">
+        <img src="${product.mainImage}" alt="${product.name}" class="main-img">
         <div class="thumbnail-container">
-          ${product.thumbnails.map(thumb => `<img src="${thumb}" alt="Thumbnail de ${product.name}" onclick="changeMainImage(this, '${thumb}')">`).join("")}
+          ${product.thumbnails.map(thumb => `
+            <img 
+              src="${thumb}" 
+              alt="Thumbnail de ${product.name}" 
+              onerror="this.style.display='none';" 
+              onclick="handleChangeAndOpenModal(this, '${product.mainImage}', ${JSON.stringify(product.thumbnails)}, '${thumb}')"
+            >
+          `).join("")}
         </div>
       </div>
       <div class="product-details">
@@ -67,6 +74,28 @@ function displayProducts(products) {
     catalog.appendChild(productDiv);
   });
 }
+
+// =============================================
+// NOVA FUNÇÃO PARA LIDAR COM CLIQUE NA MINIATURA
+// =============================================
+function handleChangeAndOpenModal(thumbnailElement, mainImageForProduct, allThumbnailsForProduct, clickedThumbSrc) {
+    // 1. Mudar a imagem principal na visualização do catálogo
+    const productDiv = thumbnailElement.closest('.product');
+    if (productDiv) {
+        const mainImgElement = productDiv.querySelector('.main-img');
+        if (mainImgElement) {
+            mainImgElement.src = clickedThumbSrc;
+        }
+    }
+
+    // 2. Preparar array de imagens para o modal
+    let modalImages = [mainImageForProduct, ...allThumbnailsForProduct];
+    modalImages = [...new Set(modalImages)]; 
+
+    // 3. Abrir o modal com a imagem clicada (clickedThumbSrc) em destaque
+    openModal(clickedThumbSrc, modalImages);
+}
+
 
 // =============================================
 // CARROSSEL
@@ -146,23 +175,40 @@ function changeQuantity(button, delta) {
 // MODAL DE IMAGEM
 // =============================================
 function openModal(imageSrc, imagesArray) {
-  currentImageIndex = imagesArray.indexOf(imageSrc);
-  currentProductImages = imagesArray;
-  modalImg.src = imageSrc;
+  if (!Array.isArray(imagesArray)) {
+    console.error("openModal foi chamada com imagesArray que não é um array:", imagesArray);
+    currentProductImages = [imageSrc];
+  } else {
+    currentProductImages = imagesArray;
+  }
+  
+  currentImageIndex = currentProductImages.indexOf(imageSrc);
+  if (currentImageIndex === -1 && currentProductImages.length > 0) {
+    currentImageIndex = 0;
+    modalImg.src = currentProductImages[0];
+  } else if (currentProductImages.length > 0) {
+     modalImg.src = imageSrc;
+  } else {
+    console.error("Nenhuma imagem para exibir no modal.");
+    imgModal.style.display = "none"; 
+    return;
+  }
+
   imgModal.style.display = "block";
-  resetZoom(); // Reseta o zoom ao abrir uma nova imagem
-  document.body.style.overflow = "hidden"; // Impede scroll do body
+  resetZoom();
+  document.body.style.overflow = "hidden";
 }
 
 function closeModal() {
   imgModal.style.display = "none";
-  document.body.style.overflow = "auto"; // Restaura scroll do body
+  document.body.style.overflow = "auto";
 }
 
 function navigateModal(step) {
+  if (currentProductImages.length === 0) return;
   currentImageIndex = (currentImageIndex + step + currentProductImages.length) % currentProductImages.length;
   modalImg.src = currentProductImages[currentImageIndex];
-  resetZoom(); // Reseta o zoom ao navegar
+  resetZoom();
 }
 
 // =============================================
@@ -170,8 +216,8 @@ function navigateModal(step) {
 // =============================================
 function zoomImage(amount) {
   currentZoomLevel += amount;
-  if (currentZoomLevel < 0.2) currentZoomLevel = 0.2; // Zoom mínimo
-  if (currentZoomLevel > 3) currentZoomLevel = 3;   // Zoom máximo
+  if (currentZoomLevel < 0.2) currentZoomLevel = 0.2;
+  if (currentZoomLevel > 3) currentZoomLevel = 3;
   modalImg.style.transform = `scale(${currentZoomLevel})`;
 }
 
@@ -205,14 +251,13 @@ function addInterest(productName, productPrice, button) {
     interests.push({ name: productName, price: productPrice, quantity: quantity });
   }
   updateInterestPanel();
-  interestPanel.style.display = "block"; // Mostra o painel ao adicionar
+  interestPanel.style.display = "block";
 }
 
 function updateInterestPanel() {
-  interestList.innerHTML = ""; // Limpa a lista
+  interestList.innerHTML = "";
   if (interests.length === 0) {
     interestList.innerHTML = "<li>Nenhum item adicionado.</li>";
-    interestPanel.style.display = "none"; // Esconde se vazio
     return;
   }
   interests.forEach((item, index) => {
@@ -228,11 +273,16 @@ function updateInterestPanel() {
 function removeInterest(index) {
   interests.splice(index, 1);
   updateInterestPanel();
+  if (interests.length === 0) {
+      interestPanel.style.display = "none";
+  }
 }
 
 function toggleInterestPanel() {
-  if (interests.length > 0) { // Só alterna se houver itens
+  if (interests.length > 0) {
       interestPanel.style.display = interestPanel.style.display === "block" ? "none" : "block";
+  } else {
+      interestPanel.style.display = "none";
   }
 }
 
@@ -245,7 +295,7 @@ function showContactModal() {
     return;
   }
   
-  selectedItemsSummary.innerHTML = ""; // Limpa o resumo
+  selectedItemsSummary.innerHTML = "";
   let itemsText = "";
   interests.forEach(item => {
     const itemDiv = document.createElement("div");
@@ -253,10 +303,10 @@ function showContactModal() {
     selectedItemsSummary.appendChild(itemDiv);
     itemsText += `${item.quantity}x ${item.name} (${item.price})\n`;
   });
-  itemsDataInput.value = itemsText.trim(); // Adiciona ao campo hidden do formulário
+  itemsDataInput.value = itemsText.trim();
   
   contactModal.style.display = "block";
-  interestPanel.style.display = "none"; // Esconde o painel de interesses
+  interestPanel.style.display = "none";
 }
 
 // Fechar modal de contato se clicar fora
@@ -275,17 +325,12 @@ window.onclick = function(event) {
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   loadCarouselImages();
-  updateInterestPanel(); // Para garantir que o painel esteja correto no carregamento
+  updateInterestPanel(); 
+  if (interests.length === 0) {
+      interestPanel.style.display = "none";
+  }
 });
 
-// =============================================
-// FUNÇÕES AUXILIARES PARA IMAGENS DE PRODUTO
-// =============================================
-function changeMainImage(thumbnailElement, newImageSrc) {
-  const productDiv = thumbnailElement.closest('.product');
-  const mainImg = productDiv.querySelector('.main-img');
-  mainImg.src = newImageSrc;
-  // Atualiza o source do modal se a imagem principal for alterada
-  mainImg.onclick = () => openModal(newImageSrc, currentProductImages);
-}
+// A função changeMainImage foi removida pois sua funcionalidade foi incorporada 
+// em handleChangeAndOpenModal e a lógica de clique na imagem principal foi alterada.
 
