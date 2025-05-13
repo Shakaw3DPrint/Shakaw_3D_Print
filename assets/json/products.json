@@ -6,9 +6,12 @@
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/01.webp",
     "thumbnails": [
-      "assets/img/produtos/01_1.webp",
+       "assets/img/produtos/01_1.webp",
+      "assets/img/produtos/01_2.webp",
       "assets/img/produtos/01_3.webp",
-      "assets/img/produtos/01_4.webp"
+      "assets/img/produtos/01_4.webp",
+      "assets/img/produtos/01_5.webp",
+      "assets/img/produtos/01_6.webp"
     ]
   },
   {
@@ -20,8 +23,10 @@
     "thumbnails": [
       "assets/img/produtos/02_1.webp",
       "assets/img/produtos/02_2.webp",
+      "assets/img/produtos/02_3.webp",
       "assets/img/produtos/02_4.webp",
-      "assets/img/produtos/02_5.webp"
+      "assets/img/produtos/02_5.webp",
+      "assets/img/produtos/02_6.webp"
     ]
   },
   {
@@ -31,7 +36,12 @@
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/03.webp",
     "thumbnails": [
-      "assets/img/produtos/03_1.webp"
+      "assets/img/produtos/03_1.webp",
+      "assets/img/produtos/03_2.webp",
+      "assets/img/produtos/03_3.webp",
+      "assets/img/produtos/03_4.webp",
+      "assets/img/produtos/03_5.webp",
+      "assets/img/produtos/03_6.webp"
     ]
   },
   {
@@ -41,11 +51,12 @@
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/04.webp",
     "thumbnails": [
-      "assets/img/produtos/04_1.webp",
-      "assets/img/produtos/04_2.webp",
-      "assets/img/produtos/04_3.webp",
-      "assets/img/produtos/04_4.webp",
-      "assets/img/produtos/04_5.webp"
+     "assets/img/produtos/03_1.webp",
+      "assets/img/produtos/03_2.webp",
+      "assets/img/produtos/03_3.webp",
+      "assets/img/produtos/03_4.webp",
+      "assets/img/produtos/03_5.webp",
+      "assets/img/produtos/03_6.webp"
     ]
   },
   {
