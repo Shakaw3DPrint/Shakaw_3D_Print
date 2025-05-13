@@ -23,7 +23,7 @@ let currentZoomLevel = 1;
 async function loadProducts() {
   loader.style.display = "block";
   try {
-    const response = await fetch("https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/json/products.json");
+    const response = await fetch("assets/json/products.json");
     if (!response.ok) {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
@@ -78,7 +78,7 @@ let currentCarouselIndex = 0;
 
 async function loadCarouselImages() {
   try {
-    const response = await fetch("https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/json/carousel.json");
+    const response = await fetch("assets/json/carousel.json");
     if (!response.ok) {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
