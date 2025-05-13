@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Cod:01",
-    {   "description": "<strong>Descrição:</strong> Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação 1:</strong> Os itens do cenário não acompanham o produto. <br><strong>Observação 2:</strong> Todos os produtos serão enviados em cores aleatórias. Caso deseje uma cor específica, informe no pedido." }
+    {   "description": "<strong>Descrição:</strong> Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação 1:</strong> Produtos enviados em cores aleatórias. Para cor específica, informe no pedido. <br><strong>Observação 2:</strong> Os itens do cenário não acompanham o produto." }
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/01.webp",
     "thumbnails": [
@@ -47,7 +47,7 @@
   {
     "id": "4",
     "name": "Cod:04",
-    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 04.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": "<strong>Descrição:</strong> Modelo<br>Imagem Real<br>Escala 1/18. Tamanho: 8-11cm de altura<br><strong>Observação 1:</strong> Produtos enviados em cores aleatórias. Para cor específica, informe no pedido.<br><strong>Observação 2:</strong> Itens do cenário não inclusos."
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/04.webp",
     "thumbnails": [
