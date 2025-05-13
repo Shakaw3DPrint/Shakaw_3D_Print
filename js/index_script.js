@@ -45,6 +45,7 @@ function displayProducts(products) {
   products.forEach(product => {
     const productDiv = document.createElement("div");
     productDiv.className = "product";
+    // A imagem principal não tem mais onclick para abrir o modal diretamente.
     productDiv.innerHTML = `
       <div class="image-column">
         <img src="${product.mainImage}" alt="${product.name}" class="main-img">
@@ -53,7 +54,7 @@ function displayProducts(products) {
             <img 
               src="${thumb}" 
               alt="Thumbnail de ${product.name}" 
-              onerror="this.style.display='none';" 
+              onerror="this.style.display='none'; this.parentElement.classList.add('has-broken-thumb');" 
               onclick="handleChangeAndOpenModal(this, '${product.mainImage}', ${JSON.stringify(product.thumbnails)}, '${thumb}')"
             >
           `).join("")}
@@ -76,29 +77,27 @@ function displayProducts(products) {
 }
 
 // =============================================
-// NOVA FUNÇÃO PARA LIDAR COM CLIQUE NA MINIATURA
+// FUNÇÃO PARA LIDAR COM CLIQUE NA MINIATURA E ABRIR MODAL
 // =============================================
 function handleChangeAndOpenModal(thumbnailElement, mainImageForProduct, allThumbnailsForProduct, clickedThumbSrc) {
-    // 1. Mudar a imagem principal na visualização do catálogo
     const productDiv = thumbnailElement.closest('.product');
     if (productDiv) {
         const mainImgElement = productDiv.querySelector('.main-img');
         if (mainImgElement) {
-            mainImgElement.src = clickedThumbSrc;
+            mainImgElement.src = clickedThumbSrc; // Atualiza a imagem principal na visualização do catálogo
         }
     }
 
-    // 2. Preparar array de imagens para o modal
+    // Prepara o array de imagens para o modal: inclui a imagem principal original e todas as miniaturas.
     let modalImages = [mainImageForProduct, ...allThumbnailsForProduct];
-    modalImages = [...new Set(modalImages)]; 
-
-    // 3. Abrir o modal com a imagem clicada (clickedThumbSrc) em destaque
+    // A função openModal fará a filtragem e a remoção de duplicatas.
+    
     openModal(clickedThumbSrc, modalImages);
 }
 
 
 // =============================================
-// CARROSSEL
+// CARROSSEL (sem alterações nesta seção)
 // =============================================
 const carousel = document.getElementById("carousel");
 const carouselIndicators = document.getElementById("carouselIndicators");
@@ -157,11 +156,11 @@ function goToSlide(index) {
 function startCarouselAutoPlay() {
   setInterval(() => {
     moveSlide(1);
-  }, 5000); // Muda a cada 5 segundos
+  }, 5000); 
 }
 
 // =============================================
-// CONTROLE DE QUANTIDADE
+// CONTROLE DE QUANTIDADE (sem alterações)
 // =============================================
 function changeQuantity(button, delta) {
   const quantityInput = button.parentElement.querySelector(".quantity");
@@ -172,52 +171,62 @@ function changeQuantity(button, delta) {
 }
 
 // =============================================
-// MODAL DE IMAGEM
+// MODAL DE IMAGEM (REVISADO PARA ZOOM E NAVEGAÇÃO)
 // =============================================
 function openModal(imageSrc, imagesArray) {
-  if (!Array.isArray(imagesArray)) {
-    console.error("openModal foi chamada com imagesArray que não é um array:", imagesArray);
-    currentProductImages = [imageSrc];
-  } else {
-    currentProductImages = imagesArray;
+  let validImages = [];
+  if (Array.isArray(imagesArray)) {
+    // Filtra apenas strings válidas e não vazias
+    validImages = imagesArray.filter(img => img && typeof img === 'string');
   }
   
+  // Adiciona imageSrc ao início da lista se não estiver presente, garantindo que seja uma string válida
+  if (imageSrc && typeof imageSrc === 'string' && !validImages.includes(imageSrc)) {
+    validImages.unshift(imageSrc);
+  }
+  // Remove duplicatas
+  currentProductImages = [...new Set(validImages)];
+
+  // Encontra o índice da imagem a ser exibida inicialmente
   currentImageIndex = currentProductImages.indexOf(imageSrc);
+  // Se imageSrc não foi encontrada (talvez após filtragem) mas há imagens, exibe a primeira
   if (currentImageIndex === -1 && currentProductImages.length > 0) {
     currentImageIndex = 0;
-    modalImg.src = currentProductImages[0];
-  } else if (currentProductImages.length > 0) {
-     modalImg.src = imageSrc;
-  } else {
-    console.error("Nenhuma imagem para exibir no modal.");
-    imgModal.style.display = "none"; 
+  }
+
+  // Se não há imagens válidas ou não foi possível determinar o índice, não abre o modal
+  if (currentProductImages.length === 0 || currentImageIndex === -1) {
+    console.error("Modal: Nenhuma imagem válida para exibir ou imagem inicial não encontrada. Imagens recebidas:", imageSrc, imagesArray);
+    imgModal.style.display = "none";
+    document.body.style.overflow = "auto"; // Restaura scroll do body
     return;
   }
 
+  modalImg.src = currentProductImages[currentImageIndex];
   imgModal.style.display = "block";
-  resetZoom();
-  document.body.style.overflow = "hidden";
+  resetZoom(); // Reseta o zoom ao abrir uma nova imagem
+  document.body.style.overflow = "hidden"; // Impede scroll do body
 }
 
 function closeModal() {
   imgModal.style.display = "none";
-  document.body.style.overflow = "auto";
+  document.body.style.overflow = "auto"; 
 }
 
 function navigateModal(step) {
   if (currentProductImages.length === 0) return;
   currentImageIndex = (currentImageIndex + step + currentProductImages.length) % currentProductImages.length;
   modalImg.src = currentProductImages[currentImageIndex];
-  resetZoom();
+  resetZoom(); 
 }
 
 // =============================================
-// CONTROLES DE ZOOM NO MODAL
+// CONTROLES DE ZOOM NO MODAL (sem alterações na lógica principal)
 // =============================================
 function zoomImage(amount) {
   currentZoomLevel += amount;
-  if (currentZoomLevel < 0.2) currentZoomLevel = 0.2;
-  if (currentZoomLevel > 3) currentZoomLevel = 3;
+  if (currentZoomLevel < 0.2) currentZoomLevel = 0.2; 
+  if (currentZoomLevel > 3) currentZoomLevel = 3;   
   modalImg.style.transform = `scale(${currentZoomLevel})`;
 }
 
@@ -227,7 +236,7 @@ function resetZoom() {
 }
 
 // =============================================
-// BOTÃO VOLTAR AO TOPO
+// BOTÃO VOLTAR AO TOPO (sem alterações)
 // =============================================
 window.onscroll = function() {
   if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
@@ -238,10 +247,10 @@ window.onscroll = function() {
 };
 
 // =============================================
-// PAINEL DE INTERESSES
+// PAINEL DE INTERESSES (AJUSTADO PARA DISPLAY FLEX)
 // =============================================
 function addInterest(productName, productPrice, button) {
-  const quantityInput = button.parentElement.querySelector(".quantity");
+  const quantityInput = button.closest('.product-details').querySelector(".quantity");
   const quantity = parseInt(quantityInput.value);
 
   const existingInterest = interests.find(item => item.name === productName);
@@ -251,13 +260,16 @@ function addInterest(productName, productPrice, button) {
     interests.push({ name: productName, price: productPrice, quantity: quantity });
   }
   updateInterestPanel();
-  interestPanel.style.display = "block";
+  if (interests.length > 0) {
+      interestPanel.style.display = "flex"; // Alterado para flex
+  }
 }
 
 function updateInterestPanel() {
-  interestList.innerHTML = "";
+  interestList.innerHTML = ""; 
   if (interests.length === 0) {
     interestList.innerHTML = "<li>Nenhum item adicionado.</li>";
+    interestPanel.style.display = "none"; 
     return;
   }
   interests.forEach((item, index) => {
@@ -268,6 +280,7 @@ function updateInterestPanel() {
     `;
     interestList.appendChild(listItem);
   });
+  // O display do painel é gerenciado por addInterest e toggleInterestPanel
 }
 
 function removeInterest(index) {
@@ -279,15 +292,19 @@ function removeInterest(index) {
 }
 
 function toggleInterestPanel() {
-  if (interests.length > 0) {
-      interestPanel.style.display = interestPanel.style.display === "block" ? "none" : "block";
+  if (interests.length > 0) { 
+      if (interestPanel.style.display === "flex") { // Verificando 'flex'
+          interestPanel.style.display = "none";
+      } else {
+          interestPanel.style.display = "flex"; // Setando para 'flex'
+      }
   } else {
       interestPanel.style.display = "none";
   }
 }
 
 // =============================================
-// MODAL DE CONTATO
+// MODAL DE CONTATO (sem alterações no JS, problema é mais provável no CSS ou estrutura)
 // =============================================
 function showContactModal() {
   if (interests.length === 0) {
@@ -295,7 +312,7 @@ function showContactModal() {
     return;
   }
   
-  selectedItemsSummary.innerHTML = "";
+  selectedItemsSummary.innerHTML = ""; 
   let itemsText = "";
   interests.forEach(item => {
     const itemDiv = document.createElement("div");
@@ -303,13 +320,13 @@ function showContactModal() {
     selectedItemsSummary.appendChild(itemDiv);
     itemsText += `${item.quantity}x ${item.name} (${item.price})\n`;
   });
-  itemsDataInput.value = itemsText.trim();
+  itemsDataInput.value = itemsText.trim(); 
   
   contactModal.style.display = "block";
-  interestPanel.style.display = "none";
+  interestPanel.style.display = "none"; 
 }
 
-// Fechar modal de contato se clicar fora
+// Fechar modais se clicar fora
 window.onclick = function(event) {
   if (event.target == imgModal) {
     closeModal();
@@ -326,11 +343,10 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   loadCarouselImages();
   updateInterestPanel(); 
+  // Garante que o painel de interesse comece escondido se estiver vazio.
   if (interests.length === 0) {
       interestPanel.style.display = "none";
   }
 });
 
-// A função changeMainImage foi removida pois sua funcionalidade foi incorporada 
-// em handleChangeAndOpenModal e a lógica de clique na imagem principal foi alterada.
 
