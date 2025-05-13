@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Produto 01",
-    "description": "Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": "Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/01.webp",
     "thumbnails": [
@@ -14,7 +14,7 @@
   {
     "id": "2",
     "name": "Produto 02",
-    "description": "Descrição detalhada do produto 02.<br><strong>Observação_2:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": "Modelo + 01 pneu em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/02.webp",
     "thumbnails": [
