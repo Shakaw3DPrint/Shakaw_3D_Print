@@ -341,25 +341,93 @@ body {
 
 /* PAINEL DE INTERESSES */
 #interestPanel {
-  display: none;
+  display: none; /* Inicialmente oculto */
   position: fixed;
   right: 30px;
   bottom: 80px;
   background: white;
-  padding: 20px;
   border-radius: 10px;
   max-width: 300px;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
   z-index: 1001;
-  max-height: 70vh;
-  overflow-y: auto;
+  max-height: 70vh; /* Altura máxima do painel */
+  
+  /* Layout flexível para organizar título, lista e botão */
+  display: flex;
+  flex-direction: column;
+  padding: 20px; /* Espaçamento interno */
+  box-sizing: border-box; /* Para que o padding não aumente a largura/altura total além de max-width/max-height */
+}
+
+#interestPanel h3 {
+  margin-top: 0;
+  margin-bottom: 15px; /* Espaço abaixo do título */
+  flex-shrink: 0; /* Não encolher o título */
+  color: #333; /* Cor do título */
+  font-size: 1.2em; /* Tamanho do título */
 }
 
 #interestList {
   list-style: none;
   padding: 0;
-  max-height: 300px;
-  overflow-y: auto;
+  margin: 0 0 15px 0; /* Margem abaixo da lista, antes do botão */
+  overflow-y: auto;   /* Habilita a rolagem vertical para a lista */
+  flex-grow: 1;       /* Faz a lista ocupar o espaço vertical disponível */
+  min-height: 30px; /* Altura mínima para a lista não sumir se vazia e o painel estiver visível */
+  border-top: 1px solid #eee; /* Separador opcional */
+  border-bottom: 1px solid #eee; /* Separador opcional */
+  padding-top: 10px; /* Espaçamento interno superior para a lista */
+  padding-bottom: 10px; /* Espaçamento interno inferior para a lista */
+}
+
+#interestList li {
+  padding: 8px 5px; /* Ajustar padding dos itens da lista */
+  border-bottom: 1px solid #f0f0f0; /* Borda mais suave */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em; /* Tamanho da fonte dos itens */
+}
+
+#interestList li:last-child {
+  border-bottom: none;
+}
+
+/* Botão remover dentro do item da lista */
+#interestList li button { 
+  margin-left: 10px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 4px 8px; 
+  font-size: 0.9em;
+  flex-shrink: 0;
+}
+#interestList li button:hover {
+  background: #e03c3c;
+}
+
+/* Estilo para o botão Enviar Interesses (principal do painel) */
+#interestPanel > button[onclick*="showContactModal"] {
+  padding: 12px 15px; /* Aumentar um pouco o padding para melhor clique */
+  background: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; 
+  box-sizing: border-box;
+  margin-top: auto; /* Garante que ele fique no final se houver espaço após a lista */
+  flex-shrink: 0; 
+  font-weight: bold;
+  text-align: center;
+  font-size: 1em;
+}
+
+#interestPanel > button[onclick*="showContactModal"]:hover {
+  background: #005fa3;
 }
 
 /* BOTÃO DE INTERESSES */
