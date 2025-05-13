@@ -470,12 +470,14 @@ body {
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 90vh; /* Altura máxima do modal */
+  overflow-y: auto; /* Permite rolagem do conteúdo do modal se exceder max-height */
+  box-sizing: border-box;
 }
 
 .contact-modal-content h2 {
   margin-top: 0;
+  margin-bottom: 15px;
   color: #0057b7;
 }
 
@@ -493,18 +495,38 @@ body {
   box-sizing: border-box;
 }
 
-.contact-modal-content button {
+/* Estilo específico para o botão de submit do formulário de contato */
+#contactForm button[type="submit"] {
   background-color: #0057b7;
   color: white;
   border: none;
-  padding: 10px 15px;
-  margin-top: 10px;
-  border-radius: 4px;
+  padding: 12px 15px;
+  margin-top: 20px; /* Espaço acima do botão */
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%; 
+  box-sizing: border-box;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1em;
+
+  position: sticky;
+  bottom: 0; /* Gruda no final do .contact-modal-content quando este rola */
+  /* O fundo precisa ser opaco para cobrir o conteúdo que rola por baixo */
+  /* Usa uma cor ligeiramente diferente ou a mesma do modal para consistência */
+  background: #f0f0f0; /* Um cinza claro para se destacar um pouco do conteúdo branco */
+  color: #0057b7; /* Cor do texto do botão para combinar com o tema */
+  border-top: 1px solid #ccc; /* Linha sutil para separar do conteúdo rolável */
+  /* O padding de 20px do .contact-modal-content já cria um espaço abaixo do botão sticky */
+  /* Se o botão estiver no final do HTML do modal, ele ficará no final da área de rolagem. */
+  /* O padding-bottom do .contact-modal-content garante que haja espaço abaixo do botão quando o conteúdo é curto. */
+  /* Quando o conteúdo é longo e rola, o botão fica sticky no bottom:0 da viewport do .contact-modal-content. */
 }
-.contact-modal-content button:hover {
-  background: #004494;
+
+#contactForm button[type="submit"]:hover {
+  background-color: #005fa3; /* Cor de hover original */
+  color: white; /* Texto branco no hover */
   transform: scale(1.02);
 }
 
@@ -523,7 +545,7 @@ body {
 }
 
 .items-summary {
-  max-height: 150px;
+  max-height: 150px; /* A lista de itens já é rolável se muitos itens */
   overflow-y: auto;
   padding: 10px;
   background-color: white;
