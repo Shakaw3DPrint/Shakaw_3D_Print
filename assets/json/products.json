@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Cod:01",
-    "description": "Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong><strong>"Descrição:<strong><strong>"Modelo + Esteira <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/01.webp",
     "thumbnails": [
@@ -17,7 +17,7 @@
   {
     "id": "2",
     "name": "Cod:02",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 02.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong><strong>"Descrição:<strong><strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <strong><br> Observação_1:<strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 02.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/02.webp",
     "thumbnails": [
@@ -32,7 +32,7 @@
   {
     "id": "3",
     "name": "Cod:03",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 03.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 03.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/03.webp",
     "thumbnails": [
@@ -47,7 +47,7 @@
   {
     "id": "4",
     "name": "Cod:04",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 04.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 04.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/04.webp",
     "thumbnails": [
@@ -62,7 +62,7 @@
   {
     "id": "5",
     "name": "Cod:05",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 05.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 05.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/05.webp",
     "thumbnails": [
@@ -72,7 +72,7 @@
   {
     "id": "6",
     "name": "Cod:06",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 06.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 06.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/06.webp",
     "thumbnails": [
@@ -86,7 +86,7 @@
   {
     "id": "7",
     "name": "Cod:07",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 07.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 07.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/07.webp",
     "thumbnails": [
@@ -98,7 +98,7 @@
   {
     "id": "8",
     "name": "Cod:08",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 08.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 08.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/08.webp",
     "thumbnails": [
@@ -110,7 +110,7 @@
   {
     "id": "9",
     "name": "Cod:09",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 09.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 09.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/09.webp",
     "thumbnails": []
@@ -118,7 +118,7 @@
   {
     "id": "10",
     "name": "Cod:10",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 10.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 10.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/10.webp",
     "thumbnails": [
@@ -129,7 +129,7 @@
   {
     "id": "11",
     "name": "Cod:11",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 11.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 11.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/11.webp",
     "thumbnails": [
@@ -140,7 +140,7 @@
   {
     "id": "12",
     "name": "Cod:12",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 12.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 12.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/12.webp",
     "thumbnails": []
@@ -148,7 +148,7 @@
   {
     "id": "13",
     "name": "Cod:13",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 13.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 13.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/13.webp",
     "thumbnails": [
@@ -158,7 +158,7 @@
   {
     "id": "14",
     "name": "Cod:14",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 14.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 14.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/14.webp",
     "thumbnails": [
@@ -169,7 +169,7 @@
   {
     "id": "15",
     "name": "Cod:15",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 15.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 15.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/15.webp",
     "thumbnails": []
@@ -177,7 +177,7 @@
   {
     "id": "16",
     "name": "Cod:16",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 16.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 16.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/16.webp",
     "thumbnails": []
@@ -185,7 +185,7 @@
   {
     "id": "17",
     "name": "Cod:17",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 17.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 17.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/17.webp",
     "thumbnails": []
@@ -193,7 +193,7 @@
   {
     "id": "18",
     "name": "Cod:18",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 18.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 18.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/18.webp",
     "thumbnails": []
@@ -201,7 +201,7 @@
   {
     "id": "19",
     "name": "Cod:19",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 19.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 19.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/19.webp",
     "thumbnails": []
@@ -209,7 +209,7 @@
   {
     "id": "20",
     "name": "Cod:20",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 20.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 20.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/20.webp",
     "thumbnails": [
@@ -219,7 +219,7 @@
   {
     "id": "21",
     "name": "Cod:21",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 21.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 21.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/21.webp",
     "thumbnails": []
@@ -227,7 +227,7 @@
   {
     "id": "22",
     "name": "Cod:22",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 22.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 22.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/22.webp",
     "thumbnails": [
@@ -238,7 +238,7 @@
   {
     "id": "23",
     "name": "Cod:23",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 23.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 23.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/23.webp",
     "thumbnails": [
@@ -249,7 +249,7 @@
   {
     "id": "24",
     "name": "Cod:24",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 24.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 24.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/24.webp",
     "thumbnails": []
@@ -257,7 +257,7 @@
   {
     "id": "25",
     "name": "Cod:25",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 25.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 25.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/25.webp",
     "thumbnails": []
@@ -265,7 +265,7 @@
   {
     "id": "26",
     "name": "Cod:26",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 26.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 26.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/26.webp",
     "thumbnails": [
@@ -276,7 +276,7 @@
   {
     "id": "27",
     "name": "Cod:27",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 27.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 27.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/27.webp",
     "thumbnails": [
@@ -286,7 +286,7 @@
   {
     "id": "29",
     "name": "Cod:29",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 29.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 29.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/29.webp",
     "thumbnails": [
@@ -296,7 +296,7 @@
   {
     "id": "30",
     "name": "Cod:30",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 30.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 30.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/30.webp",
     "thumbnails": [
@@ -307,7 +307,7 @@
   {
     "id": "31",
     "name": "Cod:31",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 31.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 31.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/31.webp",
     "thumbnails": [
@@ -320,7 +320,7 @@
   {
     "id": "32",
     "name": "Cod:32",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 32.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 32.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/32.webp",
     "thumbnails": []
@@ -328,7 +328,7 @@
   {
     "id": "33",
     "name": "Cod:33",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 33.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 33.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/33.webp",
     "thumbnails": [
@@ -339,7 +339,7 @@
   {
     "id": "34",
     "name": "Cod:34",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 34.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 34.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/34.webp",
     "thumbnails": [
@@ -349,7 +349,7 @@
   {
     "id": "35",
     "name": "Cod:35",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 35.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 35.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/35.webp",
     "thumbnails": []
@@ -357,7 +357,7 @@
   {
     "id": "36",
     "name": "Cod:36",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 36.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 36.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/36.webp",
     "thumbnails": []
@@ -365,7 +365,7 @@
   {
     "id": "37",
     "name": "Cod:37",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 37.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 37.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/37.webp",
     "thumbnails": []
@@ -373,7 +373,7 @@
   {
     "id": "38",
     "name": "Cod:38",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 38.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 38.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/38.webp",
     "thumbnails": []
@@ -381,7 +381,7 @@
   {
     "id": "39",
     "name": "Cod:39",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 39.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 39.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/39.webp",
     "thumbnails": [
@@ -392,7 +392,7 @@
   {
     "id": "40",
     "name": "Cod:40",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 40.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 40.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/40.webp",
     "thumbnails": [
@@ -402,7 +402,7 @@
   {
     "id": "41",
     "name": "Cod:41",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 41.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 41.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/41.webp",
     "thumbnails": []
@@ -410,7 +410,7 @@
   {
     "id": "42",
     "name": "Cod:42",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 42.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 42.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/42.webp",
     "thumbnails": [
@@ -423,7 +423,7 @@
   {
     "id": "43",
     "name": "Cod:43",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 43.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 43.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/43.webp",
     "thumbnails": [
@@ -437,7 +437,7 @@
   {
     "id": "44",
     "name": "Cod:44",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 44.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 44.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 45,00",
     "mainImage": "assets/img/produtos/44.webp",
     "thumbnails": []
@@ -445,7 +445,7 @@
   {
     "id": "45",
     "name": "Cod:45",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 45.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 45.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 45,00",
     "mainImage": "assets/img/produtos/45.webp",
     "thumbnails": []
@@ -453,7 +453,7 @@
   {
     "id": "46",
     "name": "Cod:46",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 46.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 46.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 45,00",
     "mainImage": "assets/img/produtos/46.webp",
     "thumbnails": []
@@ -461,7 +461,7 @@
   {
     "id": "47",
     "name": "Cod:47",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 47.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 47.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "Consultar valor",
     "mainImage": "assets/img/produtos/47.webp",
     "thumbnails": []
@@ -469,7 +469,7 @@
   {
     "id": "48",
     "name": "Cod:48",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 48.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 48.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "Consultar valor",
     "mainImage": "assets/img/produtos/48.webp",
     "thumbnails": []
@@ -477,7 +477,7 @@
   {
     "id": "49",
     "name": "Cod:49",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 49.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 49.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "Consultar valor",
     "mainImage": "assets/img/produtos/49.webp",
     "thumbnails": []
@@ -485,7 +485,7 @@
   {
     "id": "50",
     "name": "Cod:50",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 50.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 50.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/50.webp",
     "thumbnails": [
@@ -495,7 +495,7 @@
   {
     "id": "51",
     "name": "Cod:51",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 51.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 51.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/51.webp",
     "thumbnails": []
@@ -503,7 +503,7 @@
   {
     "id": "52",
     "name": "Cod:52",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 52.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 52.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/52.webp",
     "thumbnails": [
@@ -513,7 +513,7 @@
   {
     "id": "53",
     "name": "Cod:53",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 53.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 53.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/53.webp",
     "thumbnails": [
@@ -523,7 +523,7 @@
   {
     "id": "54",
     "name": "Cod:54",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 54.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 54.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/54.webp",
     "thumbnails": []
@@ -531,7 +531,7 @@
   {
     "id": "55",
     "name": "Cod:55",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 55.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 55.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/55.webp",
     "thumbnails": []
@@ -539,7 +539,7 @@
   {
     "id": "56",
     "name": "Cod:56",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 56.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 56.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/56.webp",
     "thumbnails": []
@@ -547,7 +547,7 @@
   {
     "id": "57",
     "name": "Cod:57",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 57.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 57.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/57.webp",
     "thumbnails": []
@@ -555,7 +555,7 @@
   {
     "id": "58",
     "name": "Cod:58",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 58.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 58.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/58.webp",
     "thumbnails": []
@@ -563,7 +563,7 @@
   {
     "id": "59",
     "name": "Cod:59",
-    "description": "Descrição: Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <br> Observação_2: Os itens do cenário, não acompanham o produto. 59.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "description": <strong>"Descrição:<strong> Modelo <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br> Observação_1: Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação. <strong><br> Observação_2:<strong> Os itens do cenário, não acompanham o produto. 59.<br><strong>Observação:</strong> Todos os produtos serão enviados em cores aleatórias disponíveis. Caso opte por alguma cor específica, informe no ato da solicitação.",
     "price": "R$ 60,00",
     "mainImage": "assets/img/produtos/59.webp",
     "thumbnails": []
