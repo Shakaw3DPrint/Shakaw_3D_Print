@@ -45,17 +45,25 @@ function displayProducts(products) {
   products.forEach(product => {
     const productDiv = document.createElement("div");
     productDiv.className = "product";
-    // A imagem principal não tem mais onclick para abrir o modal diretamente.
+    
+    // Prepara o array de todas as imagens do produto para o modal
+    const allProductImagesForModal = [product.mainImage, ...product.thumbnails];
+
     productDiv.innerHTML = `
       <div class="image-column">
-        <img src="${product.mainImage}" alt="${product.name}" class="main-img">
+        <img 
+          src="${product.mainImage}" 
+          alt="${product.name}" 
+          class="main-img" 
+          onclick="openModal(\'${product.mainImage}\', ${JSON.stringify(allProductImagesForModal)})"
+        >
         <div class="thumbnail-container">
           ${product.thumbnails.map(thumb => `
             <img 
               src="${thumb}" 
               alt="Thumbnail de ${product.name}" 
-              onerror="this.style.display='none'; this.parentElement.classList.add('has-broken-thumb');" 
-              onclick="handleChangeAndOpenModal(this, '${product.mainImage}', ${JSON.stringify(product.thumbnails)}, '${thumb}')"
+              onerror="this.style.display=\'none\'; this.parentElement.classList.add(\'has-broken-thumb\');" 
+              onclick="handleChangeAndOpenModal(this, \'${product.mainImage}\', ${JSON.stringify(product.thumbnails)}, \'${thumb}\')"
             >
           `).join("")}
         </div>
@@ -69,7 +77,7 @@ function displayProducts(products) {
           <input type="number" class="quantity" value="1" min="1" readonly>
           <button class="qty-btn" onclick="changeQuantity(this, 1)">+</button>
         </div>
-        <button onclick="addInterest('${product.name}', '${product.price}', this)">Tenho Interesse</button>
+        <button onclick="addInterest(\'${product.name}\', \'${product.price}\', this)">Tenho Interesse</button>
       </div>
     `;
     catalog.appendChild(productDiv);
@@ -80,9 +88,9 @@ function displayProducts(products) {
 // FUNÇÃO PARA LIDAR COM CLIQUE NA MINIATURA E ABRIR MODAL
 // =============================================
 function handleChangeAndOpenModal(thumbnailElement, mainImageForProduct, allThumbnailsForProduct, clickedThumbSrc) {
-    const productDiv = thumbnailElement.closest('.product');
+    const productDiv = thumbnailElement.closest(".product");
     if (productDiv) {
-        const mainImgElement = productDiv.querySelector('.main-img');
+        const mainImgElement = productDiv.querySelector(".main-img");
         if (mainImgElement) {
             mainImgElement.src = clickedThumbSrc; // Atualiza a imagem principal na visualização do catálogo
         }
@@ -90,7 +98,6 @@ function handleChangeAndOpenModal(thumbnailElement, mainImageForProduct, allThum
 
     // Prepara o array de imagens para o modal: inclui a imagem principal original e todas as miniaturas.
     let modalImages = [mainImageForProduct, ...allThumbnailsForProduct];
-    // A função openModal fará a filtragem e a remoção de duplicatas.
     
     openModal(clickedThumbSrc, modalImages);
 }
@@ -176,36 +183,34 @@ function changeQuantity(button, delta) {
 function openModal(imageSrc, imagesArray) {
   let validImages = [];
   if (Array.isArray(imagesArray)) {
-    // Filtra apenas strings válidas e não vazias
-    validImages = imagesArray.filter(img => img && typeof img === 'string');
+    // Filtra apenas strings válidas e não vazias e remove duplicatas
+    validImages = [...new Set(imagesArray.filter(img => img && typeof img === "string"))];
   }
   
-  // Adiciona imageSrc ao início da lista se não estiver presente, garantindo que seja uma string válida
-  if (imageSrc && typeof imageSrc === 'string' && !validImages.includes(imageSrc)) {
+  // Adiciona imageSrc ao início da lista se não estiver presente e for válida
+  if (imageSrc && typeof imageSrc === "string" && !validImages.includes(imageSrc)) {
     validImages.unshift(imageSrc);
+     // Garante que não haja duplicatas novamente após unshift
+    validImages = [...new Set(validImages)];
   }
-  // Remove duplicatas
-  currentProductImages = [...new Set(validImages)];
+  currentProductImages = validImages;
 
-  // Encontra o índice da imagem a ser exibida inicialmente
   currentImageIndex = currentProductImages.indexOf(imageSrc);
-  // Se imageSrc não foi encontrada (talvez após filtragem) mas há imagens, exibe a primeira
   if (currentImageIndex === -1 && currentProductImages.length > 0) {
-    currentImageIndex = 0;
+    currentImageIndex = 0; // Se a imagem clicada não estiver na lista (improvável), mostra a primeira
   }
 
-  // Se não há imagens válidas ou não foi possível determinar o índice, não abre o modal
   if (currentProductImages.length === 0 || currentImageIndex === -1) {
-    console.error("Modal: Nenhuma imagem válida para exibir ou imagem inicial não encontrada. Imagens recebidas:", imageSrc, imagesArray);
+    console.error("Modal: Nenhuma imagem válida para exibir. Imagem inicial:", imageSrc, "Array de imagens:", imagesArray);
     imgModal.style.display = "none";
-    document.body.style.overflow = "auto"; // Restaura scroll do body
+    document.body.style.overflow = "auto";
     return;
   }
 
   modalImg.src = currentProductImages[currentImageIndex];
   imgModal.style.display = "block";
-  resetZoom(); // Reseta o zoom ao abrir uma nova imagem
-  document.body.style.overflow = "hidden"; // Impede scroll do body
+  resetZoom(); 
+  document.body.style.overflow = "hidden"; 
 }
 
 function closeModal() {
@@ -250,7 +255,7 @@ window.onscroll = function() {
 // PAINEL DE INTERESSES (AJUSTADO PARA DISPLAY FLEX)
 // =============================================
 function addInterest(productName, productPrice, button) {
-  const quantityInput = button.closest('.product-details').querySelector(".quantity");
+  const quantityInput = button.closest(".product-details").querySelector(".quantity");
   const quantity = parseInt(quantityInput.value);
 
   const existingInterest = interests.find(item => item.name === productName);
@@ -280,7 +285,6 @@ function updateInterestPanel() {
     `;
     interestList.appendChild(listItem);
   });
-  // O display do painel é gerenciado por addInterest e toggleInterestPanel
 }
 
 function removeInterest(index) {
@@ -293,10 +297,10 @@ function removeInterest(index) {
 
 function toggleInterestPanel() {
   if (interests.length > 0) { 
-      if (interestPanel.style.display === "flex") { // Verificando 'flex'
+      if (interestPanel.style.display === "flex") { 
           interestPanel.style.display = "none";
       } else {
-          interestPanel.style.display = "flex"; // Setando para 'flex'
+          interestPanel.style.display = "flex"; 
       }
   } else {
       interestPanel.style.display = "none";
@@ -304,7 +308,7 @@ function toggleInterestPanel() {
 }
 
 // =============================================
-// MODAL DE CONTATO (sem alterações no JS, problema é mais provável no CSS ou estrutura)
+// MODAL DE CONTATO 
 // =============================================
 function showContactModal() {
   if (interests.length === 0) {
@@ -343,7 +347,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   loadCarouselImages();
   updateInterestPanel(); 
-  // Garante que o painel de interesse comece escondido se estiver vazio.
   if (interests.length === 0) {
       interestPanel.style.display = "none";
   }
