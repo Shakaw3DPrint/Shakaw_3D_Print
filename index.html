@@ -93,11 +93,12 @@
   <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn" title="Voltar ao topo">⬆️ Topo</button>
 
   <!-- PAINEL DE INTERESSES -->
-  <div id="interestPanel">
-    <h3>Lista de interesses</h3>
-    <ul id="interestList"></ul>
-    <button onclick="showContactModal()" style="margin-top: 10px; padding: 8px 12px; background: #0077cc; color: white; border: none; border-radius: 5px; cursor: pointer;">Enviar Interesses</button>
-  </div>
+ <div id="interestPanel">
+  <h3>Lista de interesses</h3>
+  <ul id="interestList"></ul>
+  <div id="interestTotal"></div> <!-- ADICIONE ESTA LINHA AQUI -->
+  <button onclick="showContactModal()" style="...">Enviar Interesses</button>
+</div>
 
   <!-- BOTÃO PARA ABRIR PAINEL DE INTERESSES -->
   <button onclick="toggleInterestPanel()" class="interest-btn">💚 Ver interesses</button>
