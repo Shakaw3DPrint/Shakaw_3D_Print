@@ -57,9 +57,8 @@ function displayProducts(products) {
     mainImg.src = product.mainImage;
     mainImg.alt = product.name;
     mainImg.className = "main-img";
-    // Apenas a imagem principal abre o modal
     mainImg.addEventListener("click", () => {
-      openModal(mainImg.src, allProductImagesForModal); // Passa o src atual da mainImg
+      openModal(mainImg.src, allProductImagesForModal);
     });
     imageColumn.appendChild(mainImg);
 
@@ -74,7 +73,6 @@ function displayProducts(products) {
           this.style.display='none'; 
           if(this.parentElement) this.parentElement.classList.add('has-broken-thumb'); 
         };
-        // Miniaturas apenas trocam a imagem principal no catálogo
         thumbImg.addEventListener("click", () => {
           mainImg.src = thumbSrc;
         });
@@ -221,7 +219,6 @@ function openModal(imageSrc, imagesArray) {
   imgModal.style.display = "block";
   resetZoom(); 
   document.body.style.overflow = "hidden"; 
-  // Adiciona listener para teclado quando modal abre
   document.addEventListener('keydown', handleModalKeydown);
 }
 
@@ -229,7 +226,6 @@ function closeModal() {
   if(!imgModal) return;
   imgModal.style.display = "none";
   document.body.style.overflow = "auto"; 
-  // Remove listener para teclado quando modal fecha
   document.removeEventListener('keydown', handleModalKeydown);
 }
 
@@ -259,28 +255,11 @@ function resetZoom() {
 
 function handleModalKeydown(event) {
   if (!imgModal || imgModal.style.display !== 'block') return;
-
   switch (event.key) {
-    case '+':
-    case '=': // Teclado numérico e principal
-      zoomImage(0.2);
-      break;
-    case '-':
-      zoomImage(-0.2);
-      break;
-    case '0':
-      resetZoom();
-      break;
-    case 'Escape':
-      closeModal();
-      break;
-    // Opcional: setas para navegar
-    // case 'ArrowLeft':
-    //   navigateModal(-1);
-    //   break;
-    // case 'ArrowRight':
-    //   navigateModal(1);
-    //   break;
+    case '+': case '=': zoomImage(0.2); break;
+    case '-': zoomImage(-0.2); break;
+    case '0': resetZoom(); break;
+    case 'Escape': closeModal(); break;
   }
 }
 
@@ -309,7 +288,6 @@ function parsePrice(priceString) {
 function addInterest(productName, productPriceString, quantityValue) {
   const quantity = parseInt(quantityValue);
   const price = parsePrice(productPriceString);
-
   const existingInterest = interests.find(item => item.name === productName);
   if (existingInterest) {
     existingInterest.quantity += quantity;
@@ -326,14 +304,12 @@ function updateInterestPanel() {
   if (!interestList) return;
   interestList.innerHTML = ""; 
   let totalValue = 0;
-
   if (interests.length === 0) {
     interestList.innerHTML = "<li>Nenhum item adicionado.</li>";
     if (interestTotalElement) interestTotalElement.innerHTML = ""; 
     if (interestPanel) interestPanel.style.display = "none"; 
     return;
   }
-
   interests.forEach((item, index) => {
     const listItem = document.createElement("li");
     listItem.innerHTML = `
@@ -343,7 +319,6 @@ function updateInterestPanel() {
     interestList.appendChild(listItem);
     totalValue += item.price * item.quantity;
   });
-
   document.querySelectorAll('.remove-interest-item-btn').forEach(button => {
     const newButton = button.cloneNode(true);
     button.parentNode.replaceChild(newButton, button);
@@ -351,7 +326,6 @@ function updateInterestPanel() {
       removeInterest(parseInt(this.dataset.index));
     });
   });
-
   if (interestTotalElement) {
     interestTotalElement.innerHTML = `<strong>Total: R$ ${totalValue.toFixed(2).replace('.', ',')}</strong>`;
   }
@@ -384,7 +358,6 @@ function showContactModal() {
     alert("Por favor, adicione itens à sua lista de interesses primeiro.");
     return;
   }
-  
   if(selectedItemsSummary) selectedItemsSummary.innerHTML = ""; 
   let itemsText = "";
   let totalFormValue = 0;
@@ -397,7 +370,6 @@ function showContactModal() {
   });
   itemsText += `\nTotal Geral: R$ ${totalFormValue.toFixed(2).replace('.', ',')}`;
   if(itemsDataInput) itemsDataInput.value = itemsText.trim(); 
-  
   if(contactModal) contactModal.style.display = "block";
   if(interestPanel) interestPanel.style.display = "none"; 
 }
@@ -416,6 +388,7 @@ window.onclick = function(event) {
 // INICIALIZAÇÃO
 // =============================================
 document.addEventListener("DOMContentLoaded", () => {
+  // Carregamento inicial
   loadProducts();
   loadCarouselImages();
   updateInterestPanel(); 
@@ -423,30 +396,49 @@ document.addEventListener("DOMContentLoaded", () => {
       interestPanel.style.display = "none";
   }
 
+  // Adicionar event listeners para elementos estáticos do HTML
+  // Carrossel
+  const carouselBtnPrev = document.querySelector(".carousel-btn.prev");
+  if(carouselBtnPrev) carouselBtnPrev.addEventListener("click", () => moveSlide(-1));
+  const carouselBtnNext = document.querySelector(".carousel-btn.next");
+  if(carouselBtnNext) carouselBtnNext.addEventListener("click", () => moveSlide(1));
+
+  // Modal de Imagem
   const closeModalButton = document.querySelector("#imgModal .close");
   if(closeModalButton) closeModalButton.addEventListener("click", closeModal);
-  
   const modalPrevButton = document.querySelector("#imgModal .modal-prev");
   if(modalPrevButton) modalPrevButton.addEventListener("click", () => navigateModal(-1));
-  
   const modalNextButton = document.querySelector("#imgModal .modal-next");
   if(modalNextButton) modalNextButton.addEventListener("click", () => navigateModal(1));
-  
   const zoomControls = document.querySelector(".zoom-controls");
   if(zoomControls){
-      if(zoomControls.children[0]) zoomControls.children[0].addEventListener("click", () => zoomImage(0.2));
-      if(zoomControls.children[1]) zoomControls.children[1].addEventListener("click", () => zoomImage(-0.2));
-      if(zoomControls.children[2]) zoomControls.children[2].addEventListener("click", resetZoom);
+      const zoomInBtn = zoomControls.children[0];
+      if(zoomInBtn) zoomInBtn.addEventListener("click", () => zoomImage(0.2));
+      const zoomOutBtn = zoomControls.children[1];
+      if(zoomOutBtn) zoomOutBtn.addEventListener("click", () => zoomImage(-0.2));
+      const zoomResetBtn = zoomControls.children[2];
+      if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoom);
   }
-  
-  if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
-  
-  const interestBtnGlobal = document.querySelector('.interest-btn');
-  if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
-  
+
+  // Modal de Contato
   const closeContactModalButton = document.querySelector('#contactModal .close-contact');
   if(closeContactModalButton) closeContactModalButton.addEventListener('click', () => { 
       if(contactModal) contactModal.style.display='none'; 
   });
+
+  // Botão Voltar ao Topo
+  if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
   
-  const showContactModalBtn = document.querySelector("#interestPanel > button"); // Botão 
+  // Botão "Ver Interesses" (verde, global)
+  const interestBtnGlobal = document.querySelector('.interest-btn'); 
+  if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
+  
+  // Botão "Enviar Interesses" dentro do painel de interesses
+  // É importante que este botão tenha um ID ou uma classe específica se o HTML for alterado.
+  // Assumindo que é o único botão diretamente dentro de #interestPanel que não seja para remover itens.
+  const showContactModalBtn = document.querySelector("#interestPanel > button:not(.remove-interest-item-btn)");
+  if(showContactModalBtn) showContactModalBtn.addEventListener('click', showContactModal);
+  
+});
+
+
