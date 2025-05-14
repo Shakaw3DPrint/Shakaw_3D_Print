@@ -7,8 +7,6 @@ const interests = []; // Armazena todos os itens de interesse
 const backToTopBtn = document.getElementById("backToTopBtn");
 const interestPanel = document.getElementById("interestPanel");
 const interestList = document.getElementById("interestList");
-// Adicionar referência ao elemento do total. Certifique-se que ele existe no HTML.
-// Ex: <div id="interestPanel"> ... <ul id="interestList"></ul> <div id="interestTotal"></div> <button>...</button> </div>
 const interestTotalElement = document.getElementById("interestTotal"); 
 const imgModal = document.getElementById("imgModal");
 const modalImg = document.getElementById("modalImg");
@@ -24,7 +22,7 @@ let currentZoomLevel = 1;
 // CARREGAMENTO DE PRODUTOS
 // =============================================
 async function loadProducts() {
-  loader.style.display = "block";
+  if(loader) loader.style.display = "block";
   try {
     const response = await fetch("assets/json/products.json");
     if (!response.ok) {
@@ -34,16 +32,17 @@ async function loadProducts() {
     displayProducts(products);
   } catch (error) {
     console.error("Falha ao carregar produtos:", error);
-    catalog.innerHTML = "<p>Erro ao carregar produtos. Tente novamente mais tarde.</p>";
+    if(catalog) catalog.innerHTML = "<p>Erro ao carregar produtos. Tente novamente mais tarde.</p>";
   } finally {
-    loader.style.display = "none";
+    if(loader) loader.style.display = "none";
   }
 }
 
 // =============================================
-// EXIBIÇÃO DE PRODUTOS (REFATORADO COM addEventListener)
+// EXIBIÇÃO DE PRODUTOS
 // =============================================
 function displayProducts(products) {
+  if(!catalog) return;
   catalog.innerHTML = "";
   products.forEach(product => {
     const productDiv = document.createElement("div");
@@ -58,8 +57,9 @@ function displayProducts(products) {
     mainImg.src = product.mainImage;
     mainImg.alt = product.name;
     mainImg.className = "main-img";
+    // Apenas a imagem principal abre o modal
     mainImg.addEventListener("click", () => {
-      openModal(product.mainImage, allProductImagesForModal);
+      openModal(mainImg.src, allProductImagesForModal); // Passa o src atual da mainImg
     });
     imageColumn.appendChild(mainImg);
 
@@ -74,12 +74,9 @@ function displayProducts(products) {
           this.style.display='none'; 
           if(this.parentElement) this.parentElement.classList.add('has-broken-thumb'); 
         };
-        thumbImg.addEventListener("click", (event) => {
-          // Atualiza a imagem principal no catálogo
-          const currentMainImg = productDiv.querySelector('.main-img');
-          if (currentMainImg) currentMainImg.src = thumbSrc;
-          // Abre o modal com a miniatura clicada como imagem inicial
-          openModal(thumbSrc, allProductImagesForModal);
+        // Miniaturas apenas trocam a imagem principal no catálogo
+        thumbImg.addEventListener("click", () => {
+          mainImg.src = thumbSrc;
         });
         thumbnailContainer.appendChild(thumbImg);
       }
@@ -113,17 +110,16 @@ function displayProducts(products) {
   });
 }
 
-// Removida handleChangeAndOpenModal pois a lógica foi incorporada no event listener da miniatura
-
 // =============================================
-// CARROSSEL (sem alterações)
+// CARROSSEL
 // =============================================
 const carousel = document.getElementById("carousel");
 const carouselIndicators = document.getElementById("carouselIndicators");
-let carouselImagesData = []; // Renomeado para evitar conflito
+let carouselImagesData = [];
 let currentCarouselIndex = 0;
 
 async function loadCarouselImages() {
+  if(!carousel || !carouselIndicators) return;
   try {
     const response = await fetch("assets/json/carousel.json");
     if (!response.ok) {
@@ -138,6 +134,7 @@ async function loadCarouselImages() {
 }
 
 function renderCarousel() {
+  if(!carousel || !carouselIndicators) return;
   carousel.innerHTML = "";
   carouselIndicators.innerHTML = "";
   carouselImagesData.forEach((image, index) => {
@@ -148,14 +145,14 @@ function renderCarousel() {
 
     const indicator = document.createElement("div");
     indicator.className = "carousel-indicator";
-    indicator.addEventListener("click", () => goToSlide(index)); // Usar addEventListener
+    indicator.addEventListener("click", () => goToSlide(index));
     carouselIndicators.appendChild(indicator);
   });
   updateCarousel();
 }
 
 function updateCarousel() {
-  if (carouselImagesData.length === 0) return;
+  if (carouselImagesData.length === 0 || !carousel) return;
   carousel.style.transform = `translateX(-${currentCarouselIndex * 100}%)`;
   const indicators = document.querySelectorAll(".carousel-indicator");
   indicators.forEach((indicator, index) => {
@@ -175,7 +172,7 @@ function goToSlide(index) {
 }
 
 function startCarouselAutoPlay() {
-  if (carouselImagesData.length > 1) { // Só inicia se houver mais de uma imagem
+  if (carouselImagesData.length > 1) {
     setInterval(() => {
       moveSlide(1);
     }, 5000); 
@@ -186,6 +183,7 @@ function startCarouselAutoPlay() {
 // CONTROLE DE QUANTIDADE
 // =============================================
 function changeQuantity(quantityInput, delta) {
+  if(!quantityInput) return;
   let currentValue = parseInt(quantityInput.value);
   currentValue += delta;
   if (currentValue < 1) currentValue = 1;
@@ -196,6 +194,7 @@ function changeQuantity(quantityInput, delta) {
 // MODAL DE IMAGEM
 // =============================================
 function openModal(imageSrc, imagesArray) {
+  if(!imgModal || !modalImg) return;
   let validImages = [];
   if (Array.isArray(imagesArray)) {
     validImages = [...new Set(imagesArray.filter(img => img && typeof img === "string"))];
@@ -213,7 +212,6 @@ function openModal(imageSrc, imagesArray) {
   }
 
   if (currentProductImages.length === 0 || currentImageIndex === -1) {
-    console.error("Modal: Nenhuma imagem válida para exibir. Imagem inicial:", imageSrc, "Array de imagens:", imagesArray);
     imgModal.style.display = "none";
     document.body.style.overflow = "auto";
     return;
@@ -223,24 +221,30 @@ function openModal(imageSrc, imagesArray) {
   imgModal.style.display = "block";
   resetZoom(); 
   document.body.style.overflow = "hidden"; 
+  // Adiciona listener para teclado quando modal abre
+  document.addEventListener('keydown', handleModalKeydown);
 }
 
 function closeModal() {
+  if(!imgModal) return;
   imgModal.style.display = "none";
   document.body.style.overflow = "auto"; 
+  // Remove listener para teclado quando modal fecha
+  document.removeEventListener('keydown', handleModalKeydown);
 }
 
 function navigateModal(step) {
-  if (currentProductImages.length === 0) return;
+  if (currentProductImages.length === 0 || !modalImg) return;
   currentImageIndex = (currentImageIndex + step + currentProductImages.length) % currentProductImages.length;
   modalImg.src = currentProductImages[currentImageIndex];
   resetZoom(); 
 }
 
 // =============================================
-// CONTROLES DE ZOOM NO MODAL
+// CONTROLES DE ZOOM NO MODAL E TECLADO
 // =============================================
 function zoomImage(amount) {
+  if(!modalImg) return;
   currentZoomLevel += amount;
   if (currentZoomLevel < 0.2) currentZoomLevel = 0.2; 
   if (currentZoomLevel > 3) currentZoomLevel = 3;   
@@ -248,8 +252,36 @@ function zoomImage(amount) {
 }
 
 function resetZoom() {
+  if(!modalImg) return;
   currentZoomLevel = 1;
   modalImg.style.transform = "scale(1)";
+}
+
+function handleModalKeydown(event) {
+  if (!imgModal || imgModal.style.display !== 'block') return;
+
+  switch (event.key) {
+    case '+':
+    case '=': // Teclado numérico e principal
+      zoomImage(0.2);
+      break;
+    case '-':
+      zoomImage(-0.2);
+      break;
+    case '0':
+      resetZoom();
+      break;
+    case 'Escape':
+      closeModal();
+      break;
+    // Opcional: setas para navegar
+    // case 'ArrowLeft':
+    //   navigateModal(-1);
+    //   break;
+    // case 'ArrowRight':
+    //   navigateModal(1);
+    //   break;
+  }
 }
 
 // =============================================
@@ -291,7 +323,7 @@ function addInterest(productName, productPriceString, quantityValue) {
 }
 
 function updateInterestPanel() {
-  if (!interestList) return; // Sai se a lista não existir
+  if (!interestList) return;
   interestList.innerHTML = ""; 
   let totalValue = 0;
 
@@ -313,7 +345,6 @@ function updateInterestPanel() {
   });
 
   document.querySelectorAll('.remove-interest-item-btn').forEach(button => {
-    // Remove event listener antigo para evitar duplicação se updateInterestPanel for chamado múltiplas vezes
     const newButton = button.cloneNode(true);
     button.parentNode.replaceChild(newButton, button);
     newButton.addEventListener('click', function() {
@@ -377,7 +408,7 @@ window.onclick = function(event) {
     closeModal();
   }
   if (contactModal && event.target == contactModal) {
-    contactModal.style.display = "none";
+    if(contactModal) contactModal.style.display = "none";
   }
 }
 
@@ -392,7 +423,6 @@ document.addEventListener("DOMContentLoaded", () => {
       interestPanel.style.display = "none";
   }
 
-  // Adicionar event listeners para botões/elementos que não são gerados dinamicamente por produto
   const closeModalButton = document.querySelector("#imgModal .close");
   if(closeModalButton) closeModalButton.addEventListener("click", closeModal);
   
@@ -411,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
   
-  const interestBtnGlobal = document.querySelector('.interest-btn'); // Botão verde "Ver Interesses"
+  const interestBtnGlobal = document.querySelector('.interest-btn');
   if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
   
   const closeContactModalButton = document.querySelector('#contactModal .close-contact');
@@ -419,17 +449,4 @@ document.addEventListener("DOMContentLoaded", () => {
       if(contactModal) contactModal.style.display='none'; 
   });
   
-  // O botão "Enviar Interesses" dentro do painel de interesses
-  // Precisa ser selecionado com cuidado, pois o HTML original tinha onclick.
-  // Assumindo que o HTML do painel de interesses é:
-  // <div id="interestPanel">...<button id="showContactModalBtn">Enviar Interesses</button></div>
-  // Se o botão não tiver ID, a seleção abaixo pode falhar ou pegar o errado.
-  // A estrutura CSS anterior sugeria: #interestPanel > button[onclick*="showContactModal"]
-  // Vamos tentar um seletor mais robusto se o HTML for conhecido ou se pudermos adicionar um ID.
-  // Por agora, se o HTML original for mantido, o botão dentro do painel de interesses é o único botão filho direto.
-  const showContactModalBtn = document.querySelector("#interestPanel > button");
-  if(showContactModalBtn) showContactModalBtn.addEventListener('click', showContactModal);
-
-});
-
-
+  const showContactModalBtn = document.querySelector("#interestPanel > button"); // Botão 
