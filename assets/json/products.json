@@ -1,19 +1,19 @@
 [
-  "{
-    ""id"": ""1"",
-    ""name"": ""Produto 01"",
-    ""description"": ""Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação."",
-    ""price"": ""R$ 60,00"",
-    ""mainImage"": ""assets/img/produtos/01.webp"",
-    ""thumbnails"": [
-      ""assets/img/produtos/01_1.webp"",
-      ""assets/img/produtos/01_2.webp"",
-      ""assets/img/produtos/01_3.webp"",
-      ""assets/img/produtos/01_4.webp"",
-      ""assets/img/produtos/01_5.webp"",
-      ""assets/img/produtos/01_6.webp""
+  {
+    "id": "1",
+    "name": "Produto 01",
+    "description": "Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "price": "R$ 60,00",
+    "mainImage": "assets/img/produtos/01.webp",
+    "thumbnails": [
+      "assets/img/produtos/01_1.webp",
+      "assets/img/produtos/01_2.webp",
+      "assets/img/produtos/01_3.webp",
+      "assets/img/produtos/01_4.webp",
+      "assets/img/produtos/01_5.webp",
+      "assets/img/produtos/01_6.webp"
     ]
-  },"
+  },
 
 
 
@@ -28,21 +28,21 @@
 
 
 
-"{
-    ""id"": ""2"",
-    ""name"": ""Produto 02"",
-    ""description"": ""Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação."",
-    ""price"": ""R$ 60,00"",
-    ""mainImage"": ""assets/img/produtos/01.webp"",
-    ""thumbnails"": [
-      ""assets/img/produtos/02_1.webp"",
-      ""assets/img/produtos/02_2.webp"",
-      ""assets/img/produtos/02_3.webp"",
-      ""assets/img/produtos/02_4.webp"",
-      ""assets/img/produtos/02_5.webp"",
-      ""assets/img/produtos/02_6.webp""
+{
+    "id": "2",
+    "name": "Produto 02",
+    "description": "Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "price": "R$ 60,00",
+    "mainImage": "assets/img/produtos/01.webp",
+    "thumbnails": [
+      "assets/img/produtos/02_1.webp",
+      "assets/img/produtos/02_2.webp",
+      "assets/img/produtos/02_3.webp",
+      "assets/img/produtos/02_4.webp",
+      "assets/img/produtos/02_5.webp",
+      "assets/img/produtos/02_6.webp"
     ]
-  },"
+  },
 
 
 
@@ -57,21 +57,21 @@
 
 
 
-"{
-    ""id"": ""3"",
-    ""name"": ""Produto 03"",
-    ""description"": ""Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação."",
-    ""price"": ""R$ 60,00"",
-    ""mainImage"": ""assets/img/produtos/01.webp"",
-    ""thumbnails"": [
-      ""assets/img/produtos/03_1.webp"",
-      ""assets/img/produtos/03_2.webp"",
-      ""assets/img/produtos/03_3.webp"",
-      ""assets/img/produtos/03_4.webp"",
-      ""assets/img/produtos/03_5.webp"",
-      ""assets/img/produtos/03_6.webp""
+{
+    "id": "3",
+    "name": "Produto 03",
+    "description": "Modelo + Esteira em resina 3D pintados a mão. <br> Imagem Real <br> Escala 1/18. Tamanho entre 8cm e 11cm de altura. <br><strong>Observação_1:</strong> Os itens do cenário não acompanham o produto.<br><strong>Observação_2:</strong> Os produtos serão enviados em cores aleatórias. Caso opte por alguma cor específica, informe no ato da solicitação.",
+    "price": "R$ 60,00",
+    "mainImage": "assets/img/produtos/01.webp",
+    "thumbnails": [
+      "assets/img/produtos/03_1.webp",
+      "assets/img/produtos/03_2.webp",
+      "assets/img/produtos/03_3.webp",
+      "assets/img/produtos/03_4.webp",
+      "assets/img/produtos/03_5.webp",
+      "assets/img/produtos/03_6.webp"
     ]
-  },"
+  },
 
 
 
