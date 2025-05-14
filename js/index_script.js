@@ -103,7 +103,7 @@ function displayProducts(products) {
 }
 
 // =============================================
-// CARROSSEL (sem alterações lógicas significativas)
+// CARROSSEL
 // =============================================
 const carousel = document.getElementById("carousel");
 const carouselIndicators = document.getElementById("carouselIndicators");
@@ -152,7 +152,7 @@ function startCarouselAutoPlay() {
 }
 
 // =============================================
-// CONTROLE DE QUANTIDADE (sem alterações)
+// CONTROLE DE QUANTIDADE
 // =============================================
 function changeQuantity(quantityInput, delta) {
   if(!quantityInput) return;
@@ -163,7 +163,7 @@ function changeQuantity(quantityInput, delta) {
 }
 
 // =============================================
-// MODAL DE IMAGEM (sem alterações lógicas significativas)
+// MODAL DE IMAGEM
 // =============================================
 function openModal(imageSrc, imagesArray) {
   if(!imgModal || !modalImg) return;
@@ -215,14 +215,14 @@ function handleModalKeydown(event) {
 }
 
 // =============================================
-// BOTÃO VOLTAR AO TOPO (sem alterações)
+// BOTÃO VOLTAR AO TOPO
 // =============================================
 window.onscroll = function() {
   if(backToTopBtn) backToTopBtn.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) ? "block" : "none";
 };
 
 // =============================================
-// FUNÇÃO AUXILIAR PARA CONVERTER PREÇO (sem alterações)
+// FUNÇÃO AUXILIAR PARA CONVERTER PREÇO
 // =============================================
 function parsePrice(priceString) {
   if (typeof priceString !== 'string') return 0;
@@ -230,43 +230,36 @@ function parsePrice(priceString) {
 }
 
 // =============================================
-// PAINEL DE INTERESSES - LÓGICA DE AUTO-HIDE E TOGGLE
+// PAINEL DE INTERESSES
 // =============================================
-function showInterestPanel() {
+function showInterestPanel(startAutoHideTimer = false) {
     if (!interestPanel) return;
     interestPanel.classList.add("visible");
-    interestPanel.classList.remove("hidden-fade"); // Garante que está visível para a animação
-    resetInterestPanelAutoHideTimer();
+    interestPanel.classList.remove("hidden-fade");
+    clearTimeout(interestPanelTimeoutId); // Limpa qualquer timer anterior ao mostrar
+    if (startAutoHideTimer && interests.length > 0) { // Só inicia o timer se houver itens
+        resetInterestPanelAutoHideTimer();
+    }
 }
 
 function hideInterestPanel(immediate = false) {
     if (!interestPanel) return;
-    clearTimeout(interestPanelTimeoutId);
+    clearTimeout(interestPanelTimeoutId); // Limpa o timer ao esconder manualmente ou por auto-hide
     if (immediate) {
         interestPanel.classList.remove("visible");
-        interestPanel.classList.add("hidden-fade"); // Para manter consistência se CSS usar isso
+        interestPanel.classList.add("hidden-fade"); 
     } else {
-        interestPanel.classList.add("hidden-fade"); // Adiciona classe para animar o fade-out
-        // O CSS deve cuidar da transição para visibility: hidden / opacity: 0
-        // E depois de um tempo, se necessário, remover a classe 'visible' completamente
-        // Para simplificar, o CSS fará opacity 0 e visibility hidden.
-        // A classe 'visible' é o estado 'deveria estar visível'.
-        // A classe 'hidden-fade' é o estado 'está se escondendo ou escondido via fade'.
-        // Vamos usar apenas 'visible' e o CSS faz o resto.
         interestPanel.classList.remove("visible"); 
+        interestPanel.classList.add("hidden-fade");
     }
 }
 
 function resetInterestPanelAutoHideTimer() {
     if (!interestPanel) return;
     clearTimeout(interestPanelTimeoutId);
-    // Só inicia o timer se o painel estiver marcado para ser visível e tiver itens
-    // Ou se o usuário explicitamente clicou para ver (mesmo vazio)
-    // A lógica atual é: se showInterestPanel é chamado, o timer é resetado.
     interestPanelTimeoutId = setTimeout(() => {
-        // Verifica se o painel ainda deve estar visível (ex: não foi escondido manualmente)
-        if (interestPanel.classList.contains("visible")) {
-            hideInterestPanel();
+        if (interestPanel.classList.contains("visible")) { 
+            hideInterestPanel(); 
         }
     }, 5000);
 }
@@ -281,7 +274,7 @@ function addInterest(productName, productPriceString, quantityValue) {
     interests.push({ name: productName, price: price, quantity: quantity, originalPriceString: productPriceString });
   }
   updateInterestPanel();
-  showInterestPanel(); // Mostra o painel e reseta o timer de auto-hide
+  showInterestPanel(true); // Mostra o painel E inicia o timer de auto-hide
 }
 
 function updateInterestPanel() {
@@ -291,8 +284,8 @@ function updateInterestPanel() {
   if (interests.length === 0) {
     interestList.innerHTML = "<li>Nenhum item adicionado.</li>";
     if (interestTotalElement) interestTotalElement.innerHTML = ""; 
-    // Não esconde o painel aqui; o timer ou toggleInterestPanel cuidará disso.
-    // Se o painel estiver visível e ficar vazio, o timer o esconderá.
+    // Se o painel estiver visível e a lista ficar vazia, o timer (se ativo e iniciado por add/remove) o esconderá.
+    // Se foi aberto pelo toggle e ficou vazio, permanece visível até novo toggle ou X.
   } else {
     interests.forEach((item, index) => {
       const listItem = document.createElement("li");
@@ -319,12 +312,8 @@ function updateInterestPanel() {
 function removeInterest(index) {
   interests.splice(index, 1);
   updateInterestPanel();
-  // Se o painel estava visível e agora está vazio, o timer de auto-hide (se ativo) o esconderá.
-  // Se o usuário acabou de remover o último item, e o painel está visível, ele deve permanecer visível
-  // e o timer de 5s (que já estava correndo ou foi resetado por uma adição anterior) o fechará.
-  // Se o painel estava visível e ainda tem itens, o timer continua.
   if (interestPanel.classList.contains("visible")) {
-      resetInterestPanelAutoHideTimer(); // Reseta o timer para dar mais 5s antes de esconder se ficar vazio ou inativo.
+      showInterestPanel(true); // Re-mostra e reinicia o timer de auto-hide
   }
 }
 
@@ -333,12 +322,13 @@ function toggleInterestPanel() {
   if (interestPanel.classList.contains("visible")) {
     hideInterestPanel(); 
   } else {
-    showInterestPanel(); // Mostra (mesmo vazio) e inicia o timer.
+    // Ao abrir pelo botão global, não inicia o auto-hide timer
+    showInterestPanel(false); 
   }
 }
 
 // =============================================
-// MODAL DE CONTATO (sem alterações lógicas significativas)
+// MODAL DE CONTATO
 // =============================================
 function showContactModal() {
   if (interests.length === 0) {
@@ -360,7 +350,7 @@ function showContactModal() {
   hideInterestPanel(true); // Esconde painel de interesse imediatamente ao abrir modal de contato
 }
 
-// Fechar modais se clicar fora (sem alterações)
+// Fechar modais se clicar fora
 window.onclick = function(event) {
   if (imgModal && event.target == imgModal) closeModal();
   if (contactModal && event.target == contactModal) if(contactModal) contactModal.style.display = "none";
@@ -373,13 +363,10 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   loadCarouselImages();
   updateInterestPanel(); 
-  if (interestPanel && interests.length === 0) {
-    // Painel começa escondido se não houver itens e não marcado como 'visible'
-    interestPanel.classList.remove("visible"); 
-    interestPanel.classList.add("hidden-fade"); // Aplica estado inicial de escondido com fade
-  } else if (interestPanel) {
-    // Se houver itens (ex: de um estado salvo, não aplicável aqui) ou se deve começar visível
-    // showInterestPanel(); // Descomente se o painel deve iniciar visível e com timer se tiver itens
+  if (interestPanel) {
+      // Painel começa escondido por padrão
+      interestPanel.classList.remove("visible"); 
+      interestPanel.classList.add("hidden-fade");
   }
 
   const carouselBtnPrev = document.querySelector(".carousel-btn.prev");
@@ -401,10 +388,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeContactModalButton = document.querySelector('#contactModal .close-contact');
   if(closeContactModalButton) closeContactModalButton.addEventListener('click', () => { if(contactModal) contactModal.style.display='none'; });
   if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
+  
   const interestBtnGlobal = document.querySelector('.interest-btn'); 
   if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
-  const showContactModalBtn = document.querySelector("#interestPanel > button:not(.remove-interest-item-btn)");
+  
+  // Seletor para o botão "Enviar Interesses" dentro do painel de interesses
+  const showContactModalBtn = document.querySelector("#interestPanel .btn-submit-interest");
   if(showContactModalBtn) showContactModalBtn.addEventListener('click', showContactModal);
+
+  // Event listener para o novo botão X no painel de interesses
+  const closeInterestPanelBtn = document.getElementById("closeInterestPanelBtn");
+  if(closeInterestPanelBtn) closeInterestPanelBtn.addEventListener('click', () => hideInterestPanel(false)); // false para usar fade
 });
 
 
