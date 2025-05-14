@@ -7,6 +7,9 @@ const interests = []; // Armazena todos os itens de interesse
 const backToTopBtn = document.getElementById("backToTopBtn");
 const interestPanel = document.getElementById("interestPanel");
 const interestList = document.getElementById("interestList");
+// Adicionar referência ao elemento do total. Certifique-se que ele existe no HTML.
+// Ex: <div id="interestPanel"> ... <ul id="interestList"></ul> <div id="interestTotal"></div> <button>...</button> </div>
+const interestTotalElement = document.getElementById("interestTotal"); 
 const imgModal = document.getElementById("imgModal");
 const modalImg = document.getElementById("modalImg");
 const contactModal = document.getElementById("contactModal");
@@ -14,7 +17,7 @@ const selectedItemsSummary = document.getElementById("selectedItemsSummary");
 const itemsDataInput = document.getElementById("itemsData");
 
 let currentImageIndex = 0;
-let currentProductImages = []; // Este será o array de imagens para o modal atual
+let currentProductImages = []; 
 let currentZoomLevel = 1;
 
 // =============================================
@@ -38,77 +41,86 @@ async function loadProducts() {
 }
 
 // =============================================
-// EXIBIÇÃO DE PRODUTOS
+// EXIBIÇÃO DE PRODUTOS (REFATORADO COM addEventListener)
 // =============================================
 function displayProducts(products) {
-  catalog.innerHTML = ""; // Limpa o catálogo antes de adicionar novos produtos
+  catalog.innerHTML = "";
   products.forEach(product => {
     const productDiv = document.createElement("div");
     productDiv.className = "product";
-    
-    // Prepara o array de todas as imagens do produto para o modal
-    const allProductImagesForModal = [product.mainImage, ...product.thumbnails];
 
-    productDiv.innerHTML = `
-      <div class="image-column">
-        <img 
-          src="${product.mainImage}" 
-          alt="${product.name}" 
-          class="main-img" 
-          onclick="openModal(\'${product.mainImage}\', ${JSON.stringify(allProductImagesForModal)})"
-        >
-        <div class="thumbnail-container">
-          ${product.thumbnails.map(thumb => `
-            <img 
-              src="${thumb}" 
-              alt="Thumbnail de ${product.name}" 
-              onerror="this.style.display=\'none\'; this.parentElement.classList.add(\'has-broken-thumb\');" 
-              onclick="handleChangeAndOpenModal(this, \'${product.mainImage}\', ${JSON.stringify(product.thumbnails)}, \'${thumb}\')"
-            >
-          `).join("")}
-        </div>
-      </div>
-      <div class="product-details">
+    const allProductImagesForModal = [product.mainImage, ...product.thumbnails.filter(t => t && typeof t === 'string')];
+
+    const imageColumn = document.createElement("div");
+    imageColumn.className = "image-column";
+
+    const mainImg = document.createElement("img");
+    mainImg.src = product.mainImage;
+    mainImg.alt = product.name;
+    mainImg.className = "main-img";
+    mainImg.addEventListener("click", () => {
+      openModal(product.mainImage, allProductImagesForModal);
+    });
+    imageColumn.appendChild(mainImg);
+
+    const thumbnailContainer = document.createElement("div");
+    thumbnailContainer.className = "thumbnail-container";
+    product.thumbnails.forEach(thumbSrc => {
+      if (thumbSrc && typeof thumbSrc === 'string') {
+        const thumbImg = document.createElement("img");
+        thumbImg.src = thumbSrc;
+        thumbImg.alt = `Thumbnail de ${product.name}`;
+        thumbImg.onerror = function() { 
+          this.style.display='none'; 
+          if(this.parentElement) this.parentElement.classList.add('has-broken-thumb'); 
+        };
+        thumbImg.addEventListener("click", (event) => {
+          // Atualiza a imagem principal no catálogo
+          const currentMainImg = productDiv.querySelector('.main-img');
+          if (currentMainImg) currentMainImg.src = thumbSrc;
+          // Abre o modal com a miniatura clicada como imagem inicial
+          openModal(thumbSrc, allProductImagesForModal);
+        });
+        thumbnailContainer.appendChild(thumbImg);
+      }
+    });
+    imageColumn.appendChild(thumbnailContainer);
+    productDiv.appendChild(imageColumn);
+
+    const productDetails = document.createElement("div");
+    productDetails.className = "product-details";
+    productDetails.innerHTML = `
         <h2>${product.name}</h2>
         <p>${product.description}</p>
         <p class="price">${product.price}</p>
         <div class="quantity-control">
-          <button class="qty-btn" onclick="changeQuantity(this, -1)">-</button>
+          <button class="qty-btn minus">-</button>
           <input type="number" class="quantity" value="1" min="1" readonly>
-          <button class="qty-btn" onclick="changeQuantity(this, 1)">+</button>
+          <button class="qty-btn plus">+</button>
         </div>
-        <button onclick="addInterest(\'${product.name}\', \'${product.price}\', this)">Tenho Interesse</button>
-      </div>
+        <button class="add-interest-btn">Tenho Interesse</button>
     `;
+    productDiv.appendChild(productDetails);
+
+    const quantityInput = productDetails.querySelector(".quantity");
+    productDetails.querySelector(".qty-btn.minus").addEventListener("click", () => changeQuantity(quantityInput, -1));
+    productDetails.querySelector(".qty-btn.plus").addEventListener("click", () => changeQuantity(quantityInput, 1));
+    productDetails.querySelector(".add-interest-btn").addEventListener("click", () => {
+        addInterest(product.name, product.price, quantityInput.value);
+    });
+
     catalog.appendChild(productDiv);
   });
 }
 
-// =============================================
-// FUNÇÃO PARA LIDAR COM CLIQUE NA MINIATURA E ABRIR MODAL
-// =============================================
-function handleChangeAndOpenModal(thumbnailElement, mainImageForProduct, allThumbnailsForProduct, clickedThumbSrc) {
-    const productDiv = thumbnailElement.closest(".product");
-    if (productDiv) {
-        const mainImgElement = productDiv.querySelector(".main-img");
-        if (mainImgElement) {
-            mainImgElement.src = clickedThumbSrc; // Atualiza a imagem principal na visualização do catálogo
-        }
-    }
-
-    // Prepara o array de imagens para o modal: inclui a imagem principal original e todas as miniaturas.
-    let modalImages = [mainImageForProduct, ...allThumbnailsForProduct];
-    
-    openModal(clickedThumbSrc, modalImages);
-}
-
+// Removida handleChangeAndOpenModal pois a lógica foi incorporada no event listener da miniatura
 
 // =============================================
-// CARROSSEL (sem alterações nesta seção)
+// CARROSSEL (sem alterações)
 // =============================================
 const carousel = document.getElementById("carousel");
 const carouselIndicators = document.getElementById("carouselIndicators");
-let carouselImages = [];
+let carouselImagesData = []; // Renomeado para evitar conflito
 let currentCarouselIndex = 0;
 
 async function loadCarouselImages() {
@@ -117,7 +129,7 @@ async function loadCarouselImages() {
     if (!response.ok) {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
-    carouselImages = await response.json();
+    carouselImagesData = await response.json();
     renderCarousel();
     startCarouselAutoPlay();
   } catch (error) {
@@ -128,7 +140,7 @@ async function loadCarouselImages() {
 function renderCarousel() {
   carousel.innerHTML = "";
   carouselIndicators.innerHTML = "";
-  carouselImages.forEach((image, index) => {
+  carouselImagesData.forEach((image, index) => {
     const imgElement = document.createElement("img");
     imgElement.src = image.src;
     imgElement.alt = image.alt;
@@ -136,13 +148,14 @@ function renderCarousel() {
 
     const indicator = document.createElement("div");
     indicator.className = "carousel-indicator";
-    indicator.onclick = () => goToSlide(index);
+    indicator.addEventListener("click", () => goToSlide(index)); // Usar addEventListener
     carouselIndicators.appendChild(indicator);
   });
   updateCarousel();
 }
 
 function updateCarousel() {
+  if (carouselImagesData.length === 0) return;
   carousel.style.transform = `translateX(-${currentCarouselIndex * 100}%)`;
   const indicators = document.querySelectorAll(".carousel-indicator");
   indicators.forEach((indicator, index) => {
@@ -151,7 +164,8 @@ function updateCarousel() {
 }
 
 function moveSlide(step) {
-  currentCarouselIndex = (currentCarouselIndex + step + carouselImages.length) % carouselImages.length;
+  if (carouselImagesData.length === 0) return;
+  currentCarouselIndex = (currentCarouselIndex + step + carouselImagesData.length) % carouselImagesData.length;
   updateCarousel();
 }
 
@@ -161,16 +175,17 @@ function goToSlide(index) {
 }
 
 function startCarouselAutoPlay() {
-  setInterval(() => {
-    moveSlide(1);
-  }, 5000); 
+  if (carouselImagesData.length > 1) { // Só inicia se houver mais de uma imagem
+    setInterval(() => {
+      moveSlide(1);
+    }, 5000); 
+  }
 }
 
 // =============================================
-// CONTROLE DE QUANTIDADE (sem alterações)
+// CONTROLE DE QUANTIDADE
 // =============================================
-function changeQuantity(button, delta) {
-  const quantityInput = button.parentElement.querySelector(".quantity");
+function changeQuantity(quantityInput, delta) {
   let currentValue = parseInt(quantityInput.value);
   currentValue += delta;
   if (currentValue < 1) currentValue = 1;
@@ -178,26 +193,23 @@ function changeQuantity(button, delta) {
 }
 
 // =============================================
-// MODAL DE IMAGEM (REVISADO PARA ZOOM E NAVEGAÇÃO)
+// MODAL DE IMAGEM
 // =============================================
 function openModal(imageSrc, imagesArray) {
   let validImages = [];
   if (Array.isArray(imagesArray)) {
-    // Filtra apenas strings válidas e não vazias e remove duplicatas
     validImages = [...new Set(imagesArray.filter(img => img && typeof img === "string"))];
   }
   
-  // Adiciona imageSrc ao início da lista se não estiver presente e for válida
   if (imageSrc && typeof imageSrc === "string" && !validImages.includes(imageSrc)) {
     validImages.unshift(imageSrc);
-     // Garante que não haja duplicatas novamente após unshift
     validImages = [...new Set(validImages)];
   }
   currentProductImages = validImages;
 
   currentImageIndex = currentProductImages.indexOf(imageSrc);
   if (currentImageIndex === -1 && currentProductImages.length > 0) {
-    currentImageIndex = 0; // Se a imagem clicada não estiver na lista (improvável), mostra a primeira
+    currentImageIndex = 0; 
   }
 
   if (currentProductImages.length === 0 || currentImageIndex === -1) {
@@ -226,7 +238,7 @@ function navigateModal(step) {
 }
 
 // =============================================
-// CONTROLES DE ZOOM NO MODAL (sem alterações na lógica principal)
+// CONTROLES DE ZOOM NO MODAL
 // =============================================
 function zoomImage(amount) {
   currentZoomLevel += amount;
@@ -241,69 +253,95 @@ function resetZoom() {
 }
 
 // =============================================
-// BOTÃO VOLTAR AO TOPO (sem alterações)
+// BOTÃO VOLTAR AO TOPO
 // =============================================
 window.onscroll = function() {
   if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-    backToTopBtn.style.display = "block";
+    if(backToTopBtn) backToTopBtn.style.display = "block";
   } else {
-    backToTopBtn.style.display = "none";
+    if(backToTopBtn) backToTopBtn.style.display = "none";
   }
 };
 
 // =============================================
-// PAINEL DE INTERESSES (AJUSTADO PARA DISPLAY FLEX)
+// FUNÇÃO AUXILIAR PARA CONVERTER PREÇO
 // =============================================
-function addInterest(productName, productPrice, button) {
-  const quantityInput = button.closest(".product-details").querySelector(".quantity");
-  const quantity = parseInt(quantityInput.value);
+function parsePrice(priceString) {
+  if (typeof priceString !== 'string') return 0;
+  return parseFloat(priceString.replace('R$', '').replace('.', '').replace(',', '.').trim());
+}
+
+// =============================================
+// PAINEL DE INTERESSES
+// =============================================
+function addInterest(productName, productPriceString, quantityValue) {
+  const quantity = parseInt(quantityValue);
+  const price = parsePrice(productPriceString);
 
   const existingInterest = interests.find(item => item.name === productName);
   if (existingInterest) {
     existingInterest.quantity += quantity;
   } else {
-    interests.push({ name: productName, price: productPrice, quantity: quantity });
+    interests.push({ name: productName, price: price, quantity: quantity, originalPriceString: productPriceString });
   }
   updateInterestPanel();
-  if (interests.length > 0) {
-      interestPanel.style.display = "flex"; // Alterado para flex
+  if (interests.length > 0 && interestPanel) {
+      interestPanel.style.display = "flex"; 
   }
 }
 
 function updateInterestPanel() {
+  if (!interestList) return; // Sai se a lista não existir
   interestList.innerHTML = ""; 
+  let totalValue = 0;
+
   if (interests.length === 0) {
     interestList.innerHTML = "<li>Nenhum item adicionado.</li>";
-    interestPanel.style.display = "none"; 
+    if (interestTotalElement) interestTotalElement.innerHTML = ""; 
+    if (interestPanel) interestPanel.style.display = "none"; 
     return;
   }
+
   interests.forEach((item, index) => {
     const listItem = document.createElement("li");
     listItem.innerHTML = `
-      ${item.name} (Qtd: ${item.quantity}) - ${item.price}
-      <button onclick="removeInterest(${index})" style="margin-left: 10px; background: #ff4d4d; color: white; border: none; border-radius: 3px; cursor: pointer;">Remover</button>
+      ${item.name} (Qtd: ${item.quantity}) - ${item.originalPriceString}
+      <button class="remove-interest-item-btn" data-index="${index}">Remover</button>
     `;
     interestList.appendChild(listItem);
+    totalValue += item.price * item.quantity;
   });
+
+  document.querySelectorAll('.remove-interest-item-btn').forEach(button => {
+    // Remove event listener antigo para evitar duplicação se updateInterestPanel for chamado múltiplas vezes
+    const newButton = button.cloneNode(true);
+    button.parentNode.replaceChild(newButton, button);
+    newButton.addEventListener('click', function() {
+      removeInterest(parseInt(this.dataset.index));
+    });
+  });
+
+  if (interestTotalElement) {
+    interestTotalElement.innerHTML = `<strong>Total: R$ ${totalValue.toFixed(2).replace('.', ',')}</strong>`;
+  }
 }
 
 function removeInterest(index) {
   interests.splice(index, 1);
   updateInterestPanel();
-  if (interests.length === 0) {
+  if (interests.length === 0 && interestPanel) {
       interestPanel.style.display = "none";
   }
 }
 
 function toggleInterestPanel() {
-  if (interests.length > 0) { 
-      if (interestPanel.style.display === "flex") { 
-          interestPanel.style.display = "none";
-      } else {
-          interestPanel.style.display = "flex"; 
-      }
-  } else {
+  if (!interestPanel) return;
+  if (interestPanel.style.display === "flex") { 
       interestPanel.style.display = "none";
+  } else {
+    if (interests.length > 0) { 
+      interestPanel.style.display = "flex"; 
+    }
   }
 }
 
@@ -316,26 +354,29 @@ function showContactModal() {
     return;
   }
   
-  selectedItemsSummary.innerHTML = ""; 
+  if(selectedItemsSummary) selectedItemsSummary.innerHTML = ""; 
   let itemsText = "";
+  let totalFormValue = 0;
   interests.forEach(item => {
     const itemDiv = document.createElement("div");
-    itemDiv.innerHTML = `<strong>${item.quantity}x</strong> ${item.name} (${item.price})`;
-    selectedItemsSummary.appendChild(itemDiv);
-    itemsText += `${item.quantity}x ${item.name} (${item.price})\n`;
+    itemDiv.innerHTML = `<strong>${item.quantity}x</strong> ${item.name} (${item.originalPriceString})`;
+    if(selectedItemsSummary) selectedItemsSummary.appendChild(itemDiv);
+    itemsText += `${item.quantity}x ${item.name} (${item.originalPriceString})\n`;
+    totalFormValue += item.price * item.quantity;
   });
-  itemsDataInput.value = itemsText.trim(); 
+  itemsText += `\nTotal Geral: R$ ${totalFormValue.toFixed(2).replace('.', ',')}`;
+  if(itemsDataInput) itemsDataInput.value = itemsText.trim(); 
   
-  contactModal.style.display = "block";
-  interestPanel.style.display = "none"; 
+  if(contactModal) contactModal.style.display = "block";
+  if(interestPanel) interestPanel.style.display = "none"; 
 }
 
 // Fechar modais se clicar fora
 window.onclick = function(event) {
-  if (event.target == imgModal) {
+  if (imgModal && event.target == imgModal) {
     closeModal();
   }
-  if (event.target == contactModal) {
+  if (contactModal && event.target == contactModal) {
     contactModal.style.display = "none";
   }
 }
@@ -347,9 +388,48 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   loadCarouselImages();
   updateInterestPanel(); 
-  if (interests.length === 0) {
+  if (interestPanel && interests.length === 0) {
       interestPanel.style.display = "none";
   }
+
+  // Adicionar event listeners para botões/elementos que não são gerados dinamicamente por produto
+  const closeModalButton = document.querySelector("#imgModal .close");
+  if(closeModalButton) closeModalButton.addEventListener("click", closeModal);
+  
+  const modalPrevButton = document.querySelector("#imgModal .modal-prev");
+  if(modalPrevButton) modalPrevButton.addEventListener("click", () => navigateModal(-1));
+  
+  const modalNextButton = document.querySelector("#imgModal .modal-next");
+  if(modalNextButton) modalNextButton.addEventListener("click", () => navigateModal(1));
+  
+  const zoomControls = document.querySelector(".zoom-controls");
+  if(zoomControls){
+      if(zoomControls.children[0]) zoomControls.children[0].addEventListener("click", () => zoomImage(0.2));
+      if(zoomControls.children[1]) zoomControls.children[1].addEventListener("click", () => zoomImage(-0.2));
+      if(zoomControls.children[2]) zoomControls.children[2].addEventListener("click", resetZoom);
+  }
+  
+  if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
+  
+  const interestBtnGlobal = document.querySelector('.interest-btn'); // Botão verde "Ver Interesses"
+  if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
+  
+  const closeContactModalButton = document.querySelector('#contactModal .close-contact');
+  if(closeContactModalButton) closeContactModalButton.addEventListener('click', () => { 
+      if(contactModal) contactModal.style.display='none'; 
+  });
+  
+  // O botão "Enviar Interesses" dentro do painel de interesses
+  // Precisa ser selecionado com cuidado, pois o HTML original tinha onclick.
+  // Assumindo que o HTML do painel de interesses é:
+  // <div id="interestPanel">...<button id="showContactModalBtn">Enviar Interesses</button></div>
+  // Se o botão não tiver ID, a seleção abaixo pode falhar ou pegar o errado.
+  // A estrutura CSS anterior sugeria: #interestPanel > button[onclick*="showContactModal"]
+  // Vamos tentar um seletor mais robusto se o HTML for conhecido ou se pudermos adicionar um ID.
+  // Por agora, se o HTML original for mantido, o botão dentro do painel de interesses é o único botão filho direto.
+  const showContactModalBtn = document.querySelector("#interestPanel > button");
+  if(showContactModalBtn) showContactModalBtn.addEventListener('click', showContactModal);
+
 });
 
 
