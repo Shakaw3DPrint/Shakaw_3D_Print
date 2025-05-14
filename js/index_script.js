@@ -340,12 +340,22 @@ function removeInterest(index) {
 }
 
 function toggleInterestPanel() {
-  if (!interestPanel) return;
-  if (interestPanel.style.display === "flex") { 
+  if (!interestPanel) {
+    console.error("toggleInterestPanel: Elemento #interestPanel não encontrado.");
+    return;
+  }
+  console.log("toggleInterestPanel: Função chamada. Display atual:", interestPanel.style.display, "Itens na lista:", interests.length);
+
+  if (interestPanel.style.display === "flex") {
       interestPanel.style.display = "none";
+      console.log("toggleInterestPanel: Painel escondido.");
   } else {
-    if (interests.length > 0) { 
-      interestPanel.style.display = "flex"; 
+    if (interests.length > 0) {
+      interestPanel.style.display = "flex";
+      console.log("toggleInterestPanel: Painel exibido.");
+    } else {
+      console.log("toggleInterestPanel: Lista de interesses vazia, painel não será exibido.");
+      alert("Sua lista de interesses está vazia. Adicione itens para visualizá-la."); // Alert temporário
     }
   }
 }
@@ -388,7 +398,6 @@ window.onclick = function(event) {
 // INICIALIZAÇÃO
 // =============================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Carregamento inicial
   loadProducts();
   loadCarouselImages();
   updateInterestPanel(); 
@@ -396,14 +405,11 @@ document.addEventListener("DOMContentLoaded", () => {
       interestPanel.style.display = "none";
   }
 
-  // Adicionar event listeners para elementos estáticos do HTML
-  // Carrossel
   const carouselBtnPrev = document.querySelector(".carousel-btn.prev");
   if(carouselBtnPrev) carouselBtnPrev.addEventListener("click", () => moveSlide(-1));
   const carouselBtnNext = document.querySelector(".carousel-btn.next");
   if(carouselBtnNext) carouselBtnNext.addEventListener("click", () => moveSlide(1));
 
-  // Modal de Imagem
   const closeModalButton = document.querySelector("#imgModal .close");
   if(closeModalButton) closeModalButton.addEventListener("click", closeModal);
   const modalPrevButton = document.querySelector("#imgModal .modal-prev");
@@ -420,25 +426,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoom);
   }
 
-  // Modal de Contato
   const closeContactModalButton = document.querySelector('#contactModal .close-contact');
   if(closeContactModalButton) closeContactModalButton.addEventListener('click', () => { 
       if(contactModal) contactModal.style.display='none'; 
   });
 
-  // Botão Voltar ao Topo
   if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
   
-  // Botão "Ver Interesses" (verde, global)
   const interestBtnGlobal = document.querySelector('.interest-btn'); 
-  if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
+  if (interestBtnGlobal) {
+    console.log("DOMContentLoaded: Botão .interest-btn encontrado. Adicionando listener para toggleInterestPanel.");
+    interestBtnGlobal.addEventListener('click', toggleInterestPanel);
+  } else {
+    console.error("DOMContentLoaded: Botão .interest-btn NÃO encontrado no DOM.");
+  }
   
-  // Botão "Enviar Interesses" dentro do painel de interesses
-  // É importante que este botão tenha um ID ou uma classe específica se o HTML for alterado.
-  // Assumindo que é o único botão diretamente dentro de #interestPanel que não seja para remover itens.
   const showContactModalBtn = document.querySelector("#interestPanel > button:not(.remove-interest-item-btn)");
-  if(showContactModalBtn) showContactModalBtn.addEventListener('click', showContactModal);
-  
+  if(showContactModalBtn) {
+    console.log("DOMContentLoaded: Botão 'Enviar Interesses' no painel encontrado. Adicionando listener para showContactModal.");
+    showContactModalBtn.addEventListener('click', showContactModal);
+  } else {
+    console.error("DOMContentLoaded: Botão 'Enviar Interesses' no painel NÃO encontrado.");
+  }
 });
 
 
