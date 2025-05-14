@@ -358,6 +358,17 @@ body {
   padding: 20px; /* Espaçamento interno */
   box-sizing: border-box; /* Para que o padding não aumente a largura/altura total além de max-width/max-height */
 }
+#interestPanel {
+    /* ... seus estilos existentes para #interestPanel ... */
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+#interestPanel.hidden-fade {
+    opacity: 0;
+    visibility: hidden;
+}
 
 #interestPanel h3 {
   margin-top: 0;
