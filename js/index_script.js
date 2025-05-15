@@ -15,9 +15,18 @@ const selectedItemsSummary = document.getElementById("selectedItemsSummary");
 const itemsDataInput = document.getElementById("itemsData");
 
 let currentImageIndex = 0;
-let currentProductImages = []; // Esta lista conterá apenas URLs de imagens VÁLIDAS
+let currentProductImages = []; 
 let currentZoomLevel = 1;
-let interestPanelTimeoutId = null; // Timer para auto-hide do painel de interesses
+let interestPanelTimeoutId = null; 
+
+// Variáveis para o Pan (arrastar imagem com zoom)
+let isPanning = false;
+let panStartX = 0;
+let panStartY = 0;
+let panStartImgX = 0;
+let panStartImgY = 0;
+let currentImgTranslateX = 0;
+let currentImgTranslateY = 0;
 
 // =============================================
 // FUNÇÃO AUXILIAR PARA VERIFICAR IMAGEM
@@ -71,7 +80,6 @@ function displayProducts(products) {
         allPotentialImages.push(product.mainImage);
     }
     allPotentialImages = [...allPotentialImages, ...validThumbnails];
-    // Remove duplicatas caso a imagem principal também esteja nas thumbnails
     allPotentialImages = [...new Set(allPotentialImages)]; 
 
     const imageColumn = document.createElement("div");
@@ -82,7 +90,6 @@ function displayProducts(products) {
         mainImgElement.alt = product.name;
         mainImgElement.className = "main-img";
         mainImgElement.addEventListener("click", () => {
-          // Passa todas as imagens potenciais (principal + thumbs) para o openModal
           openModal(mainImgElement.src, allPotentialImages);
         });
     } else {
@@ -195,56 +202,40 @@ function changeQuantity(quantityInput, delta) {
 }
 
 // =============================================
-// MODAL DE IMAGEM
+// MODAL DE IMAGEM COM PAN E ZOOM
 // =============================================
 async function openModal(clickedImageSrc, allPotentialImageUrls) {
     if (!imgModal || !modalImg) return;
-
-    // Garante que allPotentialImageUrls seja um array de strings únicas e não nulas/vazias
     let uniquePotentialUrls = Array.isArray(allPotentialImageUrls) 
         ? [...new Set(allPotentialImageUrls.filter(url => url && typeof url === "string"))] 
         : [];
-
     if (clickedImageSrc && typeof clickedImageSrc === "string" && !uniquePotentialUrls.includes(clickedImageSrc)) {
-        uniquePotentialUrls.unshift(clickedImageSrc); // Adiciona a imagem clicada no início se não estiver lá
+        uniquePotentialUrls.unshift(clickedImageSrc);
         uniquePotentialUrls = [...new Set(uniquePotentialUrls)];
     }
+    if (uniquePotentialUrls.length === 0) { closeModal(); return; }
 
-    if (uniquePotentialUrls.length === 0) {
-        console.warn("Nenhuma URL de imagem potencial fornecida para o modal.");
-        closeModal();
-        return;
-    }
-
-    // Mostra um loader no modal enquanto as imagens são verificadas
-    modalImg.src = ""; // Limpa a imagem anterior
+    modalImg.src = ""; 
     modalImg.alt = "Carregando imagens...";
-    // Você pode adicionar um estilo para um ícone de carregamento aqui se desejar
 
     const imageCheckPromises = uniquePotentialUrls.map(url => checkImage(url));
     const results = await Promise.all(imageCheckPromises);
-
     currentProductImages = results.filter(result => result.status === "loaded").map(result => result.url);
 
     if (currentProductImages.length === 0) {
-        console.warn("Nenhuma imagem válida pôde ser carregada para o modal.");
         alert("Não foi possível carregar nenhuma imagem para este produto.");
-        closeModal();
-        return;
+        closeModal(); return;
     }
 
-    // Tenta encontrar a imagem clicada originalmente na lista de imagens válidas
     currentImageIndex = currentProductImages.indexOf(clickedImageSrc);
-    if (currentImageIndex === -1) { // Se a imagem clicada não for válida ou não estiver na lista de válidas
-        currentImageIndex = 0; // Começa com a primeira imagem válida
-    }
+    if (currentImageIndex === -1) currentImageIndex = 0;
 
     modalImg.src = currentProductImages[currentImageIndex];
-    modalImg.alt = "Imagem ampliada"; // Restaura o alt text
+    modalImg.alt = "Imagem ampliada";
     imgModal.style.display = "block";
-    resetZoom();
+    resetZoomAndPan(); // Reseta zoom e pan
     document.body.style.overflow = "hidden";
-    document.removeEventListener("keydown", handleModalKeydown); // Remove listener antigo para evitar duplicação
+    document.removeEventListener("keydown", handleModalKeydown);
     document.addEventListener("keydown", handleModalKeydown);
 }
 
@@ -253,26 +244,128 @@ function closeModal() {
   imgModal.style.display = "none";
   document.body.style.overflow = "auto"; 
   document.removeEventListener("keydown", handleModalKeydown);
+  // Remove event listeners de pan ao fechar
+  modalImg.removeEventListener("mousedown", handlePanStart);
+  modalImg.removeEventListener("touchstart", handlePanStart);
 }
 
 function navigateModal(step) {
-  if (currentProductImages.length === 0 || !modalImg) return;
-  if (currentProductImages.length === 1) return; // Não navega se só houver uma imagem válida
-
+  if (currentProductImages.length <= 1 || !modalImg) return;
   currentImageIndex = (currentImageIndex + step + currentProductImages.length) % currentProductImages.length;
   modalImg.src = currentProductImages[currentImageIndex];
   modalImg.alt = "Imagem ampliada";
-  resetZoom(); 
+  resetZoomAndPan(); 
+}
+
+function applyTransform() {
+    if (!modalImg) return;
+    modalImg.style.transform = `translate(${currentImgTranslateX}px, ${currentImgTranslateY}px) scale(${currentZoomLevel})`;
+    if (currentZoomLevel > 1) {
+        modalImg.style.cursor = "grab";
+    } else {
+        modalImg.style.cursor = "default";
+    }
 }
 
 function zoomImage(amount) {
   if(!modalImg) return;
+  const oldZoomLevel = currentZoomLevel;
   currentZoomLevel += amount;
-  if (currentZoomLevel < 0.2) currentZoomLevel = 0.2; 
-  if (currentZoomLevel > 3) currentZoomLevel = 3;   
-  modalImg.style.transform = `scale(${currentZoomLevel})`;
+  if (currentZoomLevel < 1) currentZoomLevel = 1; 
+  if (currentZoomLevel > 5) currentZoomLevel = 5; // Aumentado limite de zoom   
+  
+  // Se o zoom mudou para 1, reseta o pan
+  if (currentZoomLevel === 1 && oldZoomLevel > 1) {
+      currentImgTranslateX = 0;
+      currentImgTranslateY = 0;
+  }
+  applyTransform();
 }
-function resetZoom() { if(!modalImg) return; currentZoomLevel = 1; modalImg.style.transform = "scale(1)";}
+
+function resetZoomAndPan() { 
+    if(!modalImg) return; 
+    currentZoomLevel = 1; 
+    currentImgTranslateX = 0;
+    currentImgTranslateY = 0;
+    applyTransform();
+}
+
+function handlePanStart(e) {
+    if (!modalImg || currentZoomLevel <= 1) return;
+    e.preventDefault(); // Previne comportamento padrão (ex: arrastar imagem)
+    isPanning = true;
+    modalImg.style.cursor = "grabbing";
+    if (e.type === "touchstart") {
+        panStartX = e.touches[0].clientX;
+        panStartY = e.touches[0].clientY;
+    } else {
+        panStartX = e.clientX;
+        panStartY = e.clientY;
+    }
+    panStartImgX = currentImgTranslateX;
+    panStartImgY = currentImgTranslateY;
+
+    document.addEventListener("mousemove", handlePanMove);
+    document.addEventListener("touchmove", handlePanMove, { passive: false }); // passive: false para permitir preventDefault
+    document.addEventListener("mouseup", handlePanEnd);
+    document.addEventListener("touchend", handlePanEnd);
+    document.addEventListener("mouseleave", handlePanEnd); // Adicionado para mouseleave
+}
+
+function handlePanMove(e) {
+    if (!isPanning || !modalImg) return;
+    e.preventDefault(); // Previne scroll da página no mobile
+    let currentX, currentY;
+    if (e.type === "touchmove") {
+        currentX = e.touches[0].clientX;
+        currentY = e.touches[0].clientY;
+    } else {
+        currentX = e.clientX;
+        currentY = e.clientY;
+    }
+
+    const deltaX = currentX - panStartX;
+    const deltaY = currentY - panStartY;
+
+    currentImgTranslateX = panStartImgX + deltaX;
+    currentImgTranslateY = panStartImgY + deltaY;
+    
+    // Limitar o pan para não sair da tela (simplificado, pode ser melhorado)
+    const rect = modalImg.getBoundingClientRect();
+    const modalRect = imgModal.getBoundingClientRect();
+
+    // Calcula o quanto a imagem (escalada) excede o modal
+    const overX = (rect.width - modalRect.width) / 2;
+    const overY = (rect.height - modalRect.height) / 2;
+
+    if (currentImgTranslateX > overX) currentImgTranslateX = overX;
+    if (currentImgTranslateX < -overX) currentImgTranslateX = -overX;
+    if (currentImgTranslateY > overY) currentImgTranslateY = overY;
+    if (currentImgTranslateY < -overY) currentImgTranslateY = -overY;
+    
+    // Se a imagem for menor que o modal em alguma dimensão após o zoom, centraliza nessa dimensão
+    if (rect.width <= modalRect.width) currentImgTranslateX = 0;
+    if (rect.height <= modalRect.height) currentImgTranslateY = 0;
+
+    applyTransform();
+}
+
+function handlePanEnd() {
+    if (!isPanning) return;
+    isPanning = false;
+    if (modalImg) {
+        if (currentZoomLevel > 1) {
+            modalImg.style.cursor = "grab";
+        } else {
+            modalImg.style.cursor = "default";
+        }
+    }
+    document.removeEventListener("mousemove", handlePanMove);
+    document.removeEventListener("touchmove", handlePanMove);
+    document.removeEventListener("mouseup", handlePanEnd);
+    document.removeEventListener("touchend", handlePanEnd);
+    document.removeEventListener("mouseleave", handlePanEnd);
+}
 
 function handleModalKeydown(event) {
   if (!imgModal || imgModal.style.display !== "block") return;
@@ -281,7 +374,7 @@ function handleModalKeydown(event) {
     case "ArrowLeft": navigateModal(-1); break;
     case "+": case "=": zoomImage(0.2); break;
     case "-": zoomImage(-0.2); break;
-    case "0": resetZoom(); break;
+    case "0": resetZoomAndPan(); break;
     case "Escape": closeModal(); break;
   }
 }
@@ -421,7 +514,7 @@ function showContactModal() {
 
 // Fechar modais se clicar fora
 window.onclick = function(event) {
-  if (imgModal && event.target == imgModal) closeModal();
+  if (imgModal && event.target == imgModal && !modalImg.contains(event.target)) closeModal(); // Só fecha se clicar no backdrop
   if (contactModal && event.target == contactModal) if(contactModal) contactModal.style.display = "none";
 }
 
@@ -435,6 +528,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (interestPanel) {
       interestPanel.classList.remove("visible"); 
       interestPanel.classList.add("hidden-fade");
+  }
+
+  // Adiciona listeners para o pan na imagem do modal
+  if (modalImg) {
+      modalImg.addEventListener("mousedown", handlePanStart);
+      modalImg.addEventListener("touchstart", handlePanStart, { passive: false });
   }
 
   const carouselBtnPrev = document.querySelector(".carousel-btn.prev");
@@ -455,7 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const zoomOutBtn = zoomControls.children[1]; 
       if(zoomOutBtn) zoomOutBtn.addEventListener("click", () => zoomImage(-0.2));
       const zoomResetBtn = zoomControls.children[2]; 
-      if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoom);
+      if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoomAndPan);
   }
   
   const closeContactModalButton = document.querySelector("#contactModal .close-contact");
