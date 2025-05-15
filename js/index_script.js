@@ -28,6 +28,10 @@ let panStartImgY = 0;
 let currentImgTranslateX = 0;
 let currentImgTranslateY = 0;
 
+const ZOOM_INCREMENT = 0.15; // Mais gradual
+const MAX_ZOOM = 5;
+const MIN_ZOOM = 1;
+
 // =============================================
 // FUNÇÃO AUXILIAR PARA VERIFICAR IMAGEM
 // =============================================
@@ -142,7 +146,7 @@ function displayProducts(products) {
 }
 
 // =============================================
-// CARROSSEL
+// CARROSSEL (código omitido para brevidade, mantido como antes)
 // =============================================
 const carousel = document.getElementById("carousel");
 const carouselIndicators = document.getElementById("carouselIndicators");
@@ -191,7 +195,7 @@ function startCarouselAutoPlay() {
 }
 
 // =============================================
-// CONTROLE DE QUANTIDADE
+// CONTROLE DE QUANTIDADE (código omitido, mantido como antes)
 // =============================================
 function changeQuantity(quantityInput, delta) {
   if(!quantityInput) return;
@@ -233,7 +237,7 @@ async function openModal(clickedImageSrc, allPotentialImageUrls) {
     modalImg.src = currentProductImages[currentImageIndex];
     modalImg.alt = "Imagem ampliada";
     imgModal.style.display = "block";
-    resetZoomAndPan(); // Reseta zoom e pan
+    resetZoomAndPan(); 
     document.body.style.overflow = "hidden";
     document.removeEventListener("keydown", handleModalKeydown);
     document.addEventListener("keydown", handleModalKeydown);
@@ -244,9 +248,10 @@ function closeModal() {
   imgModal.style.display = "none";
   document.body.style.overflow = "auto"; 
   document.removeEventListener("keydown", handleModalKeydown);
-  // Remove event listeners de pan ao fechar
   modalImg.removeEventListener("mousedown", handlePanStart);
   modalImg.removeEventListener("touchstart", handlePanStart);
+  modalImg.removeEventListener("mousedown", handleMouseZoom);
+  modalImg.removeEventListener("contextmenu", preventContextMenu);
 }
 
 function navigateModal(step) {
@@ -260,41 +265,88 @@ function navigateModal(step) {
 function applyTransform() {
     if (!modalImg) return;
     modalImg.style.transform = `translate(${currentImgTranslateX}px, ${currentImgTranslateY}px) scale(${currentZoomLevel})`;
-    if (currentZoomLevel > 1) {
-        modalImg.style.cursor = "grab";
-    } else {
-        modalImg.style.cursor = "default";
-    }
+    modalImg.style.cursor = currentZoomLevel > MIN_ZOOM ? (isPanning ? "grabbing" : "grab") : "default";
 }
 
-function zoomImage(amount) {
-  if(!modalImg) return;
+function constrainPan() {
+    if (!modalImg || !imgModal) return;
+
+    const scaledWidth = modalImg.offsetWidth * currentZoomLevel;
+    const scaledHeight = modalImg.offsetHeight * currentZoomLevel;
+    const modalViewportRect = imgModal.getBoundingClientRect();
+
+    let constrainedX = currentImgTranslateX;
+    let constrainedY = currentImgTranslateY;
+
+    if (scaledWidth <= modalViewportRect.width) {
+        constrainedX = 0; // Centraliza se menor ou igual ao viewport
+    } else {
+        if (constrainedX > 0) constrainedX = 0;
+        if (constrainedX + scaledWidth < modalViewportRect.width) {
+            constrainedX = modalViewportRect.width - scaledWidth;
+        }
+    }
+
+    if (scaledHeight <= modalViewportRect.height) {
+        constrainedY = 0; // Centraliza se menor ou igual ao viewport
+    } else {
+        if (constrainedY > 0) constrainedY = 0;
+        if (constrainedY + scaledHeight < modalViewportRect.height) {
+            constrainedY = modalViewportRect.height - scaledHeight;
+        }
+    }
+    currentImgTranslateX = constrainedX;
+    currentImgTranslateY = constrainedY;
+}
+
+function zoomImage(amount, focalPoint = null) { // focalPoint = {x, y} em coordenadas do viewport
+  if(!modalImg || !imgModal) return;
   const oldZoomLevel = currentZoomLevel;
   currentZoomLevel += amount;
-  if (currentZoomLevel < 1) currentZoomLevel = 1; 
-  if (currentZoomLevel > 5) currentZoomLevel = 5; // Aumentado limite de zoom   
-  
-  // Se o zoom mudou para 1, reseta o pan
-  if (currentZoomLevel === 1 && oldZoomLevel > 1) {
-      currentImgTranslateX = 0;
-      currentImgTranslateY = 0;
+  if (currentZoomLevel < MIN_ZOOM) currentZoomLevel = MIN_ZOOM;
+  if (currentZoomLevel > MAX_ZOOM) currentZoomLevel = MAX_ZOOM;
+
+  if (currentZoomLevel === MIN_ZOOM) {
+      resetZoomAndPan(); // Reseta tudo se voltou ao zoom mínimo
+      return;
   }
-  applyTransform();
+
+  const modalRect = imgModal.getBoundingClientRect();
+  let targetX_viewport, targetY_viewport;
+
+  if (focalPoint) {
+      targetX_viewport = focalPoint.x - modalRect.left;
+      targetY_viewport = focalPoint.y - modalRect.top;
+  } else { // Zoom centralizado se não houver focalPoint
+      targetX_viewport = modalRect.width / 2;
+      targetY_viewport = modalRect.height / 2;
+  }
+
+  // Ponto na imagem (não escalada) que estava sob o focalPoint
+  const imgPointX = (targetX_viewport - currentImgTranslateX) / oldZoomLevel;
+  const imgPointY = (targetY_viewport - currentImgTranslateY) / oldZoomLevel;
+
+  // Nova translação para manter imgPointX, imgPointY sob o targetX_viewport, targetY_viewport
+  currentImgTranslateX = targetX_viewport - imgPointX * currentZoomLevel;
+  currentImgTranslateY = targetY_viewport - imgPointY * currentZoomLevel;
+  
+  constrainPan(); // Ajusta translações para limites e aplica o transform
+  applyTransform(); // Garante que o cursor seja atualizado após constrainPan
 }
 
 function resetZoomAndPan() { 
     if(!modalImg) return; 
-    currentZoomLevel = 1; 
+    currentZoomLevel = MIN_ZOOM; 
     currentImgTranslateX = 0;
     currentImgTranslateY = 0;
+    isPanning = false; // Garante que o estado de pan seja resetado
     applyTransform();
 }
 
 function handlePanStart(e) {
-    if (!modalImg || currentZoomLevel <= 1) return;
-    e.preventDefault(); // Previne comportamento padrão (ex: arrastar imagem)
+    if (!modalImg || currentZoomLevel <= MIN_ZOOM || (e.type === "mousedown" && e.button !== 0)) return; // Pan só com botão esquerdo
+    e.preventDefault();
     isPanning = true;
-    modalImg.style.cursor = "grabbing";
     if (e.type === "touchstart") {
         panStartX = e.touches[0].clientX;
         panStartY = e.touches[0].clientY;
@@ -304,17 +356,18 @@ function handlePanStart(e) {
     }
     panStartImgX = currentImgTranslateX;
     panStartImgY = currentImgTranslateY;
+    applyTransform(); // Atualiza cursor para grabbing
 
     document.addEventListener("mousemove", handlePanMove);
-    document.addEventListener("touchmove", handlePanMove, { passive: false }); // passive: false para permitir preventDefault
+    document.addEventListener("touchmove", handlePanMove, { passive: false });
     document.addEventListener("mouseup", handlePanEnd);
     document.addEventListener("touchend", handlePanEnd);
-    document.addEventListener("mouseleave", handlePanEnd); // Adicionado para mouseleave
+    document.addEventListener("mouseleave", handlePanEnd); 
 }
 
 function handlePanMove(e) {
     if (!isPanning || !modalImg) return;
-    e.preventDefault(); // Previne scroll da página no mobile
+    e.preventDefault(); 
     let currentX, currentY;
     if (e.type === "touchmove") {
         currentX = e.touches[0].clientX;
@@ -323,43 +376,18 @@ function handlePanMove(e) {
         currentX = e.clientX;
         currentY = e.clientY;
     }
-
     const deltaX = currentX - panStartX;
     const deltaY = currentY - panStartY;
-
     currentImgTranslateX = panStartImgX + deltaX;
     currentImgTranslateY = panStartImgY + deltaY;
-    
-    // Limitar o pan para não sair da tela (simplificado, pode ser melhorado)
-    const rect = modalImg.getBoundingClientRect();
-    const modalRect = imgModal.getBoundingClientRect();
-
-    // Calcula o quanto a imagem (escalada) excede o modal
-    const overX = (rect.width - modalRect.width) / 2;
-    const overY = (rect.height - modalRect.height) / 2;
-
-    if (currentImgTranslateX > overX) currentImgTranslateX = overX;
-    if (currentImgTranslateX < -overX) currentImgTranslateX = -overX;
-    if (currentImgTranslateY > overY) currentImgTranslateY = overY;
-    if (currentImgTranslateY < -overY) currentImgTranslateY = -overY;
-    
-    // Se a imagem for menor que o modal em alguma dimensão após o zoom, centraliza nessa dimensão
-    if (rect.width <= modalRect.width) currentImgTranslateX = 0;
-    if (rect.height <= modalRect.height) currentImgTranslateY = 0;
-
-    applyTransform();
+    constrainPan(); 
+    applyTransform(); 
 }
 
 function handlePanEnd() {
     if (!isPanning) return;
     isPanning = false;
-    if (modalImg) {
-        if (currentZoomLevel > 1) {
-            modalImg.style.cursor = "grab";
-        } else {
-            modalImg.style.cursor = "default";
-        }
-    }
+    applyTransform(); // Atualiza cursor para grab se zoom > 1
     document.removeEventListener("mousemove", handlePanMove);
     document.removeEventListener("touchmove", handlePanMove);
     document.removeEventListener("mouseup", handlePanEnd);
@@ -367,27 +395,37 @@ function handlePanEnd() {
     document.removeEventListener("mouseleave", handlePanEnd);
 }
 
+function handleMouseZoom(e) {
+    if (!modalImg || !imgModal.contains(e.target) || isPanning) return; 
+    e.preventDefault();
+    const increment = e.button === 0 ? ZOOM_INCREMENT : (e.button === 2 ? -ZOOM_INCREMENT : 0);
+    if (increment === 0) return;
+    zoomImage(increment, { x: e.clientX, y: e.clientY });
+}
+
+function preventContextMenu(e) { e.preventDefault(); }
+
 function handleModalKeydown(event) {
   if (!imgModal || imgModal.style.display !== "block") return;
   switch (event.key) {
     case "ArrowRight": navigateModal(1); break;
     case "ArrowLeft": navigateModal(-1); break;
-    case "+": case "=": zoomImage(0.2); break;
-    case "-": zoomImage(-0.2); break;
+    case "+": case "=": zoomImage(ZOOM_INCREMENT); break;
+    case "-": zoomImage(-ZOOM_INCREMENT); break;
     case "0": resetZoomAndPan(); break;
     case "Escape": closeModal(); break;
   }
 }
 
 // =============================================
-// BOTÃO VOLTAR AO TOPO
+// BOTÃO VOLTAR AO TOPO (código omitido, mantido como antes)
 // =============================================
 window.onscroll = function() {
   if(backToTopBtn) backToTopBtn.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) ? "block" : "none";
 };
 
 // =============================================
-// FUNÇÃO AUXILIAR PARA CONVERTER PREÇO
+// FUNÇÃO AUXILIAR PARA CONVERTER PREÇO (código omitido, mantido como antes)
 // =============================================
 function parsePrice(priceString) {
   if (typeof priceString !== "string") return 0;
@@ -395,7 +433,7 @@ function parsePrice(priceString) {
 }
 
 // =============================================
-// PAINEL DE INTERESSES
+// PAINEL DE INTERESSES (código omitido, mantido como antes)
 // =============================================
 function showInterestPanel(startAutoHideTimer = false) {
     if (!interestPanel) return;
@@ -406,7 +444,6 @@ function showInterestPanel(startAutoHideTimer = false) {
         resetInterestPanelAutoHideTimer();
     }
 }
-
 function hideInterestPanel(immediate = false) {
     if (!interestPanel) return;
     clearTimeout(interestPanelTimeoutId); 
@@ -418,7 +455,6 @@ function hideInterestPanel(immediate = false) {
         interestPanel.classList.add("hidden-fade");
     }
 }
-
 function resetInterestPanelAutoHideTimer() {
     if (!interestPanel) return;
     clearTimeout(interestPanelTimeoutId);
@@ -428,7 +464,6 @@ function resetInterestPanelAutoHideTimer() {
         }
     }, 5000);
 }
-
 function addInterest(productName, productPriceString, quantityValue) {
   const quantity = parseInt(quantityValue);
   const price = parsePrice(productPriceString);
@@ -441,7 +476,6 @@ function addInterest(productName, productPriceString, quantityValue) {
   updateInterestPanel();
   showInterestPanel(true); 
 }
-
 function updateInterestPanel() {
   if (!interestList) return;
   interestList.innerHTML = ""; 
@@ -471,7 +505,6 @@ function updateInterestPanel() {
     interestTotalElement.innerHTML = interests.length > 0 ? `<strong>Total: R$ ${totalValue.toFixed(2).replace(".", ",")}</strong>` : "";
   }
 }
-
 function removeInterest(index) {
   interests.splice(index, 1);
   updateInterestPanel();
@@ -479,7 +512,6 @@ function removeInterest(index) {
       showInterestPanel(true); 
   }
 }
-
 function toggleInterestPanel() {
   if (!interestPanel) return;
   if (interestPanel.classList.contains("visible")) {
@@ -490,7 +522,7 @@ function toggleInterestPanel() {
 }
 
 // =============================================
-// MODAL DE CONTATO
+// MODAL DE CONTATO (código omitido, mantido como antes)
 // =============================================
 function showContactModal() {
   if (interests.length === 0) {
@@ -514,7 +546,7 @@ function showContactModal() {
 
 // Fechar modais se clicar fora
 window.onclick = function(event) {
-  if (imgModal && event.target == imgModal && !modalImg.contains(event.target)) closeModal(); // Só fecha se clicar no backdrop
+  if (imgModal && event.target == imgModal && !modalImg.contains(event.target)) closeModal();
   if (contactModal && event.target == contactModal) if(contactModal) contactModal.style.display = "none";
 }
 
@@ -530,10 +562,11 @@ document.addEventListener("DOMContentLoaded", () => {
       interestPanel.classList.add("hidden-fade");
   }
 
-  // Adiciona listeners para o pan na imagem do modal
   if (modalImg) {
       modalImg.addEventListener("mousedown", handlePanStart);
       modalImg.addEventListener("touchstart", handlePanStart, { passive: false });
+      modalImg.addEventListener("mousedown", handleMouseZoom);
+      modalImg.addEventListener("contextmenu", preventContextMenu);
   }
 
   const carouselBtnPrev = document.querySelector(".carousel-btn.prev");
@@ -550,9 +583,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const zoomControls = document.querySelector(".zoom-controls");
   if(zoomControls){
       const zoomInBtn = zoomControls.children[0]; 
-      if(zoomInBtn) zoomInBtn.addEventListener("click", () => zoomImage(0.2));
+      if(zoomInBtn) zoomInBtn.addEventListener("click", () => zoomImage(ZOOM_INCREMENT));
       const zoomOutBtn = zoomControls.children[1]; 
-      if(zoomOutBtn) zoomOutBtn.addEventListener("click", () => zoomImage(-0.2));
+      if(zoomOutBtn) zoomOutBtn.addEventListener("click", () => zoomImage(-ZOOM_INCREMENT));
       const zoomResetBtn = zoomControls.children[2]; 
       if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoomAndPan);
   }
