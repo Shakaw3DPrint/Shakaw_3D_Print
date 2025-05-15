@@ -28,9 +28,9 @@ let panStartImgY = 0;
 let currentImgTranslateX = 0;
 let currentImgTranslateY = 0;
 
-const ZOOM_INCREMENT = 0.06; // Mais sutil
+const ZOOM_INCREMENT = 0.04; // Mais sutil
 const MAX_ZOOM = 4;
-const MIN_ZOOM = 0.1;
+const MIN_ZOOM = 0.3;
 
 // =============================================
 // FUNÇÃO AUXILIAR PARA VERIFICAR IMAGEM
