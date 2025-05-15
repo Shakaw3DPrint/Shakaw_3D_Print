@@ -29,8 +29,8 @@ let currentImgTranslateX = 0;
 let currentImgTranslateY = 0;
 
 const ZOOM_INCREMENT = 0.06; // Mais sutil
-const MAX_ZOOM = 5;
-const MIN_ZOOM = 1;
+const MAX_ZOOM = 4;
+const MIN_ZOOM = 0.7;
 
 // =============================================
 // FUNÇÃO AUXILIAR PARA VERIFICAR IMAGEM
