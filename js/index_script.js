@@ -15,9 +15,25 @@ const selectedItemsSummary = document.getElementById("selectedItemsSummary");
 const itemsDataInput = document.getElementById("itemsData");
 
 let currentImageIndex = 0;
-let currentProductImages = []; 
+let currentProductImages = []; // Esta lista conterá apenas URLs de imagens VÁLIDAS
 let currentZoomLevel = 1;
 let interestPanelTimeoutId = null; // Timer para auto-hide do painel de interesses
+
+// =============================================
+// FUNÇÃO AUXILIAR PARA VERIFICAR IMAGEM
+// =============================================
+function checkImage(url) {
+    return new Promise((resolve) => {
+        if (!url || typeof url !== "string") {
+            resolve({ url: url, status: "invalid_url" });
+            return;
+        }
+        const img = new Image();
+        img.onload = () => resolve({ url: url, status: "loaded" });
+        img.onerror = () => resolve({ url: url, status: "error" });
+        img.src = url;
+    });
+}
 
 // =============================================
 // CARREGAMENTO DE PRODUTOS
@@ -48,36 +64,52 @@ function displayProducts(products) {
   products.forEach(product => {
     const productDiv = document.createElement("div");
     productDiv.className = "product";
-    const allProductImagesForModal = [product.mainImage, ...product.thumbnails.filter(t => t && typeof t === 'string')];
+    
+    const validThumbnails = product.thumbnails ? product.thumbnails.filter(t => t && typeof t === "string") : [];
+    let allPotentialImages = [];
+    if (product.mainImage && typeof product.mainImage === "string") {
+        allPotentialImages.push(product.mainImage);
+    }
+    allPotentialImages = [...allPotentialImages, ...validThumbnails];
+    // Remove duplicatas caso a imagem principal também esteja nas thumbnails
+    allPotentialImages = [...new Set(allPotentialImages)]; 
+
     const imageColumn = document.createElement("div");
     imageColumn.className = "image-column";
-    const mainImg = document.createElement("img");
-    mainImg.src = product.mainImage;
-    mainImg.alt = product.name;
-    mainImg.className = "main-img";
-    mainImg.addEventListener("click", () => {
-      openModal(mainImg.src, allProductImagesForModal);
-    });
-    imageColumn.appendChild(mainImg);
+    const mainImgElement = document.createElement("img");
+    if (product.mainImage && typeof product.mainImage === "string") {
+        mainImgElement.src = product.mainImage;
+        mainImgElement.alt = product.name;
+        mainImgElement.className = "main-img";
+        mainImgElement.addEventListener("click", () => {
+          // Passa todas as imagens potenciais (principal + thumbs) para o openModal
+          openModal(mainImgElement.src, allPotentialImages);
+        });
+    } else {
+        mainImgElement.style.display = "none"; 
+    }
+    imageColumn.appendChild(mainImgElement);
+    
     const thumbnailContainer = document.createElement("div");
     thumbnailContainer.className = "thumbnail-container";
-    product.thumbnails.forEach(thumbSrc => {
-      if (thumbSrc && typeof thumbSrc === 'string') {
+    validThumbnails.forEach(thumbSrc => {
         const thumbImg = document.createElement("img");
         thumbImg.src = thumbSrc;
         thumbImg.alt = `Thumbnail de ${product.name}`;
         thumbImg.onerror = function() { 
-          this.style.display='none'; 
-          if(this.parentElement) this.parentElement.classList.add('has-broken-thumb'); 
+          this.style.display="none"; 
+          if(this.parentElement) this.parentElement.classList.add("has-broken-thumb"); 
         };
         thumbImg.addEventListener("click", () => {
-          mainImg.src = thumbSrc;
+          if (product.mainImage && typeof product.mainImage === "string") {
+            mainImgElement.src = thumbSrc;
+          }
         });
         thumbnailContainer.appendChild(thumbImg);
-      }
     });
     imageColumn.appendChild(thumbnailContainer);
     productDiv.appendChild(imageColumn);
+
     const productDetails = document.createElement("div");
     productDetails.className = "product-details";
     productDetails.innerHTML = `
@@ -165,37 +197,74 @@ function changeQuantity(quantityInput, delta) {
 // =============================================
 // MODAL DE IMAGEM
 // =============================================
-function openModal(imageSrc, imagesArray) {
-  if(!imgModal || !modalImg) return;
-  let validImages = Array.isArray(imagesArray) ? [...new Set(imagesArray.filter(img => img && typeof img === 'string'))] : [];
-  if (imageSrc && typeof imageSrc === 'string' && !validImages.includes(imageSrc)) {
-    validImages.unshift(imageSrc);
-    validImages = [...new Set(validImages)];
-  }
-  currentProductImages = validImages;
-  currentImageIndex = currentProductImages.indexOf(imageSrc);
-  if (currentImageIndex === -1 && currentProductImages.length > 0) currentImageIndex = 0;
-  if (currentProductImages.length === 0 || currentImageIndex === -1) {
-    imgModal.style.display = "none"; document.body.style.overflow = "auto"; return;
-  }
-  modalImg.src = currentProductImages[currentImageIndex];
-  imgModal.style.display = "block";
-  resetZoom(); 
-  document.body.style.overflow = "hidden"; 
-  document.addEventListener('keydown', handleModalKeydown);
+async function openModal(clickedImageSrc, allPotentialImageUrls) {
+    if (!imgModal || !modalImg) return;
+
+    // Garante que allPotentialImageUrls seja um array de strings únicas e não nulas/vazias
+    let uniquePotentialUrls = Array.isArray(allPotentialImageUrls) 
+        ? [...new Set(allPotentialImageUrls.filter(url => url && typeof url === "string"))] 
+        : [];
+
+    if (clickedImageSrc && typeof clickedImageSrc === "string" && !uniquePotentialUrls.includes(clickedImageSrc)) {
+        uniquePotentialUrls.unshift(clickedImageSrc); // Adiciona a imagem clicada no início se não estiver lá
+        uniquePotentialUrls = [...new Set(uniquePotentialUrls)];
+    }
+
+    if (uniquePotentialUrls.length === 0) {
+        console.warn("Nenhuma URL de imagem potencial fornecida para o modal.");
+        closeModal();
+        return;
+    }
+
+    // Mostra um loader no modal enquanto as imagens são verificadas
+    modalImg.src = ""; // Limpa a imagem anterior
+    modalImg.alt = "Carregando imagens...";
+    // Você pode adicionar um estilo para um ícone de carregamento aqui se desejar
+
+    const imageCheckPromises = uniquePotentialUrls.map(url => checkImage(url));
+    const results = await Promise.all(imageCheckPromises);
+
+    currentProductImages = results.filter(result => result.status === "loaded").map(result => result.url);
+
+    if (currentProductImages.length === 0) {
+        console.warn("Nenhuma imagem válida pôde ser carregada para o modal.");
+        alert("Não foi possível carregar nenhuma imagem para este produto.");
+        closeModal();
+        return;
+    }
+
+    // Tenta encontrar a imagem clicada originalmente na lista de imagens válidas
+    currentImageIndex = currentProductImages.indexOf(clickedImageSrc);
+    if (currentImageIndex === -1) { // Se a imagem clicada não for válida ou não estiver na lista de válidas
+        currentImageIndex = 0; // Começa com a primeira imagem válida
+    }
+
+    modalImg.src = currentProductImages[currentImageIndex];
+    modalImg.alt = "Imagem ampliada"; // Restaura o alt text
+    imgModal.style.display = "block";
+    resetZoom();
+    document.body.style.overflow = "hidden";
+    document.removeEventListener("keydown", handleModalKeydown); // Remove listener antigo para evitar duplicação
+    document.addEventListener("keydown", handleModalKeydown);
 }
+
 function closeModal() {
   if(!imgModal) return;
   imgModal.style.display = "none";
   document.body.style.overflow = "auto"; 
-  document.removeEventListener('keydown', handleModalKeydown);
+  document.removeEventListener("keydown", handleModalKeydown);
 }
+
 function navigateModal(step) {
   if (currentProductImages.length === 0 || !modalImg) return;
+  if (currentProductImages.length === 1) return; // Não navega se só houver uma imagem válida
+
   currentImageIndex = (currentImageIndex + step + currentProductImages.length) % currentProductImages.length;
   modalImg.src = currentProductImages[currentImageIndex];
+  modalImg.alt = "Imagem ampliada";
   resetZoom(); 
 }
+
 function zoomImage(amount) {
   if(!modalImg) return;
   currentZoomLevel += amount;
@@ -204,13 +273,16 @@ function zoomImage(amount) {
   modalImg.style.transform = `scale(${currentZoomLevel})`;
 }
 function resetZoom() { if(!modalImg) return; currentZoomLevel = 1; modalImg.style.transform = "scale(1)";}
+
 function handleModalKeydown(event) {
-  if (!imgModal || imgModal.style.display !== 'block') return;
+  if (!imgModal || imgModal.style.display !== "block") return;
   switch (event.key) {
-    case '+': case '=': zoomImage(0.2); break;
-    case '-': zoomImage(-0.2); break;
-    case '0': resetZoom(); break;
-    case 'Escape': closeModal(); break;
+    case "ArrowRight": navigateModal(1); break;
+    case "ArrowLeft": navigateModal(-1); break;
+    case "+": case "=": zoomImage(0.2); break;
+    case "-": zoomImage(-0.2); break;
+    case "0": resetZoom(); break;
+    case "Escape": closeModal(); break;
   }
 }
 
@@ -225,8 +297,8 @@ window.onscroll = function() {
 // FUNÇÃO AUXILIAR PARA CONVERTER PREÇO
 // =============================================
 function parsePrice(priceString) {
-  if (typeof priceString !== 'string') return 0;
-  return parseFloat(priceString.replace('R$', '').replace('.', '').replace(',', '.').trim());
+  if (typeof priceString !== "string") return 0;
+  return parseFloat(priceString.replace("R$", "").replace(".", "").replace(",", ".").trim());
 }
 
 // =============================================
@@ -236,15 +308,15 @@ function showInterestPanel(startAutoHideTimer = false) {
     if (!interestPanel) return;
     interestPanel.classList.add("visible");
     interestPanel.classList.remove("hidden-fade");
-    clearTimeout(interestPanelTimeoutId); // Limpa qualquer timer anterior ao mostrar
-    if (startAutoHideTimer && interests.length > 0) { // Só inicia o timer se houver itens
+    clearTimeout(interestPanelTimeoutId); 
+    if (startAutoHideTimer && interests.length > 0) { 
         resetInterestPanelAutoHideTimer();
     }
 }
 
 function hideInterestPanel(immediate = false) {
     if (!interestPanel) return;
-    clearTimeout(interestPanelTimeoutId); // Limpa o timer ao esconder manualmente ou por auto-hide
+    clearTimeout(interestPanelTimeoutId); 
     if (immediate) {
         interestPanel.classList.remove("visible");
         interestPanel.classList.add("hidden-fade"); 
@@ -274,7 +346,7 @@ function addInterest(productName, productPriceString, quantityValue) {
     interests.push({ name: productName, price: price, quantity: quantity, originalPriceString: productPriceString });
   }
   updateInterestPanel();
-  showInterestPanel(true); // Mostra o painel E inicia o timer de auto-hide
+  showInterestPanel(true); 
 }
 
 function updateInterestPanel() {
@@ -284,8 +356,6 @@ function updateInterestPanel() {
   if (interests.length === 0) {
     interestList.innerHTML = "<li>Nenhum item adicionado.</li>";
     if (interestTotalElement) interestTotalElement.innerHTML = ""; 
-    // Se o painel estiver visível e a lista ficar vazia, o timer (se ativo e iniciado por add/remove) o esconderá.
-    // Se foi aberto pelo toggle e ficou vazio, permanece visível até novo toggle ou X.
   } else {
     interests.forEach((item, index) => {
       const listItem = document.createElement("li");
@@ -296,16 +366,16 @@ function updateInterestPanel() {
       interestList.appendChild(listItem);
       totalValue += item.price * item.quantity;
     });
-    document.querySelectorAll('.remove-interest-item-btn').forEach(button => {
+    document.querySelectorAll(".remove-interest-item-btn").forEach(button => {
       const newButton = button.cloneNode(true);
       button.parentNode.replaceChild(newButton, button);
-      newButton.addEventListener('click', function() {
+      newButton.addEventListener("click", function() {
         removeInterest(parseInt(this.dataset.index));
       });
     });
   }
   if (interestTotalElement) {
-    interestTotalElement.innerHTML = interests.length > 0 ? `<strong>Total: R$ ${totalValue.toFixed(2).replace('.', ',')}</strong>` : "";
+    interestTotalElement.innerHTML = interests.length > 0 ? `<strong>Total: R$ ${totalValue.toFixed(2).replace(".", ",")}</strong>` : "";
   }
 }
 
@@ -313,7 +383,7 @@ function removeInterest(index) {
   interests.splice(index, 1);
   updateInterestPanel();
   if (interestPanel.classList.contains("visible")) {
-      showInterestPanel(true); // Re-mostra e reinicia o timer de auto-hide
+      showInterestPanel(true); 
   }
 }
 
@@ -322,7 +392,6 @@ function toggleInterestPanel() {
   if (interestPanel.classList.contains("visible")) {
     hideInterestPanel(); 
   } else {
-    // Ao abrir pelo botão global, não inicia o auto-hide timer
     showInterestPanel(false); 
   }
 }
@@ -344,10 +413,10 @@ function showContactModal() {
     itemsText += `${item.quantity}x ${item.name} (${item.originalPriceString})\n`;
     totalFormValue += item.price * item.quantity;
   });
-  itemsText += `\nTotal Geral: R$ ${totalFormValue.toFixed(2).replace('.', ',')}`;
+  itemsText += `\nTotal Geral: R$ ${totalFormValue.toFixed(2).replace(".", ",")}`;
   if(itemsDataInput) itemsDataInput.value = itemsText.trim(); 
   if(contactModal) contactModal.style.display = "block";
-  hideInterestPanel(true); // Esconde painel de interesse imediatamente ao abrir modal de contato
+  hideInterestPanel(true); 
 }
 
 // Fechar modais se clicar fora
@@ -364,7 +433,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCarouselImages();
   updateInterestPanel(); 
   if (interestPanel) {
-      // Painel começa escondido por padrão
       interestPanel.classList.remove("visible"); 
       interestPanel.classList.add("hidden-fade");
   }
@@ -373,6 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(carouselBtnPrev) carouselBtnPrev.addEventListener("click", () => moveSlide(-1));
   const carouselBtnNext = document.querySelector(".carousel-btn.next");
   if(carouselBtnNext) carouselBtnNext.addEventListener("click", () => moveSlide(1));
+  
   const closeModalButton = document.querySelector("#imgModal .close");
   if(closeModalButton) closeModalButton.addEventListener("click", closeModal);
   const modalPrevButton = document.querySelector("#imgModal .modal-prev");
@@ -381,24 +450,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if(modalNextButton) modalNextButton.addEventListener("click", () => navigateModal(1));
   const zoomControls = document.querySelector(".zoom-controls");
   if(zoomControls){
-      const zoomInBtn = zoomControls.children[0]; if(zoomInBtn) zoomInBtn.addEventListener("click", () => zoomImage(0.2));
-      const zoomOutBtn = zoomControls.children[1]; if(zoomOutBtn) zoomOutBtn.addEventListener("click", () => zoomImage(-0.2));
-      const zoomResetBtn = zoomControls.children[2]; if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoom);
+      const zoomInBtn = zoomControls.children[0]; 
+      if(zoomInBtn) zoomInBtn.addEventListener("click", () => zoomImage(0.2));
+      const zoomOutBtn = zoomControls.children[1]; 
+      if(zoomOutBtn) zoomOutBtn.addEventListener("click", () => zoomImage(-0.2));
+      const zoomResetBtn = zoomControls.children[2]; 
+      if(zoomResetBtn) zoomResetBtn.addEventListener("click", resetZoom);
   }
-  const closeContactModalButton = document.querySelector('#contactModal .close-contact');
-  if(closeContactModalButton) closeContactModalButton.addEventListener('click', () => { if(contactModal) contactModal.style.display='none'; });
-  if(backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}) );
   
-  const interestBtnGlobal = document.querySelector('.interest-btn'); 
-  if(interestBtnGlobal) interestBtnGlobal.addEventListener('click', toggleInterestPanel);
+  const closeContactModalButton = document.querySelector("#contactModal .close-contact");
+  if(closeContactModalButton) closeContactModalButton.addEventListener("click", () => { if(contactModal) contactModal.style.display="none"; });
   
-  // Seletor para o botão "Enviar Interesses" dentro do painel de interesses
+  if(backToTopBtn) backToTopBtn.addEventListener("click", () => window.scrollTo({top: 0, behavior: "smooth"}) );
+  
+  const interestBtnGlobal = document.querySelector(".interest-btn"); 
+  if(interestBtnGlobal) interestBtnGlobal.addEventListener("click", toggleInterestPanel);
+  
   const showContactModalBtn = document.querySelector("#interestPanel .btn-submit-interest");
-  if(showContactModalBtn) showContactModalBtn.addEventListener('click', showContactModal);
+  if(showContactModalBtn) showContactModalBtn.addEventListener("click", showContactModal);
 
-  // Event listener para o novo botão X no painel de interesses
   const closeInterestPanelBtn = document.getElementById("closeInterestPanelBtn");
-  if(closeInterestPanelBtn) closeInterestPanelBtn.addEventListener('click', () => hideInterestPanel(false)); // false para usar fade
+  if(closeInterestPanelBtn) closeInterestPanelBtn.addEventListener("click", () => hideInterestPanel(false)); 
 });
 
 
