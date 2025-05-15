@@ -28,7 +28,7 @@ let panStartImgY = 0;
 let currentImgTranslateX = 0;
 let currentImgTranslateY = 0;
 
-const ZOOM_INCREMENT = 0.15; // Mais gradual
+const ZOOM_INCREMENT = 0.08; // Mais sutil
 const MAX_ZOOM = 5;
 const MIN_ZOOM = 1;
 
