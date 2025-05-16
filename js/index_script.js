@@ -30,7 +30,7 @@ let currentImgTranslateY = 0;
 
 const ZOOM_INCREMENT = 0.07; // Mantido conforme preferência do usuário
 const MAX_ZOOM = 4;          // Mantido conforme preferência do usuário
-const MIN_ZOOM = 1;          // CORRIGIDO: Revertido para 1, valor menor que 1 quebra a lógica
+const MIN_ZOOM = 0.7;          // CORRIGIDO: Revertido para 1, valor menor que 1 quebra a lógica
 
 // =============================================
 // FUNÇÃO AUXILIAR PARA VERIFICAR IMAGEM
