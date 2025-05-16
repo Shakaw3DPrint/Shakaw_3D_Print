@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Página em Construção | Shakaw 3D Print</title>
-  <link rel="stylesheet" href="css/outros_projetos_styles.css">
+  <title>Outros Projetos - Shakaw 3D Print</title>
+  <link rel="stylesheet" href="css/index_styles.css">
+  <link rel="stylesheet" href="css/outros_projetos.css">
 </head>
 <body>
-  <!-- CABEÇALHO -->
+  <!-- CABEÇALHO ATUALIZADO -->
   <div class="header">
     <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
     <h1>Shakaw 3D Print</h1>
@@ -17,24 +18,53 @@
         @shakaw3dprint
       </a>
       <a href="index.html">
-        Voltar para o site principal
+        Página Inicial
       </a>
     </div>
   </div>
 
-  <!-- CONTEÚDO -->
-  <div class="construction-content">
-    <div class="construction-icon">🚧</div>
-    <h2>Página em Construção</h2>
-    <p>Estamos trabalhando duro para trazer novos projetos e conteúdos incríveis para você!</p>
-    <p>Enquanto isso, você pode nos acompanhar no Instagram ou voltar para a página principal.</p>
-    <p>Obrigado pela paciência e compreensão!</p>
+  <!-- SEÇÃO DE ÚLTIMAS DO INSTAGRAM -->
+  <div class="section-container">
+    <h2 class="section-title">Últimas do Instagram</h2>
+    <div class="instagram-carousel-container">
+      <div class="carousel" id="instagramCarousel"></div>
+      <button class="carousel-btn prev" id="instaPrevBtn">❮</button>
+      <button class="carousel-btn next" id="instaNextBtn">❯</button>
+      <div class="carousel-indicators" id="instagramCarouselIndicators"></div>
+    </div>
+    <div class="instagram-embed-container">
+      <!-- O script do Instagram será inserido aqui via JavaScript -->
+    </div>
   </div>
 
-  <!-- RODAPÉ -->
-  <div class="footer">
-    &copy; 2023 Shakaw 3D Print - Todos os direitos reservados
+  <!-- GALERIA DE PROJETOS -->
+  <div class="section-container">
+    <h2 class="section-title">Galeria de Projetos</h2>
+    <div class="projects-gallery" id="projectsGallery">
+      <!-- Os itens da galeria serão inseridos aqui via JavaScript -->
+    </div>
   </div>
+
+  <!-- MODAL PARA IMAGENS AMPLIADAS (Reutilizado da página principal) -->
+  <div id="imgModal" class="modal">
+    <span class="close" id="closeModalBtn">&times;</span>
+    <button class="modal-nav modal-prev" id="modalPrevBtn">❮</button>
+    <div class="modal-content">
+      <img id="modalImg" src="" alt="Imagem ampliada">
+    </div>
+    <button class="modal-nav modal-next" id="modalNextBtn">❯</button>
+    <div class="zoom-controls">
+      <button id="zoomInBtn">+</button>
+      <button id="zoomOutBtn">-</button>
+      <button id="zoomResetBtn">Reset</button>
+    </div>
+  </div>
+
+  <!-- BOTÃO "VOLTAR AO TOPO" -->
+  <button id="backToTopBtn" title="Voltar ao topo">⬆️ Topo</button>
+
+  <!-- SCRIPTS -->
+  <script src="js/index_script.js"></script>
+  <script src="js/outros_projetos.js"></script>
 </body>
 </html>
-
