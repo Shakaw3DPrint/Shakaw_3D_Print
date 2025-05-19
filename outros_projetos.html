@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Shakaw 3D Print</title>
+  <link rel="stylesheet" href="css/index_styles.css">
+</head>
+<body>
+  <!-- CABEÇALHO ATUALIZADO -->
+  <div class="header">
+    <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
+    <h1>Shakaw 3D Print</h1>
+    <div class="header-links">
+      <a href="https://www.instagram.com/shakaw3dprint" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="instagram-icon">
+        @shakaw3dprint
+      </a>
+      <a href="outros_projetos.html" target="_blank">
+        Outros Projetos
+      </a>
+    </div>
+  </div>
+
+  
+  <!-- SnapWidget -->
+  <div class="snapwidget-container" style="text-align:center; margin: 40px 0;">
+    <iframe src="https://snapwidget.com/embed/1096859" class="snapwidget-widget" allowtransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%; max-width:602px; height:602px;" title="Posts from Instagram"></iframe>
+  </div>
+
+
+<!-- INÍCIO DA GALERIA -->
+
+  <!-- GALERIA DE OUTROS PROJETOS -->
+  <div class="gallery-container">
+    <h2 style="text-align:center; margin: 20px 0;">Galeria de Produtos Realizados</h2>
+    <div class="gallery-grid">
+      <img src="assets/img/produto1.webp" alt="Produto 1">
+      <img src="assets/img/produto2.webp" alt="Produto 2">
+      <img src="assets/img/produto3.webp" alt="Produto 3">
+      <img src="assets/img/produto4.webp" alt="Produto 4">
+    </div>
+  </div>
+  <style>
+    .gallery-container {
+      padding: 20px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+  </style>
+
+  <div class="carousel-container">
+    <div class="carousel" id="carousel"></div>
+    <button class="carousel-btn prev" onclick="moveSlide(-1)">❮</button>
+    <button class="carousel-btn next" onclick="moveSlide(1)">❯</button>
+    <div class="carousel-indicators" id="carouselIndicators"></div>
+  </div>
+
+  </body>
+</html>
