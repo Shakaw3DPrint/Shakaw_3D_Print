@@ -67,10 +67,56 @@
       height: 250px; /* Altura fixa para uniformidade */
     }
     
+    /* SnapWidget Carousel */
+    .snapwidget-container {
+      margin: 40px auto;
+      text-align: center;
+    }
+    
+    .snapwidget-widget {
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Seção de Contato */
+    .contact-section {
+      background-color: #f5f5f5;
+      padding: 40px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .contact-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      min-width: 250px;
+    }
+    
+    .contact-card i {
+      font-size: 2rem;
+      color: #405DE6;
+      margin-bottom: 10px;
+    }
+    
     /* Adaptações para mobile */
     @media (max-width: 768px) {
       .gallery-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      
+      .snapwidget-widget {
+        width: 100% !important;
+        height: 400px !important;
       }
     }
     
@@ -81,6 +127,11 @@
       
       .gallery-title {
         font-size: 1.5rem;
+      }
+      
+      .contact-info {
+        flex-direction: column;
+        gap: 15px;
       }
     }
   </style>
@@ -100,29 +151,25 @@
     </div>
   </div>
 
-  <!-- CARROSSEL DE IMAGENS (MESMO DA PÁGINA PRINCIPAL) -->
-  <div class="carousel-container">
-    <div class="carousel" id="carousel"></div>
-    <button class="carousel-btn prev" onclick="moveSlide(-1)">❮</button>
-    <button class="carousel-btn next" onclick="moveSlide(1)">❯</button>
-    <div class="carousel-indicators" id="carouselIndicators"></div>
+  <!-- CARROSSEL SNAPWIDGET -->
+  <div class="snapwidget-container">
+    <iframe src="https://snapwidget.com/embed/1096859" class="snapwidget-widget" allowtransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:602px; height:602px" title="Posts from Instagram"></iframe>
   </div>
 
   <!-- GALERIA DE PRODUTOS -->
   <div class="gallery-container">
     <h2 class="gallery-title">Galeria de Produtos Realizados</h2>
     <div class="gallery-grid">
-      <!-- Posts do Instagram incorporados -->
+      <!-- Post do Instagram incorporado corretamente -->
       <div class="gallery-item instagram-post">
-        <blockquote class="https://www.instagram.com/reel/C6NM74nLqAn/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" 
-                    data-instgrm-version="14">
+        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/C6NM74nLqAn/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14">
           <!-- O conteúdo será carregado pelo script do Instagram -->
         </blockquote>
       </div>
       
+      <!-- Outro exemplo de post do Instagram -->
       <div class="gallery-item instagram-post">
-        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/EXEMPLO2/" 
-                    data-instgrm-version="14">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/EXEMPLO2/" data-instgrm-version="14">
         </blockquote>
       </div>
       
@@ -141,6 +188,33 @@
       </div>
     </div>
   </div>
+
+  <!-- SEÇÃO DE CONTATO -->
+  <section class="contact-section">
+    <h2 class="gallery-title">Entre em Contato</h2>
+    <div class="contact-info">
+      <div class="contact-card">
+        <i class="fas fa-envelope"></i>
+        <h3>Email</h3>
+        <p>shakaw3dprint@hotmail.com</p>
+        <a href="mailto:shakaw3dprint@hotmail.com" class="contact-btn">Enviar Email</a>
+      </div>
+      
+      <div class="contact-card">
+        <i class="fab fa-whatsapp"></i>
+        <h3>WhatsApp</h3>
+        <p>(11) 95484-6647</p>
+        <a href="https://wa.me/5511954846647" target="_blank" class="contact-btn">Enviar Mensagem</a>
+      </div>
+      
+      <div class="contact-card">
+        <i class="fab fa-instagram"></i>
+        <h3>Instagram</h3>
+        <p>@shakaw3dprint</p>
+        <a href="https://www.instagram.com/shakaw3dprint" target="_blank" class="contact-btn">Seguir</a>
+      </div>
+    </div>
+  </section>
 
   <!-- MODAIS E ELEMENTOS DA PÁGINA PRINCIPAL -->
   <div id="imgModal" class="modal">
