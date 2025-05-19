@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Galeria de Produtos - Shakaw 3D Print</title>
+  <title>Galeria de Projetos - Shakaw 3D Print</title>
   <link rel="stylesheet" href="css/index_styles.css">
   <!-- Adicionei Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -45,6 +45,7 @@
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
     }
     
     .gallery-item:hover {
@@ -57,14 +58,13 @@
       height: 250px;
       object-fit: cover;
       display: block;
-      cursor: pointer;
     }
     
     .instagram-post {
       border: 1px solid #ddd;
       border-radius: 8px;
       overflow: hidden;
-      height: 250px; /* Altura fixa para uniformidade */
+      height: 250px;
     }
     
     /* SnapWidget Carousel */
@@ -78,12 +78,14 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     
-    /* Seção de Contato */
+    /* Seção de Contato com Degradê */
     .contact-section {
-      background-color: #f5f5f5;
-      padding: 40px 20px;
+      background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+      padding: 60px 20px;
       text-align: center;
       margin-top: 40px;
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
     }
     
     .contact-info {
@@ -91,21 +93,142 @@
       justify-content: center;
       gap: 30px;
       flex-wrap: wrap;
-      margin-top: 20px;
+      margin-top: 30px;
     }
     
     .contact-card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
       min-width: 250px;
+      transition: transform 0.3s;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
     }
     
     .contact-card i {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #405DE6;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .contact-card h3 {
+      margin: 10px 0;
+      color: #333;
+    }
+    
+    .contact-card p {
+      margin-bottom: 15px;
+      color: #555;
+    }
+    
+    .contact-btn {
+      display: inline-block;
+      background: #405DE6;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .contact-btn:hover {
+      background: #344ab8;
+    }
+    
+    /* Modal Ampliado Melhorado */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      overflow: auto;
+    }
+    
+    .modal-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #modalImg {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+    
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10;
+    }
+    
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      padding: 15px;
+      border-radius: 50%;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+    
+    .modal-nav:hover {
+      background: rgba(0,0,0,0.8);
+    }
+    
+    .modal-prev {
+      left: 30px;
+    }
+    
+    .modal-next {
+      right: 30px;
+    }
+    
+    .zoom-controls {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+    
+    .zoom-controls button {
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .zoom-controls button:hover {
+      background: rgba(0,0,0,0.9);
     }
     
     /* Adaptações para mobile */
@@ -117,6 +240,15 @@
       .snapwidget-widget {
         width: 100% !important;
         height: 400px !important;
+      }
+      
+      .contact-card {
+        padding: 20px;
+      }
+      
+      .modal-nav {
+        font-size: 30px;
+        padding: 10px;
       }
     }
     
@@ -131,13 +263,18 @@
       
       .contact-info {
         flex-direction: column;
-        gap: 15px;
+        gap: 20px;
+      }
+      
+      #modalImg {
+        max-width: 95%;
+        max-height: 80%;
       }
     }
   </style>
 </head>
 <body>
-  <!-- CABEÇALHO IDÊNTICO AO DA PÁGINA PRINCIPAL -->
+  <!-- CABEÇALHO -->
   <div class="header">
     <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
     <h1>Shakaw 3D Print</h1>
@@ -156,9 +293,9 @@
     <iframe src="https://snapwidget.com/embed/1096859" class="snapwidget-widget" allowtransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:602px; height:602px" title="Posts from Instagram"></iframe>
   </div>
 
-  <!-- GALERIA DE PRODUTOS -->
+  <!-- GALERIA DE PROJETOS -->
   <div class="gallery-container">
-    <h2 class="gallery-title">Galeria de Produtos Realizados</h2>
+    <h2 class="gallery-title">Galeria de Projetos</h2>
     <div class="gallery-grid">
       <!-- Post do Instagram incorporado corretamente -->
       <div class="gallery-item instagram-post">
@@ -167,29 +304,23 @@
         </blockquote>
       </div>
       
-      <!-- Outro exemplo de post do Instagram -->
-      <div class="gallery-item instagram-post">
-        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/EXEMPLO2/" data-instgrm-version="14">
-        </blockquote>
-      </div>
-      
-      <!-- Imagens locais como fallback -->
+      <!-- Outros projetos -->
       <div class="gallery-item">
-        <img src="assets/img/produto1.webp" alt="Produto 1" loading="lazy" onclick="openModal(this)">
+        <img src="assets/img/projeto1.webp" alt="Projeto 1" loading="lazy" onclick="openModal(this)">
       </div>
       <div class="gallery-item">
-        <img src="assets/img/produto2.webp" alt="Produto 2" loading="lazy" onclick="openModal(this)">
+        <img src="assets/img/projeto2.webp" alt="Projeto 2" loading="lazy" onclick="openModal(this)">
       </div>
       <div class="gallery-item">
-        <img src="assets/img/produto3.webp" alt="Produto 3" loading="lazy" onclick="openModal(this)">
+        <img src="assets/img/projeto3.webp" alt="Projeto 3" loading="lazy" onclick="openModal(this)">
       </div>
       <div class="gallery-item">
-        <img src="assets/img/produto4.webp" alt="Produto 4" loading="lazy" onclick="openModal(this)">
+        <img src="assets/img/projeto4.webp" alt="Projeto 4" loading="lazy" onclick="openModal(this)">
       </div>
     </div>
   </div>
 
-  <!-- SEÇÃO DE CONTATO -->
+  <!-- SEÇÃO DE CONTATO COM DEGRADÊ -->
   <section class="contact-section">
     <h2 class="gallery-title">Entre em Contato</h2>
     <div class="contact-info">
@@ -216,9 +347,8 @@
     </div>
   </section>
 
-  <!-- MODAIS E ELEMENTOS DA PÁGINA PRINCIPAL -->
+  <!-- MODAL AMPLIADO MELHORADO -->
   <div id="imgModal" class="modal">
-    <!-- Conteúdo idêntico ao da página principal -->
     <span class="close" onclick="closeModal()">&times;</span>
     <button class="modal-nav modal-prev" onclick="navigateModal(-1)">❮</button>
     <div class="modal-content">
@@ -232,24 +362,13 @@
     </div>
   </div>
 
+  <!-- Restante do seu código (modais, painel de interesses, etc.) -->
   <div id="contactModal" class="contact-modal">
-    <!-- Conteúdo idêntico ao da página principal -->
-    <div class="contact-modal-content">
-      <span class="close-contact" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
-      <h2>Enviar Interesses</h2>
-      <form id="contactForm" action="https://formsubmit.co/shakaw3dprint@hotmail.com" method="POST">
-        <!-- Campos do formulário mantidos iguais -->
-      </form>
-    </div>
+    <!-- Conteúdo do modal de contato -->
   </div>
 
-  <!-- PAINEL DE INTERESSES -->
   <div id="interestPanel">
-    <button id="closeInterestPanelBtn" class="close-interest-panel-btn">&times;</button> 
-    <h3>Lista de interesses</h3>
-    <ul id="interestList"></ul>
-    <div id="interestTotal"></div>
-    <button onclick="showContactModal()" class="send-interest-btn">Enviar Interesses</button>
+    <!-- Painel de interesses -->
   </div>
 
   <!-- BOTÕES FLUTUANTES -->
@@ -257,42 +376,56 @@
   <button class="interest-btn"><i class="fas fa-heart"></i> Interesses</button>
 
   <!-- SCRIPTS -->
-  <!-- Script do Instagram -->
   <script async src="//www.instagram.com/embed.js"></script>
-  
-  <!-- Seus scripts existentes -->
   <script src="js/index_script.js"></script>
   
-  <!-- Script adicional para a galeria -->
   <script>
-    // Funções para o modal de imagem (compatíveis com as da página principal)
-    function openModal(img) {
+    // Array para armazenar todas as imagens da galeria
+    let galleryImages = [];
+    let currentImageIndex = 0;
+    
+    // Inicializa a galeria quando o DOM estiver carregado
+    document.addEventListener('DOMContentLoaded', function() {
+      // Coleta todas as imagens da galeria
+      galleryImages = Array.from(document.querySelectorAll('.gallery-item img'));
+      
+      // Adiciona event listener para cada imagem
+      galleryImages.forEach((img, index) => {
+        img.addEventListener('click', () => openModal(index));
+      });
+    });
+    
+    // Abre o modal com a imagem clicada
+    function openModal(index) {
       const modal = document.getElementById('imgModal');
       const modalImg = document.getElementById('modalImg');
-      modal.style.display = "block";
-      modalImg.src = img.src;
       
-      // Atualiza o array de imagens para navegação
-      window.currentImages = Array.from(document.querySelectorAll('.gallery-item img'));
-      window.currentImageIndex = window.currentImages.indexOf(img);
+      currentImageIndex = index;
+      modalImg.src = galleryImages[currentImageIndex].src;
+      modal.style.display = "block";
+      document.body.style.overflow = "hidden"; // Impede a rolagem da página
     }
     
+    // Fecha o modal
     function closeModal() {
       document.getElementById('imgModal').style.display = "none";
+      document.body.style.overflow = "auto"; // Restaura a rolagem da página
     }
     
+    // Navega entre as imagens
     function navigateModal(direction) {
-      window.currentImageIndex += direction;
+      currentImageIndex += direction;
       
-      if (window.currentImageIndex >= window.currentImages.length) {
-        window.currentImageIndex = 0;
-      } else if (window.currentImageIndex < 0) {
-        window.currentImageIndex = window.currentImages.length - 1;
+      if (currentImageIndex >= galleryImages.length) {
+        currentImageIndex = 0;
+      } else if (currentImageIndex < 0) {
+        currentImageIndex = galleryImages.length - 1;
       }
       
-      document.getElementById('modalImg').src = window.currentImages[window.currentImageIndex].src;
+      document.getElementById('modalImg').src = galleryImages[currentImageIndex].src;
     }
     
+    // Controles de zoom
     function zoomImage(scale) {
       const img = document.getElementById('modalImg');
       const currentScale = parseFloat(img.style.transform.replace('scale(', '').replace(')', '')) || 1;
@@ -306,14 +439,23 @@
     // Fechar modal ao clicar fora da imagem
     window.onclick = function(event) {
       const modal = document.getElementById('imgModal');
-      if (event.target == modal) {
+      if (event.target === modal) {
         closeModal();
       }
     };
     
-    // Inicialização do carrossel (se necessário)
-    document.addEventListener('DOMContentLoaded', function() {
-      // Seu código de inicialização do carrossel aqui
+    // Navegação por teclado
+    document.addEventListener('keydown', function(event) {
+      const modal = document.getElementById('imgModal');
+      if (modal.style.display === "block") {
+        if (event.key === "Escape") {
+          closeModal();
+        } else if (event.key === "ArrowLeft") {
+          navigateModal(-1);
+        } else if (event.key === "ArrowRight") {
+          navigateModal(1);
+        }
+      }
     });
   </script>
 </body>
