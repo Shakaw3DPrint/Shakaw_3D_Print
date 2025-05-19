@@ -3,107 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Galeria de Produtos - Shakaw 3D Print</title>
+  <title>Shakaw 3D Print</title>
   <link rel="stylesheet" href="css/index_styles.css">
-  <!-- Adicionei Font Awesome para ícones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* Estilos específicos para a galeria que complementam seu index_styles.css */
-    .gallery-container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    .gallery-title {
-      text-align: center;
-      margin: 30px 0;
-      font-size: 2rem;
-      color: #333;
-      position: relative;
-    }
-    
-    .gallery-title::after {
-      content: '';
-      display: block;
-      width: 80px;
-      height: 3px;
-      background: #405DE6; /* Cor do Instagram */
-      margin: 15px auto;
-    }
-    
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-    
-    .gallery-item {
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .gallery-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-    
-    .gallery-item img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      display: block;
-      cursor: pointer;
-    }
-    
-    .instagram-post {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      height: 250px; /* Altura fixa para uniformidade */
-    }
-    
-    /* Adaptações para mobile */
-    @media (max-width: 768px) {
-      .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .gallery-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .gallery-title {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
 </head>
 <body>
-  <!-- CABEÇALHO IDÊNTICO AO DA PÁGINA PRINCIPAL -->
+  <!-- CABEÇALHO ATUALIZADO -->
   <div class="header">
     <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
     <h1>Shakaw 3D Print</h1>
     <div class="header-links">
       <a href="https://www.instagram.com/shakaw3dprint" target="_blank">
-        <i class="fab fa-instagram"></i> @shakaw3dprint
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="instagram-icon">
+        @shakaw3dprint
       </a>
-      <a href="outros_projetos.html">
-        <i class="fas fa-cubes"></i> Outros Projetos
-      </a>
-      <a href="index.html">
-        <i class="fas fa-home"></i> Página Inicial
+      <a href="outros_projetos.html" target="_blank">
+        Outros Projetos
       </a>
     </div>
   </div>
 
-  <!-- CARROSSEL DE IMAGENS (MESMO DA PÁGINA PRINCIPAL) -->
+  <!-- CARROSSEL DE IMAGENS -->
   <div class="carousel-container">
     <div class="carousel" id="carousel"></div>
     <button class="carousel-btn prev" onclick="moveSlide(-1)">❮</button>
@@ -111,43 +30,14 @@
     <div class="carousel-indicators" id="carouselIndicators"></div>
   </div>
 
-  <!-- GALERIA DE PRODUTOS -->
-  <div class="gallery-container">
-    <h2 class="gallery-title">Galeria de Produtos Realizados</h2>
-    <div class="gallery-grid">
-      <!-- Posts do Instagram incorporados -->
-      <div class="gallery-item instagram-post">
-        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/EXEMPLO1/" 
-                    data-instgrm-version="14">
-          <!-- O conteúdo será carregado pelo script do Instagram -->
-        </blockquote>
-      </div>
-      
-      <div class="gallery-item instagram-post">
-        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/EXEMPLO2/" 
-                    data-instgrm-version="14">
-        </blockquote>
-      </div>
-      
-      <!-- Imagens locais como fallback -->
-      <div class="gallery-item">
-        <img src="assets/img/produto1.webp" alt="Produto 1" loading="lazy" onclick="openModal(this)">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/img/produto2.webp" alt="Produto 2" loading="lazy" onclick="openModal(this)">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/img/produto3.webp" alt="Produto 3" loading="lazy" onclick="openModal(this)">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/img/produto4.webp" alt="Produto 4" loading="lazy" onclick="openModal(this)">
-      </div>
-    </div>
-  </div>
+  <!-- INDICADOR DE CARREGAMENTO -->
+  <div class="loader" id="loader"></div>
 
-  <!-- MODAIS E ELEMENTOS DA PÁGINA PRINCIPAL -->
+  <!-- ÁREA PRINCIPAL DO CATÁLOGO -->
+  <div class="catalog-page" id="catalog"></div>
+
+  <!-- MODAL PARA IMAGENS AMPLIADAS -->
   <div id="imgModal" class="modal">
-    <!-- Conteúdo idêntico ao da página principal -->
     <span class="close" onclick="closeModal()">&times;</span>
     <button class="modal-nav modal-prev" onclick="navigateModal(-1)">❮</button>
     <div class="modal-content">
@@ -161,89 +51,61 @@
     </div>
   </div>
 
+  <!-- MODAL PARA FORMULÁRIO DE CONTATO -->
   <div id="contactModal" class="contact-modal">
-    <!-- Conteúdo idêntico ao da página principal -->
     <div class="contact-modal-content">
       <span class="close-contact" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
       <h2>Enviar Interesses</h2>
       <form id="contactForm" action="https://formsubmit.co/shakaw3dprint@hotmail.com" method="POST">
-        <!-- Campos do formulário mantidos iguais -->
+        <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
+        <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
+        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_next" value="https://shakaw3dprint.github.io/Shakaw_3D_Print/obrigado.html">
+        <input type="hidden" id="itemsData" name="items_data">
+        
+        <div class="form-section">
+          <label for="name">Nome:</label>
+          <input type="text" id="name" name="name" required>
+          
+          <label for="email">E-mail:</label>
+          <input type="email" id="email" name="email" required>
+          
+          <label for="whatsapp">WhatsApp:</label>
+          <input type="tel" id="whatsapp" name="whatsapp" placeholder="(00) 00000-0000" required>
+        </div>
+        
+        <div class="form-section">
+          <h3>Resumo dos Itens Selecionados</h3>
+          <div id="selectedItemsSummary" class="items-summary"></div>
+        </div>
+        
+        <div class="form-section">
+          <label for="customMessage">Mensagem Adicional:</label>
+          <textarea id="customMessage" name="custom_message" rows="4" placeholder="Digite aqui qualquer informação adicional..."></textarea>
+        </div>
+        
+        <button type="submit">Enviar Interesses</button>
       </form>
     </div>
   </div>
 
+  <!-- BOTÃO "VOLTAR AO TOPO" -->
+  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn" title="Voltar ao topo">⬆️ Topo</button>
+
   <!-- PAINEL DE INTERESSES -->
-  <div id="interestPanel">
-    <button id="closeInterestPanelBtn" class="close-interest-panel-btn">&times;</button> 
-    <h3>Lista de interesses</h3>
-    <ul id="interestList"></ul>
-    <div id="interestTotal"></div>
-    <button onclick="showContactModal()" class="send-interest-btn">Enviar Interesses</button>
-  </div>
+ <div id="interestPanel">
+  <button id="closeInterestPanelBtn" class="close-interest-panel-btn">&times;</button> 
+  <h3>Lista de interesses</h3>
+  <ul id="interestList"></ul>
+  <div id="interestTotal"></div> <!-- ADICIONE ESTA LINHA AQUI -->
+     <button onclick="showContactModal()" style="...">Enviar Interesses</button>
+</div>
 
-  <!-- BOTÕES FLUTUANTES -->
-  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn" title="Voltar ao topo">⬆️</button>
-  <button class="interest-btn"><i class="fas fa-heart"></i> Interesses</button>
+  <!-- BOTÃO PARA ABRIR PAINEL DE INTERESSES -->
+  <button class="interest-btn">💚 Ver interesses</button>
 
-  <!-- SCRIPTS -->
-  <!-- Script do Instagram -->
-  <script async src="//www.instagram.com/embed.js"></script>
-  
-  <!-- Seus scripts existentes -->
+  <!-- SCRIPT JAVASCRIPT -->
   <script src="js/index_script.js"></script>
-  
-  <!-- Script adicional para a galeria -->
-  <script>
-    // Funções para o modal de imagem (compatíveis com as da página principal)
-    function openModal(img) {
-      const modal = document.getElementById('imgModal');
-      const modalImg = document.getElementById('modalImg');
-      modal.style.display = "block";
-      modalImg.src = img.src;
-      
-      // Atualiza o array de imagens para navegação
-      window.currentImages = Array.from(document.querySelectorAll('.gallery-item img'));
-      window.currentImageIndex = window.currentImages.indexOf(img);
-    }
-    
-    function closeModal() {
-      document.getElementById('imgModal').style.display = "none";
-    }
-    
-    function navigateModal(direction) {
-      window.currentImageIndex += direction;
-      
-      if (window.currentImageIndex >= window.currentImages.length) {
-        window.currentImageIndex = 0;
-      } else if (window.currentImageIndex < 0) {
-        window.currentImageIndex = window.currentImages.length - 1;
-      }
-      
-      document.getElementById('modalImg').src = window.currentImages[window.currentImageIndex].src;
-    }
-    
-    function zoomImage(scale) {
-      const img = document.getElementById('modalImg');
-      const currentScale = parseFloat(img.style.transform.replace('scale(', '').replace(')', '')) || 1;
-      img.style.transform = `scale(${currentScale + scale})`;
-    }
-    
-    function resetZoom() {
-      document.getElementById('modalImg').style.transform = 'scale(1)';
-    }
-    
-    // Fechar modal ao clicar fora da imagem
-    window.onclick = function(event) {
-      const modal = document.getElementById('imgModal');
-      if (event.target == modal) {
-        closeModal();
-      }
-    };
-    
-    // Inicialização do carrossel (se necessário)
-    document.addEventListener('DOMContentLoaded', function() {
-      // Seu código de inicialização do carrossel aqui
-    });
-  </script>
 </body>
 </html>
+
