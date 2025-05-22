@@ -651,3 +651,43 @@ document.addEventListener("DOMContentLoaded", () => {
   if(closeInterestPanelBtn) closeInterestPanelBtn.addEventListener("click", () => hideInterestPanel(false)); 
 });
 
+// Adicionar manipulador de eventos para o formulário
+document.addEventListener('DOMContentLoaded', function() {
+var contactForm = document.getElementById('contactForm');
+if (contactForm) {
+contactForm.addEventListener('submit', function(e) {
+e.preventDefault();
+var form = this;
+var formData = new FormData(form);
+// Mostrar indicador de carregamento
+var submitButton = form.querySelector('button[type="submit"]');
+1.
+1.
+1.
+1.
+1.
+var originalButtonText = submitButton ? submitButton.innerHTML : '';
+if (submitButton) {
+submitButton.innerHTML = 'Enviando...';
+submitButton.disabled = true;
+}
+// Enviar dados para o Google Apps Script
+fetch(form.action, {
+method: 'POST',
+body: formData
+})
+.then(function() {
+// Redirecionar para a página de agradecimento
+window.location.href = 'obrigado.html';
+})
+.catch(function(error) {
+console.error('Erro:', error);
+alert('Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.');
+if (submitButton) {
+submitButton.innerHTML = originalButtonText;
+submitButton.disabled = false;
+}
+});
+});
+}
+});
