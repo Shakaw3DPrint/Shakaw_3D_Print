@@ -271,9 +271,78 @@
         max-height: 80%;
       }
     }
+
+    /* Estilos para o aviso de página em construção */
+    .construction-banner {
+      background-color: #fff8e1;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      max-width: 1200px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      animation: pulse 2s infinite ease-in-out;
+      border: 2px dashed #ffc107;
+    }
+
+    .construction-banner img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    .construction-message {
+      flex: 1;
+      min-width: 280px;
+      text-align: center;
+    }
+
+    .construction-message h2 {
+      color: #ff6f00;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    .construction-message p {
+      color: #5d4037;
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 600px) {
+      .construction-banner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- AVISO DE PÁGINA EM CONSTRUÇÃO -->
+  <div class="construction-banner">
+    <img src="https://media1.giphy.com/media/Mah9dFWo1WZX0WM62Q/giphy.gif" alt="Pinguim construtor">
+    <div class="construction-message">
+      <h2>Ops! Estamos em obras!</h2>
+      <p>Desculpe o transtorno, esta página está em construção. Estamos trabalhando para trazer novidades incríveis em breve!</p>
+    </div>
+  </div>
+
   <!-- CABEÇALHO -->
   <div class="header">
     <img src="https://shakaw3dprint.github.io/Shakaw_3D_Print/assets/img/logo.webp" alt="Logo Shakaw 3D Print" class="logo">
