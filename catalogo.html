@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Shakaw 3D Print</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Shakaw 3D Print</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="catalogo.html">Catálogo</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="catalogo" class="section-padding">
+            <div class="container">
+                <h2>Nosso Catálogo de Produtos</h2>
+
+                <div class="filters">
+                    <button class="filter-btn active" data-category="all">Todos</button>
+                    <button class="filter-btn" data-category="miniaturas3d">Miniaturas 3D</button>
+                    <button class="filter-btn" data-category="dioramagaragem">Diorama Garagem</button>
+                    <button class="filter-btn" data-category="miniaturasrpg">Miniaturas RPG</button>
+                    <button class="filter-btn" data-category="itensfuncionais">Itens Funcionais</button>
+                </div>
+
+                <div class="product-grid">
+                    <!-- Exemplo de Card de Produto (vamos duplicar e preencher depois) -->
+                    <div class="product-card" data-category="miniaturas3d">
+                        <img src="https://via.placeholder.com/300x200?text=Produto+1" alt="Nome do Produto 1">
+                        <h3>Nome do Produto 1</h3>
+                        <p class="description">Uma breve descrição do Produto 1, destacando suas características principais.</p>
+                        <p class="price">R$ 49,90</p>
+                        <div class="product-images-thumb">
+                            <img src="https://via.placeholder.com/50x50?text=P1a" alt="Miniatura 1a">
+                            <img src="https://via.placeholder.com/50x50?text=P1b" alt="Miniatura 1b">
+                        </div>
+                        <button class="add-to-interest">Adicionar à Lista de Interesses</button>
+                    </div>
+
+                    <div class="product-card" data-category="dioramagaragem">
+                        <img src="https://via.placeholder.com/300x200?text=Produto+2" alt="Nome do Produto 2">
+                        <h3>Nome do Produto 2</h3>
+                        <p class="description">Uma breve descrição do Produto 2, destacando suas características principais.</p>
+                        <p class="price">R$ 79,90</p>
+                        <div class="product-images-thumb">
+                            <img src="https://via.placeholder.com/50x50?text=P2a" alt="Miniatura 2a">
+                            <img src="https://via.placeholder.com/50x50?text=P2b" alt="Miniatura 2b">
+                        </div>
+                        <button class="add-to-interest">Adicionar à Lista de Interesses</button>
+                    </div>
+                    <!-- Adicione mais cards de produtos aqui, seguindo o mesmo padrão -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Shakaw 3D Print. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script> <!-- Adicionaremos este arquivo depois -->
+</body>
+</html>
