@@ -42,10 +42,11 @@ header {
 }
 
 .logo {
-    width: 150px; /* Tamanho do logo */
-    height: 150px;
-    border-radius: 75%; /* Para deixá-lo redondo */
-    object-fit: cover; /* Garante que a imagem preencha o círculo */
+    width: 250px; /* Aumentar o tamanho para caber o nome */
+    height: 250px; /* Manter a proporção */
+    border-radius: 50%; /* Manter o formato redondo */
+    object-fit: contain; /* Garante que a imagem inteira caiba dentro do círculo, sem cortar */
+    background-color: transparent; /* Fundo transparente para o logo */
     border: 3px solid #00c6ff; /* Borda colorida */
     box-shadow: 0 0 15px rgba(0, 198, 255, 0.5); /* Sombra para destacar */
 }
