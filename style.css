@@ -114,7 +114,7 @@ main {
     font-size: 1.3rem;
     max-width: 900px;
     margin: 0 auto 25px auto;
-    color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
+    background: linear-gradient(to bottom, #051131, #f0f0f0);/*color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
 }
 
 .section-padding {
