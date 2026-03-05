@@ -110,12 +110,12 @@ main {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-.hero p {
+/*.hero p {
     font-size: 1.3rem;
     max-width: 900px;
     margin: 0 auto 25px auto;
     background: linear-gradient(to bottom, #051131, #2B3550);/*color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
-}
+/}
 
 .section-padding {
     padding: 40px 0;
