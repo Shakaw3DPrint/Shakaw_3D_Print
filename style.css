@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     /* Aplicando um degradê linear no fundo */
-    background: linear-gradient(to bottom, #1a2a3a, #0f1a2a); /* Degradê do azul escuro para um tom ainda mais escuro */
+    background: linear-gradient(to bottom, #051131, #091127); /* Degradê do azul escuro para um tom ainda mais escuro */
     background-attachment: fixed; /* Garante que o degradê cubra toda a página, mesmo ao rolar */
     color: #e0e0e0; /* Cor de texto clara padrão */
     line-height: 1.6;
@@ -20,9 +20,9 @@ body {
 /* Cabeçalho */
 header {
     /* Usando o mesmo degradê do body para o cabeçalho */
-    background: linear-gradient(to bottom, #1a2a3a, #0f1a2a);
+    background: linear-gradient(to bottom, #051131, #07112E);
     color: #fff;
-    padding: 2rem 0; /* Mais espaçamento */
+    padding: 0.8rem 0; /* Mais espaçamento */
     text-align: center;
     border-bottom: 1px solid #2a3a4a; /* Linha sutil */
 }
