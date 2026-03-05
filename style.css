@@ -1,12 +1,12 @@
 /* Estilos Gerais */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
     margin: 0;
     padding: 0;
     /* Aplicando um degradê linear no fundo */
     background: linear-gradient(to bottom, #1a2a3a, #0f1a2a); /* Degradê do azul escuro para um tom ainda mais escuro */
     background-attachment: fixed; /* Garante que o degradê cubra toda a página, mesmo ao rolar */
-    color: #e0e0e0;
+    color: #e0e0e0; /* Cor de texto clara padrão */
     line-height: 1.6;
 }
 
@@ -19,15 +19,44 @@ body {
 
 /* Cabeçalho */
 header {
-    background-color: #333;
+    /* Usando o mesmo degradê do body para o cabeçalho */
+    background: linear-gradient(to bottom, #1a2a3a, #0f1a2a);
     color: #fff;
-    padding: 1rem 0;
+    padding: 2rem 0; /* Mais espaçamento */
     text-align: center;
+    border-bottom: 1px solid #2a3a4a; /* Linha sutil */
 }
 
-header h1 {
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espaçamento entre logo e navegação */
+}
+
+.logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 150px; /* Tamanho do logo */
+    height: 150px;
+    border-radius: 50%; /* Para deixá-lo redondo */
+    object-fit: cover; /* Garante que a imagem preencha o círculo */
+    border: 3px solid #00c6ff; /* Borda colorida */
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5); /* Sombra para destacar */
+}
+
+header h2 { /* Alterado de h1 para h2 para o nome da empresa */
     margin: 0;
-    font-size: 2.5rem;
+    font-family: 'Algerian', serif; /* Aplicando a fonte Algerian */
+    font-size: 2.8rem; /* Aumentando um pouco o tamanho */
+    color: #fff;
+    letter-spacing: 2px; /* Mais espaçamento entre letras */
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Adicionando uma sombra para destacar */
 }
 
 header nav ul {
@@ -35,43 +64,49 @@ header nav ul {
     padding: 0;
     margin: 0;
     display: flex;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
     justify-content: center;
-}
-
-header nav ul li {
-    margin: 0 15px;
+    gap: 15px; /* Espaçamento entre os botões */
 }
 
 header nav ul li a {
+    background-color: #007bff; /* Cor de fundo dos botões */
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s ease;
+    padding: 12px 25px; /* Tamanho dos botões */
+    border-radius: 30px; /* Botões arredondados */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaçamento entre ícone e texto */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 header nav ul li a:hover {
-    color: #ffc107; /* Cor de destaque */
+    background-color: #0056b3; /* Cor ao passar o mouse */
+    transform: translateY(-2px); /* Efeito sutil ao passar o mouse */
 }
 
-/* Seções Principais */
+/* Estilos para o corpo do site (main) */
 main {
-    padding: 20px 0;
+    padding: 40px 0;
 }
 
 .hero {
-    background-color: #e9ecef;
+    background-color: #2a3a4a; /* Fundo da seção hero */
     text-align: center;
-    padding: 60px 0;
-    margin-bottom: 30px;
+    padding: 80px 0;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-header h2 {
-    margin: 0;
-    font-family: 'Cinzel', serif; /* Aplicando a fonte Cinzel */
-    font-size: 2.8rem; /* Aumentando um pouco o tamanho */
-    color: #fff;
-    letter-spacing: 2px; /* Mais espaçamento entre letras */
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Adicionando uma sombra para destacar */
+.hero h2 {
+    font-size: 3.5rem;
+    margin-bottom: 25px;
+    color: #00c6ff; /* Cor de destaque para o título */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .hero p {
@@ -86,82 +121,101 @@ header h2 {
 }
 
 /* Contato */
+#contato h2, #catalogo h2 {
+    text-align: center;
+    font-size: 2.8rem;
+    color: #00c6ff;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
 #contato .contact-info {
     text-align: center;
     margin-top: 30px;
+    background-color: #2a3a4a;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 #contato .contact-info p {
     font-size: 1.2rem;
     margin-bottom: 15px;
-    color: #e0e0e0;
+    color: #f0f0f0; /* Ajustado para ser mais visível */
 }
 
 #contato .contact-info a {
-    color: #007bff;
+    color: #00c6ff;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 #contato .contact-info a:hover {
+    color: #0099cc;
     text-decoration: underline;
 }
 
 /* Catálogo - Filtros */
 .filters {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .filter-btn {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    margin: 8px;
+    border-radius: 30px; /* Botões arredondados */
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
 .filter-btn:hover, .filter-btn.active {
     background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
 /* Catálogo - Grid de Produtos */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cards um pouco maiores */
     gap: 30px;
 }
 
 .product-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
+    background-color: #2a3a4a; /* Fundo do card */
+    border: 1px solid #3a4a5a;
+    border-radius: 10px;
+    padding: 25px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
 .product-card img {
     max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 15px;
+    height: 200px; /* Altura fixa para as imagens */
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #4a5a6a;
 }
 
 .product-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-top: 0;
-    margin-bottom: 10px;
-    color: #333;
+    margin-bottom: 12px;
+    color: #00c6ff;
 }
 
 .product-card .description {
@@ -171,59 +225,92 @@ header h2 {
 }
 
 .product-card .price {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: bold;
     color: #28a745; /* Cor para preço */
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .product-images-thumb {
     display: flex;
     justify-content: center;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
 .product-images-thumb img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
-    border: 1px solid #eee;
-    border-radius: 3px;
+    border: 2px solid #4a5a6a;
+    border-radius: 5px;
     cursor: pointer;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, transform 0.2s ease;
 }
 
 .product-images-thumb img:hover {
-    border-color: #007bff;
+    border-color: #00c6ff;
+    transform: scale(1.05);
 }
 
 .add-to-interest {
-    background-color: #ffc107;
+    background-color: #ffc107; /* Cor do botão de interesse */
     color: #333;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 30px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
 .add-to-interest:hover {
     background-color: #e0a800;
+    transform: translateY(-2px);
 }
 
 /* Rodapé */
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: #1a2a3a;
+    color: #a0a0a0;
     text-align: center;
-    padding: 1rem 0;
-    margin-top: 40px;
+    padding: 1.5rem 0;
+    margin-top: 60px;
+    border-top: 1px solid #2a3a4a;
 }
 
 footer p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+}
+
+/* Responsividade básica */
+@media (max-width: 768px) {
+    header h2 {
+        font-size: 1.8rem;
+    }
+    header nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+    header nav ul li a {
+        width: 80%;
+        max-width: 300px;
+        margin: 0 auto;
+        justify-content: center;
+    }
+    .hero h2 {
+        font-size: 2.5rem;
+    }
+    .hero p {
+        font-size: 1.1rem;
+    }
+    #contato h2, #catalogo h2 {
+        font-size: 2rem;
+    }
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
 }
