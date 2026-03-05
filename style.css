@@ -1,10 +1,12 @@
 /* Estilos Gerais */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    /* Aplicando um degradê linear no fundo */
+    background: linear-gradient(to bottom, #1a2a3a, #0f1a2a); /* Degradê do azul escuro para um tom ainda mais escuro */
+    background-attachment: fixed; /* Garante que o degradê cubra toda a página, mesmo ao rolar */
+    color: #e0e0e0;
     line-height: 1.6;
 }
 
