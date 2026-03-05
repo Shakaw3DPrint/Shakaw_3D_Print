@@ -95,7 +95,7 @@ main {
 }
 
 .hero {
-    background-color: #2a3a4a; /* Fundo da seção hero */
+    background: linear-gradient(to bottom, #051131, #f0f0f0);/*background-color: #2a3a4a; /* Fundo da seção hero */
     text-align: center;
     padding: 80px 0;
     margin-bottom: 40px;
