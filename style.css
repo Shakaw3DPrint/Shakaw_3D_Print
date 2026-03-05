@@ -65,10 +65,13 @@ main {
     margin-bottom: 30px;
 }
 
-.hero h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    color: #007bff; /* Cor primária */
+header h2 {
+    margin: 0;
+    font-family: 'Cinzel', serif; /* Aplicando a fonte Cinzel */
+    font-size: 2.8rem; /* Aumentando um pouco o tamanho */
+    color: #fff;
+    letter-spacing: 2px; /* Mais espaçamento entre letras */
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Adicionando uma sombra para destacar */
 }
 
 .hero p {
