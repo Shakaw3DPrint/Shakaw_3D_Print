@@ -3,70 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shakaw 3D Print - Impressão 3D Personalizada</title>
+    <title>Catálogo - Shakaw 3D Print</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Importação da fonte Algerian -->
     <link href="https://fonts.googleapis.com/css2?family=Algerian&display=swap" rel="stylesheet">
-    <!-- Importação do Font Awesome para os ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-   <header>
-    <div class="container header-content">
-        <div class="logo-area">
-            <img src="images/Logo.png" alt="Shakaw 3D Print Logo" class="logo">
-            <h2>Shakaw 3D Print</h2>
+    <header>
+        <!-- Seu cabeçalho existente -->
+        <div class="container header-content">
+            <div class="logo-area">
+                <img src="images/Logo.png" alt="Shakaw 3D Print Logo" class="logo">
+                <h2>Shakaw 3D Print</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="catalogo.html"><i class="fas fa-cube"></i> Catálogo</a></li>
+                    <li><a href="contato.html"><i class="fas fa-project-diagram"></i> Contato</a></li>
+                    <li><a href="https://www.instagram.com/shakaw3dprint" target="_blank"><i class="fab fa-instagram"></i> @shakaw3dprint</a></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
-                <li><a href="catalogo.html"><i class="fas fa-cube"></i> Catálogo</a></li>
-                <li><a href="contato.html"><i class="fas fa-project-diagram"></i> Contato</a></li>
-                <li><a href="https://www.instagram.com/shakaw3dprint" target="_blank"><i class="fab fa-instagram"></i> @shakaw3dprint</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    </header>
 
     <main>
         <section id="catalogo" class="section-padding">
             <div class="container">
                 <h2>Nosso Catálogo de Produtos</h2>
-
                 <div class="filters">
-                    <button class="filter-btn active" data-category="all">Todos</button>
-                    <button class="filter-btn" data-category="miniaturas3d">Miniaturas 3D</button>
-                    <button class="filter-btn" data-category="dioramagaragem">Diorama Garagem</button>
-                    <button class="filter-btn" data-category="miniaturasrpg">Miniaturas RPG</button>
-                    <button class="filter-btn" data-category="itensfuncionais">Itens Funcionais</button>
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="miniaturas">Miniaturas</button>
+                    <button class="filter-btn" data-filter="dioramas">Dioramas</button>
+                    <button class="filter-btn" data-filter="funcionais">Funcionais</button>
                 </div>
 
                 <div class="product-grid">
-                    <!-- Exemplo de Card de Produto (vamos duplicar e preencher depois) -->
-                    <div class="product-card" data-category="miniaturas3d">
-                        <img src="https://via.placeholder.com/300x200?text=Produto+1" alt="Nome do Produto 1">
-                        <h3>Nome do Produto 1</h3>
-                        <p class="description">Uma breve descrição do Produto 1, destacando suas características principais.</p>
-                        <p class="price">R$ 49,90</p>
+                    <!-- Exemplo de um card de produto. Você pode duplicar e alterar o conteúdo -->
+                    <div class="product-card" data-category="miniaturas">
+                        <img src="images/produto1.jpg" alt="Miniatura de Dragão">
+                        <h3>Miniatura de Dragão Épico</h3>
+                        <p class="description">Uma miniatura detalhada de um dragão, perfeita para colecionadores e RPG.</p>
+                        <p class="price">R$ 120,00</p>
                         <div class="product-images-thumb">
-                            <img src="https://via.placeholder.com/50x50?text=P1a" alt="Miniatura 1a">
-                            <img src="https://via.placeholder.com/50x50?text=P1b" alt="Miniatura 1b">
+                            <img src="images/produto1-thumb1.jpg" alt="Miniatura de Dragão - Vista 1">
+                            <img src="images/produto1-thumb2.jpg" alt="Miniatura de Dragão - Vista 2">
                         </div>
-                        <button class="add-to-interest">Adicionar à Lista de Interesses</button>
+                        <button class="add-to-interest" data-product-id="prod001" data-product-name="Miniatura de Dragão Épico">Adicionar à Lista de Interesses</button>
                     </div>
-
-                    <div class="product-card" data-category="dioramagaragem">
-                        <img src="https://via.placeholder.com/300x200?text=Produto+2" alt="Nome do Produto 2">
-                        <h3>Nome do Produto 2</h3>
-                        <p class="description">Uma breve descrição do Produto 2, destacando suas características principais.</p>
-                        <p class="price">R$ 79,90</p>
-                        <div class="product-images-thumb">
-                            <img src="https://via.placeholder.com/50x50?text=P2a" alt="Miniatura 2a">
-                            <img src="https://via.placeholder.com/50x50?text=P2b" alt="Miniatura 2b">
-                        </div>
-                        <button class="add-to-interest">Adicionar à Lista de Interesses</button>
-                    </div>
-                    <!-- Adicione mais cards de produtos aqui, seguindo o mesmo padrão -->
+                    <!-- Adicione mais product-cards aqui -->
                 </div>
             </div>
         </section>
@@ -78,6 +63,48 @@
         </div>
     </footer>
 
-    <script src="script.js"></script> <!-- Adicionaremos este arquivo depois -->
+    <!-- MODAL PARA FORMULÁRIO DE CONTATO (Lista de Interesses) -->
+    <div id="contactModal" class="contact-modal">
+        <div class="contact-modal-content">
+            <span class="close-contact" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
+            <h2>Enviar Interesses</h2>
+            <form id="contactForm" action="https://formsubmit.co/shakaw3dprint@hotmail.com" method="POST">
+                <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
+                <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="https://shakaw3dprint.github.io/Shakaw_3D_Print/obrigado.html">
+                <input type="hidden" id="itemsData" name="items_data">
+
+                <div class="form-section">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="whatsapp">WhatsApp:</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(00) 00000-0000" required>
+                </div>
+
+                <div class="form-section">
+                    <h3>Resumo dos Itens Selecionados</h3>
+                    <div id="selectedItemsSummary" class="items-summary"></div>
+                </div>
+
+                <div class="form-section">
+                    <label for="customMessage">Mensagem Adicional:</label>
+                    <textarea id="customMessage" name="custom_message" rows="4" placeholder="Digite aqui qualquer informação adicional..."></textarea>
+                </div>
+
+                <button type="submit">Enviar Interesses</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Botão Voltar ao Topo -->
+    <button id="backToTopBtn" title="Voltar ao Topo"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Importação do script.js -->
+    <script src="script.js"></script>
 </body>
 </html>
