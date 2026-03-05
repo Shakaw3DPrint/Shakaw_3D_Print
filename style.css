@@ -72,9 +72,10 @@ main {
 }
 
 .hero p {
-    font-size: 1.2rem;
-    max-width: 800px;
-    margin: 0 auto 20px auto;
+    font-size: 1.3rem;
+    max-width: 900px;
+    margin: 0 auto 25px auto;
+    color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
 }
 
 .section-padding {
@@ -88,8 +89,9 @@ main {
 }
 
 #contato .contact-info p {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #e0e0e0;
 }
 
 #contato .contact-info a {
@@ -160,9 +162,9 @@ main {
 }
 
 .product-card .description {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
+    margin-bottom: 20px;
 }
 
 .product-card .price {
