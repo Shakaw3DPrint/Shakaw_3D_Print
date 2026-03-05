@@ -22,7 +22,7 @@ header {
     /* Usando o mesmo degradê do body para o cabeçalho */
     background: linear-gradient(to bottom, #051131, #07112E);
     color: #fff;
-    padding: 0.8rem 0; /* Mais espaçamento */
+    padding: 0.3rem 0; /* Mais espaçamento */
     text-align: center;
     border-bottom: 1px solid #2a3a4a; /* Linha sutil */
 }
