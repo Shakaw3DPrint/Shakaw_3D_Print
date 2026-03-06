@@ -242,9 +242,11 @@ main { padding: 40px 0; }
 .product-card .card-image {
     width: 100%;
     aspect-ratio: 1 / 1;
-    object-fit: cover;
+    object-fit: contain;
+    background: #0d1824;
     display: block;
-    transition: transform 0.3s ease;
+    cursor: zoom-in;
+    transition: transform 0.3s;
 }
 
 .product-card:hover .card-image {
