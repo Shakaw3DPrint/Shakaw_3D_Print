@@ -371,6 +371,8 @@ footer p {
     padding: 12px 15px;
     border-bottom: 1px solid #2a3a5a;
     background-color: rgba(255,255,255,0.03);
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .items-summary-list li:last-child {
@@ -384,9 +386,49 @@ footer p {
     padding: 20px;
 }
 
-.items-summary-list li span {
+/* Nome do item */
+.item-name {
+    flex: 1;
+    min-width: 150px;
     color: #f0f0f0;
     font-size: 1rem;
+}
+
+/* Controles de quantidade */
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.item-quantity {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #00c6ff;
+    min-width: 24px;
+    text-align: center;
+}
+
+.qty-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.qty-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
 }
 
 .remove-item-btn {
@@ -509,7 +551,6 @@ footer p {
    BOTÕES FLUTUANTES
    ============================================= */
 
-/* Botão Ver Interesses */
 #viewInterestsBtn {
     display: none;
     position: fixed;
@@ -535,7 +576,6 @@ footer p {
     transform: translateY(-2px);
 }
 
-/* Botão Voltar ao Topo */
 #backToTopBtn {
     display: none;
     position: fixed;
@@ -581,27 +621,15 @@ footer p {
     max-width: 300px;
 }
 
-.notification.success {
-    background-color: #28a745;
-}
-
-.notification.warning {
-    background-color: #ffc107;
-    color: #333;
-}
-
-.notification.show {
-    opacity: 1;
-    transform: translateY(0);
-}
+.notification.success { background-color: #28a745; }
+.notification.warning { background-color: #ffc107; color: #333; }
+.notification.show { opacity: 1; transform: translateY(0); }
 
 /* =============================================
    RESPONSIVIDADE
    ============================================= */
 @media (max-width: 768px) {
-    header h2 {
-        font-size: 1.8rem;
-    }
+    header h2 { font-size: 1.8rem; }
     header nav ul {
         flex-direction: column;
         gap: 10px;
@@ -612,21 +640,11 @@ footer p {
         margin: 0 auto;
         justify-content: center;
     }
-    .hero h2 {
-        font-size: 2.5rem;
-    }
-    .hero p {
-        font-size: 1.1rem;
-    }
-    #contato h2, #catalogo h2 {
-        font-size: 2rem;
-    }
-    .product-grid {
-        grid-template-columns: 1fr;
-    }
-    .modal-content {
-        padding: 25px 20px;
-    }
+    .hero h2 { font-size: 2.5rem; }
+    .hero p { font-size: 1.1rem; }
+    #contato h2, #catalogo h2 { font-size: 2rem; }
+    .product-grid { grid-template-columns: 1fr; }
+    .modal-content { padding: 25px 20px; }
     #viewInterestsBtn {
         bottom: 80px;
         right: 15px;
