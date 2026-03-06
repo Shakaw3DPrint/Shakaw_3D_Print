@@ -1,25 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Lista de interesses (armazenada no localStorage)
+    // ── Estado
     const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
 
-    // Elementos do DOM
-    const productGrid = document.querySelector('.product-grid');
-    const viewInterestsBtn = document.getElementById('viewInterestsBtn');
+    // ── Elementos
+    const productGrid          = document.querySelector('.product-grid');
+    const viewInterestsBtn     = document.getElementById('viewInterestsBtn');
     const interestSummaryModal = document.getElementById('interestSummaryModal');
-    const contactFormModal = document.getElementById('contactFormModal');
-    const closeSummaryModal = document.getElementById('closeSummaryModal');
-    const closeContactFormModal = document.getElementById('closeContactFormModal');
-    const selectedItemsList = document.getElementById('selectedItemsList');
-    const itemsDataInput = document.getElementById('itemsData');
-    const contactForm = document.getElementById('contactForm');
+    const contactFormModal     = document.getElementById('contactFormModal');
+    const closeSummaryModal    = document.getElementById('closeSummaryModal');
+    const closeContactFormModal= document.getElementById('closeContactFormModal');
+    const selectedItemsList    = document.getElementById('selectedItemsList');
+    const itemsDataInput       = document.getElementById('itemsData');
+    const contactForm          = document.getElementById('contactForm');
     const registerInterestsBtn = document.getElementById('registerInterestsBtn');
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const productCards = document.querySelectorAll('.product-card');
+    const backToTopBtn         = document.getElementById('backToTopBtn');
+    const filterBtns           = document.querySelectorAll('.filter-btn');
+    const productCards         = document.querySelectorAll('.product-card');
+
+    // ── Lightbox
+    const lightbox      = document.getElementById('lightbox');
+    const lightboxImg   = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev  = document.getElementById('lightbox-prev');
+    const lightboxNext  = document.getElementById('lightbox-next');
+    const lightboxOverlay = document.getElementById('lightbox-overlay');
+    const zoomInBtn     = document.getElementById('zoom-in');
+    const zoomOutBtn    = document.getElementById('zoom-out');
+    const zoomResetBtn  = document.getElementById('zoom-reset');
+    const zoomLevelEl   = document.getElementById('zoom-level');
+
+    let lightboxImages  = [];
+    let lightboxIndex   = 0;
+    let currentZoom     = 1;
+    const ZOOM_STEP     = 0.25;
+    const ZOOM_MAX      = 4;
+    const ZOOM_MIN      = 0.5;
 
     // =============================================
-    // FILTROS DO CATÁLOGO
+    // FILTROS
     // =============================================
     if (filterBtns.length > 0) {
         filterBtns.forEach(btn => {
@@ -28,152 +47,214 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
                 const filter = btn.dataset.filter;
                 productCards.forEach(card => {
-                    if (filter === 'all' || card.dataset.category === filter) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                    card.style.display =
+                        (filter === 'all' || card.dataset.category === filter)
+                        ? 'flex' : 'none';
                 });
             });
         });
     }
 
     // =============================================
-    // GERENCIAMENTO DA LISTA DE INTERESSES
+    // LIGHTBOX
     // =============================================
+    function openLightbox(images, startIndex) {
+        lightboxImages = images;
+        lightboxIndex  = startIndex;
+        currentZoom    = 1;
+        updateLightboxImage();
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
 
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+        document.body.style.overflow = '';
+        currentZoom = 1;
+        lightboxImg.style.transform = 'scale(1)';
+    }
+
+    function updateLightboxImage() {
+        lightboxImg.src = lightboxImages[lightboxIndex];
+        currentZoom = 1;
+        lightboxImg.style.transform = 'scale(1)';
+        updateZoomLabel();
+        lightboxPrev.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+        lightboxNext.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+    }
+
+    function updateZoomLabel() {
+        if (zoomLevelEl) zoomLevelEl.textContent = Math.round(currentZoom * 100) + '%';
+    }
+
+    function applyZoom() {
+        lightboxImg.style.transform = `scale(${currentZoom})`;
+        updateZoomLabel();
+    }
+
+    if (lightboxClose)   lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
+
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', () => {
+            lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+            updateLightboxImage();
+        });
+    }
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', () => {
+            lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+            updateLightboxImage();
+        });
+    }
+
+    if (zoomInBtn) zoomInBtn.addEventListener('click', () => {
+        if (currentZoom < ZOOM_MAX) { currentZoom += ZOOM_STEP; applyZoom(); }
+    });
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => {
+        if (currentZoom > ZOOM_MIN) { currentZoom -= ZOOM_STEP; applyZoom(); }
+    });
+    if (zoomResetBtn) zoomResetBtn.addEventListener('click', () => {
+        currentZoom = 1; applyZoom();
+    });
+
+    // Scroll do mouse para zoom
+    if (lightboxImg) {
+        lightboxImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0 && currentZoom < ZOOM_MAX) currentZoom += ZOOM_STEP;
+            if (e.deltaY > 0 && currentZoom > ZOOM_MIN) currentZoom -= ZOOM_STEP;
+            applyZoom();
+        }, { passive: false });
+    }
+
+    // Teclas de atalho no lightbox
+    document.addEventListener('keydown', (e) => {
+        if (lightbox && lightbox.style.display === 'flex') {
+            if (e.key === 'ArrowLeft')  lightboxPrev && lightboxPrev.click();
+            if (e.key === 'ArrowRight') lightboxNext && lightboxNext.click();
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === '+')          zoomInBtn && zoomInBtn.click();
+            if (e.key === '-')          zoomOutBtn && zoomOutBtn.click();
+        }
+    });
+
+    // Clique na imagem principal do card abre o lightbox
+    if (productGrid) {
+        productGrid.addEventListener('click', (e) => {
+            const cardImg = e.target.closest('.card-image');
+            if (cardImg) {
+                const card = cardImg.closest('.product-card');
+                const allImgs = [cardImg.src];
+                card.querySelectorAll('.thumb-img-data').forEach(t => allImgs.push(t.dataset.src));
+                openLightbox(allImgs, 0);
+                return;
+            }
+
+            const addBtn = e.target.closest('.add-to-interest');
+            if (addBtn) {
+                addProductToInterest(addBtn.dataset.productId, addBtn.dataset.productName);
+            }
+        });
+    }
+
+    // =============================================
+    // LISTA DE INTERESSES
+    // =============================================
     const saveInterestList = () => {
         localStorage.setItem('shakawInterestList', JSON.stringify(interestList));
         updateViewInterestsButton();
     };
 
-    // Conta o total de itens (somando quantidades)
-    const getTotalItems = () => {
-        return interestList.reduce((total, item) => total + item.quantity, 0);
-    };
+    const getTotalItems = () =>
+        interestList.reduce((total, item) => total + item.quantity, 0);
 
     const updateViewInterestsButton = () => {
-        if (viewInterestsBtn) {
-            const total = getTotalItems();
-            if (total > 0) {
-                viewInterestsBtn.style.display = 'flex';
-                viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total})`;
-            } else {
-                viewInterestsBtn.style.display = 'none';
-            }
+        if (!viewInterestsBtn) return;
+        const total = getTotalItems();
+        if (total > 0) {
+            viewInterestsBtn.style.display = 'flex';
+            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total})`;
+        } else {
+            viewInterestsBtn.style.display = 'none';
         }
     };
 
     const addProductToInterest = (productId, productName) => {
-        const existingItem = interestList.find(item => item.id === productId);
-        if (existingItem) {
-            // Se já existe, apenas aumenta a quantidade
-            existingItem.quantity += 1;
+        const existing = interestList.find(item => item.id === productId);
+        if (existing) {
+            existing.quantity += 1;
             saveInterestList();
-            showNotification(`"${productName}" adicionado! (${existingItem.quantity} unidades)`, 'success');
+            showNotification(`"${productName}" — ${existing.quantity} un. na lista!`, 'success');
         } else {
-            // Se não existe, adiciona com quantidade 1
             interestList.push({ id: productId, name: productName, quantity: 1 });
             saveInterestList();
-            showNotification(`"${productName}" adicionado à lista!`, 'success');
+            showNotification(`"${productName}" adicionado!`, 'success');
         }
     };
 
     const increaseQuantity = (productId) => {
-        const item = interestList.find(item => item.id === productId);
-        if (item) {
-            item.quantity += 1;
-            saveInterestList();
-            renderInterestSummary();
-        }
+        const item = interestList.find(i => i.id === productId);
+        if (item) { item.quantity += 1; saveInterestList(); renderInterestSummary(); }
     };
 
     const decreaseQuantity = (productId) => {
-        const item = interestList.find(item => item.id === productId);
+        const item = interestList.find(i => i.id === productId);
         if (item) {
             item.quantity -= 1;
-            if (item.quantity <= 0) {
-                // Remove o item se a quantidade chegar a 0
-                const index = interestList.findIndex(i => i.id === productId);
-                interestList.splice(index, 1);
-            }
+            if (item.quantity <= 0) interestList.splice(interestList.findIndex(i => i.id === productId), 1);
             saveInterestList();
             renderInterestSummary();
         }
     };
 
     const removeProductFromInterest = (productId) => {
-        const index = interestList.findIndex(item => item.id === productId);
-        if (index > -1) {
-            interestList.splice(index, 1);
-            saveInterestList();
-            renderInterestSummary();
-        }
+        const index = interestList.findIndex(i => i.id === productId);
+        if (index > -1) { interestList.splice(index, 1); saveInterestList(); renderInterestSummary(); }
     };
 
-    // Adicionar produto ao clicar no botão
-    if (productGrid) {
-        productGrid.addEventListener('click', (event) => {
-            const btn = event.target.closest('.add-to-interest');
-            if (btn) {
-                const productId = btn.dataset.productId;
-                const productName = btn.dataset.productName;
-                addProductToInterest(productId, productName);
-            }
-        });
-    }
-
-    // =============================================
-    // NOTIFICAÇÕES
-    // =============================================
+    // ── Notificações
     const showNotification = (message, type = 'success') => {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.classList.add('show'), 10);
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 400);
-        }, 3000);
+        const n = document.createElement('div');
+        n.className = `notification ${type}`;
+        n.textContent = message;
+        document.body.appendChild(n);
+        setTimeout(() => n.classList.add('show'), 10);
+        setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 3000);
     };
 
-    // =============================================
-    // PRIMEIRO MODAL: RESUMO DE INTERESSES
-    // =============================================
-
+    // ── Modal 1: Resumo
     const renderInterestSummary = () => {
         if (!selectedItemsList) return;
         selectedItemsList.innerHTML = '';
 
         if (interestList.length === 0) {
-            selectedItemsList.innerHTML = '<li class="empty-list">Sua lista de interesses está vazia.</li>';
+            selectedItemsList.innerHTML = '<li class="empty-list">Sua lista está vazia.</li>';
             if (registerInterestsBtn) registerInterestsBtn.style.display = 'none';
-
-            // Fecha o modal automaticamente se a lista ficar vazia
             if (interestSummaryModal) interestSummaryModal.style.display = 'none';
-        } else {
-            interestList.forEach((item) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span class="item-name">${item.name}</span>
-                    <div class="item-controls">
-                        <button class="qty-btn decrease-btn" data-product-id="${item.id}" title="Diminuir">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <span class="item-quantity">${item.quantity}</span>
-                        <button class="qty-btn increase-btn" data-product-id="${item.id}" title="Aumentar">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                        <button class="remove-item-btn" data-product-id="${item.id}" title="Remover">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                selectedItemsList.appendChild(li);
-            });
-            if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
+            return;
         }
+
+        interestList.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="item-name">${item.name}</span>
+                <div class="item-controls">
+                    <button class="qty-btn decrease-btn" data-product-id="${item.id}">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="item-quantity">${item.quantity}</span>
+                    <button class="qty-btn increase-btn" data-product-id="${item.id}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="remove-item-btn" data-product-id="${item.id}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>`;
+            selectedItemsList.appendChild(li);
+        });
+
+        if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
     };
 
     if (viewInterestsBtn) {
@@ -189,28 +270,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Controles dentro da lista (aumentar, diminuir, remover)
     if (selectedItemsList) {
-        selectedItemsList.addEventListener('click', (event) => {
-            const increaseBtn = event.target.closest('.increase-btn');
-            const decreaseBtn = event.target.closest('.decrease-btn');
-            const removeBtn = event.target.closest('.remove-item-btn');
-
-            if (increaseBtn) increaseQuantity(increaseBtn.dataset.productId);
-            if (decreaseBtn) decreaseQuantity(decreaseBtn.dataset.productId);
-            if (removeBtn) removeProductFromInterest(removeBtn.dataset.productId);
+        selectedItemsList.addEventListener('click', (e) => {
+            const inc = e.target.closest('.increase-btn');
+            const dec = e.target.closest('.decrease-btn');
+            const rem = e.target.closest('.remove-item-btn');
+            if (inc) increaseQuantity(inc.dataset.productId);
+            if (dec) decreaseQuantity(dec.dataset.productId);
+            if (rem) removeProductFromInterest(rem.dataset.productId);
         });
     }
 
-    // =============================================
-    // SEGUNDO MODAL: FORMULÁRIO DE CONTATO
-    // =============================================
-
+    // ── Modal 2: Formulário
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
             let itemsText = '';
-            interestList.forEach((item, index) => {
-                itemsText += `${index + 1}. ${item.name} - Quantidade: ${item.quantity}\n`;
+            interestList.forEach((item, i) => {
+                itemsText += `${i + 1}. ${item.name} - Quantidade: ${item.quantity}\n`;
             });
             if (itemsDataInput) itemsDataInput.value = itemsText;
             interestSummaryModal.style.display = 'none';
@@ -232,16 +308,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fechar modais clicando fora
-    window.addEventListener('click', (event) => {
-        if (event.target === interestSummaryModal) interestSummaryModal.style.display = 'none';
-        if (event.target === contactFormModal) contactFormModal.style.display = 'none';
+    window.addEventListener('click', (e) => {
+        if (e.target === interestSummaryModal) interestSummaryModal.style.display = 'none';
+        if (e.target === contactFormModal)     contactFormModal.style.display = 'none';
     });
 
-    // =============================================
-    // BOTÃO VOLTAR AO TOPO
-    // =============================================
-
+    // ── Voltar ao topo
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
             backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
