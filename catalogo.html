@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatÃ¡logo - Shakaw 3D Print</title>
+    <title>Catálogo - Shakaw 3D Print</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Algerian&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -17,8 +17,8 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html"><i class="fas fa-home"></i> InÃ­cio</a></li>
-                    <li><a href="catalogo.html"><i class="fas fa-cube"></i> CatÃ¡logo</a></li>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="catalogo.html"><i class="fas fa-cube"></i> Catálogo</a></li>
                     <li><a href="contato.html"><i class="fas fa-envelope"></i> Contato</a></li>
                     <li><a href="https://www.instagram.com/shakaw3dprint" target="_blank"><i class="fab fa-instagram"></i> @shakaw3dprint</a></li>
                 </ul>
@@ -29,59 +29,20 @@
     <main>
         <section id="catalogo" class="section-padding">
             <div class="container">
-                <h2>Nosso CatÃ¡logo de Produtos</h2>
+                <h2>Nosso Catálogo de Produtos</h2>
 
                 <div class="filters">
                     <button class="filter-btn active" data-filter="all">Todos</button>
                     <button class="filter-btn" data-filter="miniaturas3d">Miniaturas 3D</button>
-                    <button class="filter-btn" data-filter="dioramagaragem">Diorama Garagem</button>
                     <button class="filter-btn" data-filter="miniaturasrpg">Miniaturas RPG</button>
+                    <button class="filter-btn" data-filter="dioramagaragem">Diorama Garagem</button>
                     <button class="filter-btn" data-filter="itensfuncionais">Itens Funcionais</button>
                 </div>
 
                 <div class="product-grid">
-                    <!-- PRODUTO 1 -->
-                    <div class="product-card" data-category="miniaturas3d">
-                        <img src="images/produto1.jpg" alt="Miniatura de DragÃ£o Ãpico">
-                        <h3>Miniatura de DragÃ£o Ãpico</h3>
-                        <p class="description">Uma miniatura detalhada de um dragÃ£o, perfeita para colecionadores e RPG.</p>
-                        <p class="price">R$ 120,00</p>
-                        <div class="product-images-thumb">
-                            <img src="images/produto1-thumb1.jpg" alt="Vista 1">
-                            <img src="images/produto1-thumb2.jpg" alt="Vista 2">
-                        <!-- Produto: Deusa da Justiça Themis -->
-<div class="product-card" data-category="miniaturas3d">
-    <img src="images/miniaturas3d/deusa_themis_justica.webp" alt="Deusa da Justiça Themis">
-    <h3>Deusa da Justiça Themis</h3>
-    <p class="description">Produto artesanal produzido em resina e pintado a mão. Altura aproximada de 15cm.
-As cores podem variar de acordo com o material disponível no momento.</p>
-    <p class="price">R$ 120,00</p>
-    <div class="product-images-thumb">
-                <img src="images/miniaturas3d/deusa_themis_justica_4.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_da_justica_themis.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_da_justica_themis_1.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_da_justica_themis_2.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_da_justica_themis_3.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_da_justica_themis_4.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_themis_justica_1.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_themis_justica_2.webp" alt="Deusa da Justiça Themis - miniatura">
-                <img src="images/miniaturas3d/deusa_themis_justica_3.webp" alt="Deusa da Justiça Themis - miniatura">
-            </div>
-    <button class="add-to-interest"
-            data-product-id="m3d_01"
-            data-product-name="Deusa da Justiça Themis">
-        <i class="fas fa-star"></i> Adicionar à Lista de Interesses
-    </button>
-</div>
-</div>
-                        <button class="add-to-interest"
-                                data-product-id="prod001"
-                                data-product-name="Miniatura de DragÃ£o Ãpico">
-                            <i class="fas fa-star"></i> Adicionar Ã  Lista de Interesses
-                        </button>
-                    </div>
-                    <!-- Adicione mais produtos seguindo o mesmo padrÃ£o acima -->
+                    <!-- NOVOS PRODUTOS -->
                 </div>
+
             </div>
         </section>
     </main>
@@ -92,17 +53,17 @@ As cores podem variar de acordo com o material disponível no momento.</p>
         </div>
     </footer>
 
-    <!-- BotÃ£o Ver Interesses (fixo na tela) -->
+    <!-- Botão Ver Interesses -->
     <button id="viewInterestsBtn" title="Ver Lista de Interesses">
         <i class="fas fa-list"></i> Ver Interesses (0)
     </button>
 
-    <!-- BotÃ£o Voltar ao Topo (fixo na tela) -->
+    <!-- Botão Voltar ao Topo -->
     <button id="backToTopBtn" title="Voltar ao Topo">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- PRIMEIRO MODAL: Resumo da Lista de Interesses -->
+    <!-- MODAL 1: Lista de Interesses -->
     <div id="interestSummaryModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-modal" id="closeSummaryModal">&times;</span>
@@ -114,42 +75,57 @@ As cores podem variar de acordo com o material disponível no momento.</p>
         </div>
     </div>
 
-    <!-- SEGUNDO MODAL: FormulÃ¡rio de Contato -->
+    <!-- MODAL 2: Formulário -->
     <div id="contactFormModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-modal" id="closeContactFormModal">&times;</span>
             <h2><i class="fas fa-envelope"></i> Enviar Interesses</h2>
-            <form id="contactForm" action="https://formsubmit.co/shakaw3dprint@hotmail.com" method="POST">
+            <form id="contactForm"
+                  action="https://formsubmit.co/shakaw3dprint@hotmail.com"
+                  method="POST">
                 <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
                 <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
                 <input type="hidden" name="_template" value="box">
-                <input type="hidden" name="_next" value="https://shakaw3dprint.com.br/obrigado.html">
+                <input type="hidden" name="_next" value="https://shakaw3dprint.github.io/Shakaw_3D_Print/obrigado.html">
                 <input type="hidden" name="itens_de_interesse" id="itemsData">
-
                 <div class="form-section">
                     <label for="name">Nome Completo:</label>
                     <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
                 </div>
-
                 <div class="form-section">
                     <label for="email">E-mail:</label>
                     <input type="email" id="email" name="email" placeholder="seu@email.com" required>
                 </div>
-
                 <div class="form-section">
                     <label for="whatsapp">WhatsApp:</label>
-                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(00) 00000-0000" required>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
                 </div>
-
                 <div class="form-section">
-                    <label for="customMessage">Mensagem Adicional:</label>
-                    <textarea id="customMessage" name="custom_message" rows="4" placeholder="Digite aqui qualquer informaÃ§Ã£o adicional..."></textarea>
+                    <label for="message">Mensagem Adicional:</label>
+                    <textarea id="message" name="message" rows="3"
+                              placeholder="Alguma observação ou dúvida?"></textarea>
                 </div>
-
                 <button type="submit">
-                    <i class="fas fa-paper-plane"></i> Enviar Interesses
+                    <i class="fas fa-paper-plane"></i> Enviar
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" style="display:none;">
+        <div id="lightbox-overlay"></div>
+        <div id="lightbox-container">
+            <button id="lightbox-close">&times;</button>
+            <button id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+            <img id="lightbox-img" src="" alt="">
+            <button id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+            <div id="lightbox-zoom-controls">
+                <button id="zoom-out"><i class="fas fa-search-minus"></i></button>
+                <span id="zoom-level">100%</span>
+                <button id="zoom-in"><i class="fas fa-search-plus"></i></button>
+                <button id="zoom-reset"><i class="fas fa-expand"></i></button>
+            </div>
         </div>
     </div>
 
