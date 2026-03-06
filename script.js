@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     const registerInterestsBtn = document.getElementById('registerInterestsBtn');
     const backToTopBtn = document.getElementById('backToTopBtn');
-
-    // Filtros do catálogo
     const filterBtns = document.querySelectorAll('.filter-btn');
     const productCards = document.querySelectorAll('.product-card');
 
@@ -49,11 +47,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateViewInterestsButton();
     };
 
+    // Conta o total de itens (somando quantidades)
+    const getTotalItems = () => {
+        return interestList.reduce((total, item) => total + item.quantity, 0);
+    };
+
     const updateViewInterestsButton = () => {
         if (viewInterestsBtn) {
-            if (interestList.length > 0) {
+            const total = getTotalItems();
+            if (total > 0) {
                 viewInterestsBtn.style.display = 'flex';
-                viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${interestList.length})`;
+                viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total})`;
             } else {
                 viewInterestsBtn.style.display = 'none';
             }
@@ -63,11 +67,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const addProductToInterest = (productId, productName) => {
         const existingItem = interestList.find(item => item.id === productId);
         if (existingItem) {
-            showNotification(`"${productName}" já está na sua lista!`, 'warning');
+            // Se já existe, apenas aumenta a quantidade
+            existingItem.quantity += 1;
+            saveInterestList();
+            showNotification(`"${productName}" adicionado! (${existingItem.quantity} unidades)`, 'success');
         } else {
-            interestList.push({ id: productId, name: productName });
+            // Se não existe, adiciona com quantidade 1
+            interestList.push({ id: productId, name: productName, quantity: 1 });
             saveInterestList();
             showNotification(`"${productName}" adicionado à lista!`, 'success');
+        }
+    };
+
+    const increaseQuantity = (productId) => {
+        const item = interestList.find(item => item.id === productId);
+        if (item) {
+            item.quantity += 1;
+            saveInterestList();
+            renderInterestSummary();
+        }
+    };
+
+    const decreaseQuantity = (productId) => {
+        const item = interestList.find(item => item.id === productId);
+        if (item) {
+            item.quantity -= 1;
+            if (item.quantity <= 0) {
+                // Remove o item se a quantidade chegar a 0
+                const index = interestList.findIndex(i => i.id === productId);
+                interestList.splice(index, 1);
+            }
+            saveInterestList();
+            renderInterestSummary();
         }
     };
 
@@ -93,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =============================================
-    // NOTIFICAÇÃO (substitui o alert)
+    // NOTIFICAÇÕES
     // =============================================
     const showNotification = (message, type = 'success') => {
         const notification = document.createElement('div');
@@ -118,18 +149,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (interestList.length === 0) {
             selectedItemsList.innerHTML = '<li class="empty-list">Sua lista de interesses está vazia.</li>';
             if (registerInterestsBtn) registerInterestsBtn.style.display = 'none';
+
+            // Fecha o modal automaticamente se a lista ficar vazia
+            if (interestSummaryModal) interestSummaryModal.style.display = 'none';
         } else {
             interestList.forEach((item) => {
                 const li = document.createElement('li');
                 li.innerHTML = `
-                    <span>${item.name}</span>
-                    <button class="remove-item-btn" data-product-id="${item.id}" title="Remover">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <span class="item-name">${item.name}</span>
+                    <div class="item-controls">
+                        <button class="qty-btn decrease-btn" data-product-id="${item.id}" title="Diminuir">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="item-quantity">${item.quantity}</span>
+                        <button class="qty-btn increase-btn" data-product-id="${item.id}" title="Aumentar">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="remove-item-btn" data-product-id="${item.id}" title="Remover">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 `;
                 selectedItemsList.appendChild(li);
             });
-            if (registerInterestsBtn) registerInterestsBtn.style.display = 'block';
+            if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
         }
     };
 
@@ -146,12 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Controles dentro da lista (aumentar, diminuir, remover)
     if (selectedItemsList) {
         selectedItemsList.addEventListener('click', (event) => {
-            const btn = event.target.closest('.remove-item-btn');
-            if (btn) {
-                removeProductFromInterest(btn.dataset.productId);
-            }
+            const increaseBtn = event.target.closest('.increase-btn');
+            const decreaseBtn = event.target.closest('.decrease-btn');
+            const removeBtn = event.target.closest('.remove-item-btn');
+
+            if (increaseBtn) increaseQuantity(increaseBtn.dataset.productId);
+            if (decreaseBtn) decreaseQuantity(decreaseBtn.dataset.productId);
+            if (removeBtn) removeProductFromInterest(removeBtn.dataset.productId);
         });
     }
 
@@ -163,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         registerInterestsBtn.addEventListener('click', () => {
             let itemsText = '';
             interestList.forEach((item, index) => {
-                itemsText += `${index + 1}. ${item.name}\n`;
+                itemsText += `${index + 1}. ${item.name} - Quantidade: ${item.quantity}\n`;
             });
             if (itemsDataInput) itemsDataInput.value = itemsText;
             interestSummaryModal.style.display = 'none';
@@ -177,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Limpar lista após envio
     if (contactForm) {
         contactForm.addEventListener('submit', () => {
             localStorage.removeItem('shakawInterestList');
@@ -188,12 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fechar modais clicando fora
     window.addEventListener('click', (event) => {
-        if (event.target === interestSummaryModal) {
-            interestSummaryModal.style.display = 'none';
-        }
-        if (event.target === contactFormModal) {
-            contactFormModal.style.display = 'none';
-        }
+        if (event.target === interestSummaryModal) interestSummaryModal.style.display = 'none';
+        if (event.target === contactFormModal) contactFormModal.style.display = 'none';
     });
 
     // =============================================
@@ -202,18 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.style.display = 'flex';
-            } else {
-                backToTopBtn.style.display = 'none';
-            }
+            backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
         });
-
         backToTopBtn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
-    // Inicializa o botão Ver Interesses
     updateViewInterestsButton();
 });
