@@ -1,146 +1,188 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Lista de interesses (armazenada no localStorage)
     const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
+
+    // Elementos do DOM
     const productGrid = document.querySelector('.product-grid');
     const viewInterestsBtn = document.getElementById('viewInterestsBtn');
-
-    // Modais
-    const interestSummaryModal = document.getElementById('interestSummaryModal'); // Primeiro modal: lista de itens
-    const contactFormModal = document.getElementById('contactFormModal');     // Segundo modal: formulário de contato
-
-    // Botões de fechar modais
-    const closeSummaryModal = document.querySelector('#interestSummaryModal .close-modal');
-    const closeContactFormModal = document.querySelector('#contactFormModal .close-modal');
-
-    // Conteúdo dos modais
-    const selectedItemsList = document.getElementById('selectedItemsList'); // Onde a lista de itens será exibida no 1º modal
-    const itemsDataInput = document.getElementById('itemsData');            // Campo hidden para o FormSubmit no 2º modal
+    const interestSummaryModal = document.getElementById('interestSummaryModal');
+    const contactFormModal = document.getElementById('contactFormModal');
+    const closeSummaryModal = document.getElementById('closeSummaryModal');
+    const closeContactFormModal = document.getElementById('closeContactFormModal');
+    const selectedItemsList = document.getElementById('selectedItemsList');
+    const itemsDataInput = document.getElementById('itemsData');
     const contactForm = document.getElementById('contactForm');
-
-    // Botão para ir do 1º modal para o 2º
     const registerInterestsBtn = document.getElementById('registerInterestsBtn');
-
-    // Botão Voltar ao Topo
     const backToTopBtn = document.getElementById('backToTopBtn');
 
-    // --- Funções de Gerenciamento da Lista de Interesses ---
+    // Filtros do catálogo
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const productCards = document.querySelectorAll('.product-card');
+
+    // =============================================
+    // FILTROS DO CATÁLOGO
+    // =============================================
+    if (filterBtns.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                productCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
+
+    // =============================================
+    // GERENCIAMENTO DA LISTA DE INTERESSES
+    // =============================================
 
     const saveInterestList = () => {
         localStorage.setItem('shakawInterestList', JSON.stringify(interestList));
         updateViewInterestsButton();
     };
 
-    const addProductToInterest = (productId, productName) => {
-        const existingItem = interestList.find(item => item.id === productId);
-        if (existingItem) {
-            alert(`"${productName}" já está na sua lista de interesses!`);
-        } else {
-            interestList.push({ id: productId, name: productName });
-            saveInterestList();
-            alert(`"${productName}" adicionado à sua lista de interesses!`);
-        }
-    };
-
-    const removeProductFromInterest = (productId) => {
-        const index = interestList.findIndex(item => item.id === productId);
-        if (index > -1) {
-            const removedItem = interestList.splice(index, 1);
-            saveInterestList();
-            alert(`"${removedItem[0].name}" removido da sua lista.`);
-            renderInterestSummary(); // Atualiza a lista no modal de resumo
-        }
-    };
-
-    // --- Event Listeners para Adicionar/Remover Itens ---
-
-    if (productGrid) {
-        productGrid.addEventListener('click', (event) => {
-            if (event.target.classList.contains('add-to-interest')) {
-                const productId = event.target.dataset.productId;
-                const productName = event.target.dataset.productName;
-                addProductToInterest(productId, productName);
-            }
-        });
-    }
-
-    // --- Funções e Event Listeners para Modais ---
-
     const updateViewInterestsButton = () => {
         if (viewInterestsBtn) {
             if (interestList.length > 0) {
-                viewInterestsBtn.style.display = 'block';
-                viewInterestsBtn.textContent = `Ver Interesses (${interestList.length})`;
+                viewInterestsBtn.style.display = 'flex';
+                viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${interestList.length})`;
             } else {
                 viewInterestsBtn.style.display = 'none';
             }
         }
     };
 
+    const addProductToInterest = (productId, productName) => {
+        const existingItem = interestList.find(item => item.id === productId);
+        if (existingItem) {
+            showNotification(`"${productName}" já está na sua lista!`, 'warning');
+        } else {
+            interestList.push({ id: productId, name: productName });
+            saveInterestList();
+            showNotification(`"${productName}" adicionado à lista!`, 'success');
+        }
+    };
+
+    const removeProductFromInterest = (productId) => {
+        const index = interestList.findIndex(item => item.id === productId);
+        if (index > -1) {
+            interestList.splice(index, 1);
+            saveInterestList();
+            renderInterestSummary();
+        }
+    };
+
+    // Adicionar produto ao clicar no botão
+    if (productGrid) {
+        productGrid.addEventListener('click', (event) => {
+            const btn = event.target.closest('.add-to-interest');
+            if (btn) {
+                const productId = btn.dataset.productId;
+                const productName = btn.dataset.productName;
+                addProductToInterest(productId, productName);
+            }
+        });
+    }
+
+    // =============================================
+    // NOTIFICAÇÃO (substitui o alert)
+    // =============================================
+    const showNotification = (message, type = 'success') => {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.classList.add('show'), 10);
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 400);
+        }, 3000);
+    };
+
+    // =============================================
+    // PRIMEIRO MODAL: RESUMO DE INTERESSES
+    // =============================================
+
     const renderInterestSummary = () => {
-        selectedItemsList.innerHTML = ''; // Limpa a lista anterior
+        if (!selectedItemsList) return;
+        selectedItemsList.innerHTML = '';
+
         if (interestList.length === 0) {
-            selectedItemsList.innerHTML = '<p>Sua lista de interesses está vazia.</p>';
-            registerInterestsBtn.style.display = 'none'; // Esconde o botão se não houver itens
+            selectedItemsList.innerHTML = '<li class="empty-list">Sua lista de interesses está vazia.</li>';
+            if (registerInterestsBtn) registerInterestsBtn.style.display = 'none';
         } else {
             interestList.forEach((item) => {
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span>${item.name}</span>
-                    <button class="remove-item-btn" data-product-id="${item.id}">&times;</button>
+                    <button class="remove-item-btn" data-product-id="${item.id}" title="Remover">
+                        <i class="fas fa-times"></i>
+                    </button>
                 `;
                 selectedItemsList.appendChild(li);
             });
-            registerInterestsBtn.style.display = 'block'; // Mostra o botão
+            if (registerInterestsBtn) registerInterestsBtn.style.display = 'block';
         }
     };
 
-    // Abrir o primeiro modal (Resumo de Interesses)
     if (viewInterestsBtn) {
         viewInterestsBtn.addEventListener('click', () => {
             renderInterestSummary();
-            interestSummaryModal.style.display = 'flex'; // Usa flex para centralizar
+            interestSummaryModal.style.display = 'flex';
         });
     }
 
-    // Fechar o primeiro modal
     if (closeSummaryModal) {
         closeSummaryModal.addEventListener('click', () => {
             interestSummaryModal.style.display = 'none';
         });
     }
 
-    // Remover item da lista de interesses no primeiro modal
     if (selectedItemsList) {
         selectedItemsList.addEventListener('click', (event) => {
-            if (event.target.classList.contains('remove-item-btn')) {
-                const productId = event.target.dataset.productId;
-                removeProductFromInterest(productId);
+            const btn = event.target.closest('.remove-item-btn');
+            if (btn) {
+                removeProductFromInterest(btn.dataset.productId);
             }
         });
     }
 
-    // Abrir o segundo modal (Formulário de Contato) a partir do primeiro modal
+    // =============================================
+    // SEGUNDO MODAL: FORMULÁRIO DE CONTATO
+    // =============================================
+
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
-            if (interestList.length === 0) {
-                alert('Sua lista de interesses está vazia. Adicione itens antes de registrar.');
-                return;
-            }
-            // Prepara os dados para o FormSubmit
-            let itemsText = 'Itens de Interesse:\n';
+            let itemsText = '';
             interestList.forEach((item, index) => {
                 itemsText += `${index + 1}. ${item.name}\n`;
             });
-            itemsDataInput.value = itemsText;
-
-            interestSummaryModal.style.display = 'none'; // Fecha o primeiro modal
-            contactFormModal.style.display = 'flex';     // Abre o segundo modal
+            if (itemsDataInput) itemsDataInput.value = itemsText;
+            interestSummaryModal.style.display = 'none';
+            contactFormModal.style.display = 'flex';
         });
     }
 
-    // Fechar o segundo modal
     if (closeContactFormModal) {
         closeContactFormModal.addEventListener('click', () => {
             contactFormModal.style.display = 'none';
+        });
+    }
+
+    // Limpar lista após envio
+    if (contactForm) {
+        contactForm.addEventListener('submit', () => {
+            localStorage.removeItem('shakawInterestList');
+            interestList.length = 0;
+            updateViewInterestsButton();
         });
     }
 
@@ -154,36 +196,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Limpar lista de interesses após envio do formulário (simulado)
-    if (contactForm) {
-        contactForm.addEventListener('submit', () => {
-            // Limpa a lista de interesses após o envio
-            localStorage.removeItem('shakawInterestList');
-            interestList.length = 0; // Esvazia o array
-            saveInterestList(); // Atualiza o estado do botão
-            // O FormSubmit já cuida do redirecionamento para 'obrigado.html'
-        });
-    }
-
-    // --- Botão Voltar ao Topo ---
+    // =============================================
+    // BOTÃO VOLTAR AO TOPO
+    // =============================================
 
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
             if (window.pageYOffset > 300) {
-                backToTopBtn.style.display = 'flex'; // Usa flex para centralizar o ícone
+                backToTopBtn.style.display = 'flex';
             } else {
                 backToTopBtn.style.display = 'none';
             }
         });
 
         backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
-    // Inicializa o estado do botão "Ver Interesses"
+    // Inicializa o botão Ver Interesses
     updateViewInterestsButton();
 });
