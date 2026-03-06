@@ -101,13 +101,64 @@
         </div>
     </div>
 
-       <!-- Botão para ver a lista de interesses -->
+      <!-- Botão para ver a lista de interesses (fixo na tela) -->
     <button id="viewInterestsBtn" title="Ver Lista de Interesses">Ver Interesses</button>
 
-    <!-- Botão Voltar ao Topo -->
+    <!-- Botão Voltar ao Topo (fixo na tela) -->
     <button id="backToTopBtn" title="Voltar ao Topo"><i class="fas fa-arrow-up"></i></button>
 
-    <!-- Importação do script.js -->
+    <!-- PRIMEIRO MODAL: Resumo da Lista de Interesses -->
+    <div id="interestSummaryModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Sua Lista de Interesses</h2>
+            <ul id="selectedItemsList" class="items-summary-list">
+                <!-- Itens serão adicionados aqui pelo JavaScript -->
+            </ul>
+            <button id="registerInterestsBtn" class="modal-action-btn">Registrar Interesses</button>
+        </div>
+    </div>
+
+    <!-- SEGUNDO MODAL: Formulário de Contato (o que você já tinha) -->
+    <div id="contactFormModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Enviar Interesses</h2>
+            <form id="contactForm" action="https://formsubmit.co/shakaw3dprint@hotmail.com" method="POST">
+                <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
+                <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="https://shakaw3dprint.com.br/obrigado.html">
+
+                <!-- Campo oculto para os itens de interesse -->
+                <input type="hidden" name="itens_de_interesse" id="itemsData">
+
+                <div class="form-section">
+                    <label for="name">Nome Completo:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-section">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-section">
+                    <label for="whatsapp">WhatsApp:</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(00) 00000-0000" required>
+                </div>
+
+                <div class="form-section">
+                    <label for="customMessage">Mensagem Adicional:</label>
+                    <textarea id="customMessage" name="custom_message" rows="4" placeholder="Digite aqui qualquer informação adicional..."></textarea>
+                </div>
+
+                <button type="submit">Enviar Interesses</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Importação do script.js (sempre no final do body) -->
     <script src="script.js"></script>
 </body>
 </html>
