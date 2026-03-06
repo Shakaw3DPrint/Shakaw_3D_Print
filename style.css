@@ -1,12 +1,11 @@
 /* Estilos Gerais */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    /* Aplicando um degradê linear no fundo */
-    background: linear-gradient(to bottom, #051131, #091127); /* Degradê do azul escuro para um tom ainda mais escuro */
-    background-attachment: fixed; /* Garante que o degradê cubra toda a página, mesmo ao rolar */
-    color: #e0e0e0; /* Cor de texto clara padrão */
+    background: linear-gradient(to bottom, #051131, #091127);
+    background-attachment: fixed;
+    color: #e0e0e0;
     line-height: 1.6;
 }
 
@@ -19,19 +18,18 @@ body {
 
 /* Cabeçalho */
 header {
-    /* Usando o mesmo degradê do body para o cabeçalho */
     background: linear-gradient(to bottom, #051131, #07112E);
     color: #fff;
-    padding: 0.3rem 0; /* Mais espaçamento */
+    padding: 0.3rem 0;
     text-align: center;
-    border-bottom: 1px solid #2a3a4a; /* Linha sutil */
+    border-bottom: 1px solid #2a3a4a;
 }
 
 .header-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px; /* Espaçamento entre logo e navegação */
+    gap: 20px;
 }
 
 .logo-area {
@@ -42,22 +40,22 @@ header {
 }
 
 .logo {
-    width: 250px; /* Aumentar o tamanho para caber o nome */
-    height: 250px; /* Manter a proporção */
-    border-radius: 50%; /* Manter o formato redondo */
-    object-fit: contain; /* Garante que a imagem inteira caiba dentro do círculo, sem cortar */
-    background-color: transparent; /* Fundo transparente para o logo */
-    border: 3px solid #00c6ff; /* Borda colorida */
-    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5); /* Sombra para destacar */
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: contain;
+    background-color: transparent;
+    border: 3px solid #00c6ff;
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
 }
 
-header h2 { /* Alterado de h1 para h2 para o nome da empresa */
+header h2 {
     margin: 0;
-    font-family: 'Algerian', serif; /* Aplicando a fonte Algerian */
-    font-size: 2.8rem; /* Aumentando um pouco o tamanho */
+    font-family: 'Algerian', serif;
+    font-size: 2.8rem;
     color: #fff;
-    letter-spacing: 2px; /* Mais espaçamento entre letras */
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Adicionando uma sombra para destacar */
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
 }
 
 header nav ul {
@@ -65,37 +63,39 @@ header nav ul {
     padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 15px; /* Espaçamento entre os botões */
+    gap: 15px;
 }
 
 header nav ul li a {
-    background-color: #007bff; /* Cor de fundo dos botões */
+    background-color: #007bff;
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    padding: 12px 25px; /* Tamanho dos botões */
-    border-radius: 30px; /* Botões arredondados */
+    padding: 12px 25px;
+    border-radius: 30px;
     transition: background-color 0.3s ease, transform 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 8px; /* Espaçamento entre ícone e texto */
+    justify-content: center;
+    gap: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 header nav ul li a:hover {
-    background-color: #0056b3; /* Cor ao passar o mouse */
-    transform: translateY(-2px); /* Efeito sutil ao passar o mouse */
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
-/* Estilos para o corpo do site (main) */
+/* Main */
 main {
     padding: 40px 0;
 }
 
+/* Hero */
 .hero {
-    background: linear-gradient(to bottom, #051131, #2B3550);/*background-color: #2a3a4a; /* Fundo da seção hero */
+    background: linear-gradient(to bottom, #051131, #2B3550);
     text-align: center;
     padding: 80px 0;
     margin-bottom: 40px;
@@ -106,16 +106,16 @@ main {
 .hero h2 {
     font-size: 3.5rem;
     margin-bottom: 25px;
-    color: #00c6ff; /* Cor de destaque para o título */
+    color: #00c6ff;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-/*.hero p {
+.hero p {
     font-size: 1.3rem;
     max-width: 900px;
     margin: 0 auto 25px auto;
-    background: linear-gradient(to bottom, #051131, #2B3550);/*color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
-/}
+    color: #f0f0f0;
+}
 
 .section-padding {
     padding: 40px 0;
@@ -142,7 +142,7 @@ main {
 #contato .contact-info p {
     font-size: 1.2rem;
     margin-bottom: 15px;
-    color: #f0f0f0; /* Ajustado para ser mais visível */
+    color: #f0f0f0;
 }
 
 #contato .contact-info a {
@@ -169,7 +169,7 @@ main {
     border: none;
     padding: 12px 25px;
     margin: 8px;
-    border-radius: 30px; /* Botões arredondados */
+    border-radius: 30px;
     cursor: pointer;
     font-size: 1.1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -184,12 +184,12 @@ main {
 /* Catálogo - Grid de Produtos */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cards um pouco maiores */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
 .product-card {
-    background-color: #2a3a4a; /* Fundo do card */
+    background-color: #2a3a4a;
     border: 1px solid #3a4a5a;
     border-radius: 10px;
     padding: 25px;
@@ -205,8 +205,8 @@ main {
 
 .product-card img {
     max-width: 100%;
-    height: 200px; /* Altura fixa para as imagens */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+    height: 200px;
+    object-fit: cover;
     border-radius: 8px;
     margin-bottom: 20px;
     border: 1px solid #4a5a6a;
@@ -221,14 +221,14 @@ main {
 
 .product-card .description {
     font-size: 1rem;
-    color: #f0f0f0; /* Um cinza bem claro para melhor leitura */
+    color: #f0f0f0;
     margin-bottom: 20px;
 }
 
 .product-card .price {
     font-size: 1.6rem;
     font-weight: bold;
-    color: #28a745; /* Cor para preço */
+    color: #28a745;
     margin-bottom: 20px;
 }
 
@@ -255,16 +255,21 @@ main {
 }
 
 .add-to-interest {
-    background-color: #ffc107; /* Cor do botão de interesse */
+    background-color: #ffc107;
     color: #333;
     border: none;
     padding: 12px 25px;
     border-radius: 30px;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
 }
 
 .add-to-interest:hover {
@@ -274,7 +279,7 @@ main {
 
 /* Rodapé */
 footer {
-    background: linear-gradient(to bottom, #2B3550, #051131);/*background-color: #1a2a3a;
+    background: linear-gradient(to bottom, #2B3550, #051131);
     color: #a0a0a0;
     text-align: center;
     padding: 1.5rem 0;
@@ -287,7 +292,312 @@ footer p {
     font-size: 0.95rem;
 }
 
-/* Responsividade básica */
+/* =============================================
+   MODAIS (POP-UPS)
+   ============================================= */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.75);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: linear-gradient(to bottom, #0d1f3c, #1a2a4a);
+    border: 1px solid #3a4a5a;
+    border-radius: 12px;
+    padding: 35px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    animation: fadeInModal 0.3s ease-out;
+    color: #e0e0e0;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: translateY(-30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+.modal-content h2 {
+    color: #00c6ff;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+/* Lista de itens no primeiro modal */
+.items-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    border: 1px solid #3a4a5a;
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.items-summary-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #2a3a5a;
+    background-color: rgba(255,255,255,0.03);
+}
+
+.items-summary-list li:last-child {
+    border-bottom: none;
+}
+
+.items-summary-list li.empty-list {
+    justify-content: center;
+    color: #a0a0a0;
+    font-style: italic;
+    padding: 20px;
+}
+
+.items-summary-list li span {
+    color: #f0f0f0;
+    font-size: 1rem;
+}
+
+.remove-item-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.remove-item-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.1);
+}
+
+/* Botão Registrar Interesses */
+.modal-action-btn {
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+.modal-action-btn:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+/* Formulário no segundo modal */
+.form-section {
+    margin-bottom: 18px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 6px;
+    color: #c0d0e0;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="tel"],
+.modal-content textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #4a5a6a;
+    border-radius: 6px;
+    background-color: rgba(255,255,255,0.05);
+    color: #f0f0f0;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+    color: #6a7a8a;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content input[type="email"]:focus,
+.modal-content input[type="tel"]:focus,
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #00c6ff;
+    box-shadow: 0 0 8px rgba(0, 198, 255, 0.3);
+}
+
+.modal-content textarea {
+    resize: vertical;
+}
+
+.modal-content button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   BOTÕES FLUTUANTES
+   ============================================= */
+
+/* Botão Ver Interesses */
+#viewInterestsBtn {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    border-radius: 30px;
+    padding: 13px 22px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 998;
+    align-items: center;
+    gap: 8px;
+}
+
+#viewInterestsBtn:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+/* Botão Voltar ao Topo */
+#backToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 998;
+    align-items: center;
+    justify-content: center;
+}
+
+#backToTopBtn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   NOTIFICAÇÕES
+   ============================================= */
+.notification {
+    position: fixed;
+    bottom: 160px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 1100;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    max-width: 300px;
+}
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.warning {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =============================================
+   RESPONSIVIDADE
+   ============================================= */
 @media (max-width: 768px) {
     header h2 {
         font-size: 1.8rem;
@@ -314,270 +624,19 @@ footer p {
     .product-grid {
         grid-template-columns: 1fr;
     }
-}
-/* Estilos para os Modais (Pop-ups) */
-.modal {
-    display: none; /* Escondido por padrão */
-    position: fixed; /* Posição fixa na tela */
-    z-index: 1000; /* Fica acima de outros elementos */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Permite rolagem se o conteúdo for grande */
-    background-color: rgba(0,0,0,0.7); /* Fundo escuro semi-transparente */
-    display: flex; /* Usar flexbox para centralizar */
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
-}
-
-.modal-content {
-    background-color: #1a2a3a; /* Fundo do modal */
-    margin: auto;
-    padding: 30px;
-    border: 1px solid #3a4a5a;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px; /* Largura máxima para o modal */
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-    position: relative;
-    animation: fadeIn 0.3s ease-out; /* Animação de entrada */
-    color: #e0e0e0; /* Cor de texto padrão para o modal */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.close-modal {
-    color: #aaa;
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-modal:hover,
-.close-modal:focus {
-    color: #fff;
-    text-decoration: none;
-}
-
-.modal-content h2 {
-    color: #00c6ff;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2.2rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-/* Estilos para a lista de itens no primeiro modal */
-.items-summary-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
-    background-color: #2a3a4a;
-    border: 1px solid #4a5a6a;
-    border-radius: 5px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.items-summary-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-bottom: 1px solid #3a4a5a;
-}
-
-.items-summary-list li:last-child {
-    border-bottom: none;
-}
-
-.items-summary-list li span {
-    color: #f0f0f0;
-    font-size: 1.1rem;
-}
-
-.remove-item-btn {
-    background-color: #dc3545; /* Cor vermelha para remover */
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.remove-item-btn:hover {
-    background-color: #c82333;
-}
-
-.modal-action-btn { /* Botão "Registrar Interesses" no primeiro modal */
-    background-color: #ffc107; /* Cor de destaque */
-    color: #333;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-
-.modal-action-btn:hover {
-    background-color: #e0a800;
-    transform: translateY(-2px);
-}
-
-/* Estilos para o formulário de contato dentro do segundo modal */
-.modal-content .form-section {
-    margin-bottom: 25px;
-}
-
-.modal-content .form-section h3 {
-    color: #00c6ff;
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #3a4a5a;
-    padding-bottom: 5px;
-}
-
-.modal-content label {
-    display: block;
-    margin-bottom: 8px;
-    color: #f0f0f0;
-    font-weight: bold;
-}
-
-.modal-content input[type="text"],
-.modal-content input[type="email"],
-.modal-content input[type="tel"],
-.modal-content textarea {
-    width: calc(100% - 24px); /* Ajusta a largura considerando o padding */
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #4a5a6a;
-    border-radius: 5px;
-    background-color: #2a3a4a;
-    color: #f0f0f0;
-    font-size: 1rem;
-    box-sizing: border-box; /* Inclui padding e borda na largura total */
-}
-
-.modal-content input[type="text"]:focus,
-.modal-content input[type="email"]:focus,
-.modal-content input[type="tel"]:focus,
-.modal-content textarea:focus {
-    outline: none;
-    border-color: #00c6ff;
-    box-shadow: 0 0 8px rgba(0, 198, 255, 0.4);
-}
-
-.modal-content textarea {
-    resize: vertical; /* Permite redimensionar verticalmente */
-}
-
-.modal-content button[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-
-.modal-content button[type="submit"]:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-/* Botão "Ver Interesses" (fixo na tela) */
-#viewInterestsBtn {
-    display: none; /* Escondido por padrão, JS mostra quando há itens */
-    position: fixed;
-    bottom: 90px; /* Acima do botão "Voltar ao Topo" */
-    right: 20px;
-    background-color: #ffc107; /* Cor de destaque */
-    color: #333;
-    border: none;
-    border-radius: 30px;
-    padding: 15px 25px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    z-index: 999;
-}
-
-#viewInterestsBtn:hover {
-    background-color: #e0a800;
-    transform: translateY(-2px);
-}
-
-/* Botão Voltar ao Topo (fixo na tela) */
-#backToTopBtn {
-    display: none; /* Escondido por padrão, JS mostra quando necessário */
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 50%; /* Redondo */
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#backToTopBtn:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-/* Responsividade para modais e botões */
-@media (max-width: 768px) {
     .modal-content {
-        width: 95%;
-        padding: 20px;
+        padding: 25px 20px;
     }
-    #viewInterestsBtn, #backToTopBtn {
-        right: 10px;
-        padding: 12px 20px;
-        font-size: 1rem;
+    #viewInterestsBtn {
+        bottom: 80px;
+        right: 15px;
+        font-size: 0.9rem;
+        padding: 11px 18px;
     }
     #backToTopBtn {
+        bottom: 15px;
+        right: 15px;
         width: 45px;
         height: 45px;
-        font-size: 1.3rem;
     }
 }
