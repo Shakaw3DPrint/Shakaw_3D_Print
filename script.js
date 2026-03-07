@@ -56,107 +56,207 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =============================================
-    // LIGHTBOX
-    // =============================================
-    function openLightbox(images, startIndex) {
-        lightboxImages = images;
-        lightboxIndex  = startIndex;
-        currentZoom    = 1;
-        updateLightboxImage();
-        lightbox.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+// LIGHTBOX
+// =============================================
+function openLightbox(images, startIndex) {
+    lightboxImages = images;
+    lightboxIndex = startIndex;
+    currentZoom = 1;
+    
+    // Resetar posição e zoom
+    lightboxImg.style.transform = 'scale(1) translate(0, 0)';
+    lightboxImg.style.cursor = 'grab';
+    
+    updateLightboxImage();
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    lightbox.style.display = 'none';
+    document.body.style.overflow = '';
+    currentZoom = 1;
+    lightboxImg.style.transform = 'scale(1) translate(0, 0)';
+}
+
+function updateLightboxImage() {
+    lightboxImg.src = lightboxImages[lightboxIndex];
+    currentZoom = 1;
+    lightboxImg.style.transform = 'scale(1) translate(0, 0)';
+    updateZoomLabel();
+    lightboxPrev.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+    lightboxNext.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+}
+
+function updateZoomLabel() {
+    if (zoomLevelEl) zoomLevelEl.textContent = Math.round(currentZoom * 100) + '%';
+}
+
+// Variáveis para controle de pan (arrastar)
+let isDragging = false;
+let startX, startY;
+let translateX = 0, translateY = 0;
+let lastTranslateX = 0, lastTranslateY = 0;
+
+function applyZoomAndPan() {
+    lightboxImg.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+    updateZoomLabel();
+}
+
+// Eventos de mouse para arrastar a imagem
+lightboxImg.addEventListener('mousedown', (e) => {
+    if (currentZoom > 1) {
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        lightboxImg.style.cursor = 'grabbing';
+        e.preventDefault();
     }
+});
 
-    function closeLightbox() {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = '';
-        currentZoom = 1;
-        lightboxImg.style.transform = 'scale(1)';
+document.addEventListener('mousemove', (e) => {
+    if (isDragging && currentZoom > 1) {
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        
+        // Limitar o movimento para não sair da área visível
+        const imgRect = lightboxImg.getBoundingClientRect();
+        const containerRect = lightboxContainer.getBoundingClientRect();
+        
+        // Calcula limites baseados no zoom
+        const maxX = (imgRect.width * (currentZoom - 1)) / 2;
+        const maxY = (imgRect.height * (currentZoom - 1)) / 2;
+        
+        translateX = Math.min(Math.max(translateX, -maxX), maxX);
+        translateY = Math.min(Math.max(translateY, -maxY), maxY);
+        
+        applyZoomAndPan();
+        e.preventDefault();
     }
+});
 
-    function updateLightboxImage() {
-        lightboxImg.src = lightboxImages[lightboxIndex];
-        currentZoom = 1;
-        lightboxImg.style.transform = 'scale(1)';
-        updateZoomLabel();
-        lightboxPrev.style.display = lightboxImages.length > 1 ? 'block' : 'none';
-        lightboxNext.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+document.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+        lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
+        lastTranslateX = translateX;
+        lastTranslateY = translateY;
     }
+});
 
-    function updateZoomLabel() {
-        if (zoomLevelEl) zoomLevelEl.textContent = Math.round(currentZoom * 100) + '%';
-    }
-
-    function applyZoom() {
-        lightboxImg.style.transform = `scale(${currentZoom})`;
-        updateZoomLabel();
-    }
-
-    if (lightboxClose)   lightboxClose.addEventListener('click', closeLightbox);
-    if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
-
-    if (lightboxPrev) {
-        lightboxPrev.addEventListener('click', () => {
-            lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
-            updateLightboxImage();
-        });
-    }
-    if (lightboxNext) {
-        lightboxNext.addEventListener('click', () => {
-            lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
-            updateLightboxImage();
-        });
-    }
-
-    if (zoomInBtn) zoomInBtn.addEventListener('click', () => {
-        if (currentZoom < ZOOM_MAX) { currentZoom += ZOOM_STEP; applyZoom(); }
-    });
-    if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => {
-        if (currentZoom > ZOOM_MIN) { currentZoom -= ZOOM_STEP; applyZoom(); }
-    });
-    if (zoomResetBtn) zoomResetBtn.addEventListener('click', () => {
-        currentZoom = 1; applyZoom();
-    });
-
-    // Scroll do mouse para zoom
-    if (lightboxImg) {
-        lightboxImg.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            if (e.deltaY < 0 && currentZoom < ZOOM_MAX) currentZoom += ZOOM_STEP;
-            if (e.deltaY > 0 && currentZoom > ZOOM_MIN) currentZoom -= ZOOM_STEP;
-            applyZoom();
-        }, { passive: false });
-    }
-
-    // Teclas de atalho no lightbox
-    document.addEventListener('keydown', (e) => {
-        if (lightbox && lightbox.style.display === 'flex') {
-            if (e.key === 'ArrowLeft')  lightboxPrev && lightboxPrev.click();
-            if (e.key === 'ArrowRight') lightboxNext && lightboxNext.click();
-            if (e.key === 'Escape')     closeLightbox();
-            if (e.key === '+')          zoomInBtn && zoomInBtn.click();
-            if (e.key === '-')          zoomOutBtn && zoomOutBtn.click();
+// Zoom com botões
+if (zoomInBtn) {
+    zoomInBtn.addEventListener('click', () => {
+        if (currentZoom < ZOOM_MAX) {
+            currentZoom += ZOOM_STEP;
+            // Resetar posição ao aumentar zoom
+            translateX = 0;
+            translateY = 0;
+            lastTranslateX = 0;
+            lastTranslateY = 0;
+            applyZoomAndPan();
+            lightboxImg.style.cursor = 'grab';
         }
     });
+}
 
-    // Clique na imagem principal do card abre o lightbox
-    if (productGrid) {
-        productGrid.addEventListener('click', (e) => {
-            const cardImg = e.target.closest('.card-image');
-            if (cardImg) {
-                const card = cardImg.closest('.product-card');
-                const allImgs = [cardImg.src];
-                card.querySelectorAll('.thumb-img-data').forEach(t => allImgs.push(t.dataset.src));
-                openLightbox(allImgs, 0);
-                return;
-            }
+if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+        if (currentZoom > ZOOM_MIN) {
+            currentZoom -= ZOOM_STEP;
+            translateX = 0;
+            translateY = 0;
+            lastTranslateX = 0;
+            lastTranslateY = 0;
+            applyZoomAndPan();
+            lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
+        }
+    });
+}
 
-            const addBtn = e.target.closest('.add-to-interest');
-            if (addBtn) {
-                addProductToInterest(addBtn.dataset.productId, addBtn.dataset.productName);
-            }
-        });
+if (zoomResetBtn) {
+    zoomResetBtn.addEventListener('click', () => {
+        currentZoom = 1;
+        translateX = 0;
+        translateY = 0;
+        lastTranslateX = 0;
+        lastTranslateY = 0;
+        applyZoomAndPan();
+        lightboxImg.style.cursor = 'default';
+    });
+}
+
+// Scroll do mouse para zoom (com posição baseada no cursor)
+lightboxImg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    
+    const rect = lightboxImg.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Calcula posição relativa do mouse na imagem (0 a 1)
+    const relX = mouseX / rect.width;
+    const relY = mouseY / rect.height;
+    
+    const oldZoom = currentZoom;
+    
+    if (e.deltaY < 0 && currentZoom < ZOOM_MAX) {
+        currentZoom += ZOOM_STEP;
     }
+    if (e.deltaY > 0 && currentZoom > ZOOM_MIN) {
+        currentZoom -= ZOOM_STEP;
+    }
+    
+    if (oldZoom !== currentZoom) {
+        // Ajusta posição para manter o ponto sob o mouse
+        translateX = (mouseX - rect.width / 2) * (1 - currentZoom / oldZoom);
+        translateY = (mouseY - rect.height / 2) * (1 - currentZoom / oldZoom);
+        
+        lastTranslateX = translateX;
+        lastTranslateY = translateY;
+        
+        applyZoomAndPan();
+        lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
+    }
+}, { passive: false });
+
+// Teclas de atalho no lightbox
+document.addEventListener('keydown', (e) => {
+    if (lightbox && lightbox.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') lightboxPrev && lightboxPrev.click();
+        if (e.key === 'ArrowRight') lightboxNext && lightboxNext.click();
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === '+' || e.key === '=') zoomInBtn && zoomInBtn.click();
+        if (e.key === '-' || e.key === '_') zoomOutBtn && zoomOutBtn.click();
+        if (e.key === '0') zoomResetBtn && zoomResetBtn.click();
+    }
+});
+
+if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
+
+if (lightboxPrev) {
+    lightboxPrev.addEventListener('click', () => {
+        lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+        updateLightboxImage();
+        translateX = 0;
+        translateY = 0;
+        lastTranslateX = 0;
+        lastTranslateY = 0;
+    });
+}
+
+if (lightboxNext) {
+    lightboxNext.addEventListener('click', () => {
+        lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+        updateLightboxImage();
+        translateX = 0;
+        translateY = 0;
+        lastTranslateX = 0;
+        lastTranslateY = 0;
+    });
+}
+    
 
     // =============================================
     // LISTA DE INTERESSES
