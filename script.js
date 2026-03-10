@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ── Estado
+    // ── Estado (modificado para incluir preço)
     const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
 
     // ── Elementos
@@ -19,17 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const productCards         = document.querySelectorAll('.product-card');
 
     // ── Lightbox
-    const lightbox          = document.getElementById('lightbox');
-    const lightboxContainer = document.getElementById('lightbox-container');
-    const lightboxImg       = document.getElementById('lightbox-img');
-    const lightboxClose     = document.getElementById('lightbox-close');
-    const lightboxPrev      = document.getElementById('lightbox-prev');
-    const lightboxNext      = document.getElementById('lightbox-next');
-    const lightboxOverlay   = document.getElementById('lightbox-overlay');
-    const zoomInBtn         = document.getElementById('zoom-in');
-    const zoomOutBtn        = document.getElementById('zoom-out');
-    const zoomResetBtn      = document.getElementById('zoom-reset');
-    const zoomLevelEl       = document.getElementById('zoom-level');
+    const lightbox      = document.getElementById('lightbox');
+    const lightboxImg   = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev  = document.getElementById('lightbox-prev');
+    const lightboxNext  = document.getElementById('lightbox-next');
+    const lightboxOverlay = document.getElementById('lightbox-overlay');
+    const zoomInBtn     = document.getElementById('zoom-in');
+    const zoomOutBtn    = document.getElementById('zoom-out');
+    const zoomResetBtn  = document.getElementById('zoom-reset');
+    const zoomLevelEl   = document.getElementById('zoom-level');
 
     let lightboxImages  = [];
     let lightboxIndex   = 0;
@@ -37,11 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ZOOM_STEP     = 0.25;
     const ZOOM_MAX      = 4;
     const ZOOM_MIN      = 0.5;
-
-    // Variáveis para controle de pan (arrastar)
-    let isDragging = false;
-    let startX, startY;
-    let translateX = 0, translateY = 0;
 
     // =============================================
     // FILTROS
@@ -66,211 +60,130 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     function openLightbox(images, startIndex) {
         lightboxImages = images;
-        lightboxIndex = startIndex;
-        currentZoom = 1;
-        translateX = 0;
-        translateY = 0;
-        
-        lightboxImg.src = lightboxImages[lightboxIndex];
-        lightboxImg.style.transform = 'scale(1) translate(0px, 0px)';
-        lightboxImg.style.cursor = 'default';
-        
-        // Mostrar/esconder botões de navegação
-        if (lightboxPrev) lightboxPrev.style.display = lightboxImages.length > 1 ? 'flex' : 'none';
-        if (lightboxNext) lightboxNext.style.display = lightboxImages.length > 1 ? 'flex' : 'none';
-        
+        lightboxIndex  = startIndex;
+        currentZoom    = 1;
+        updateLightboxImage();
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        updateZoomLabel();
     }
 
     function closeLightbox() {
         lightbox.style.display = 'none';
         document.body.style.overflow = '';
         currentZoom = 1;
-        translateX = 0;
-        translateY = 0;
-        lightboxImg.style.transform = 'scale(1) translate(0px, 0px)';
+        lightboxImg.style.transform = 'scale(1)';
+    }
+
+    function updateLightboxImage() {
+        lightboxImg.src = lightboxImages[lightboxIndex];
+        currentZoom = 1;
+        lightboxImg.style.transform = 'scale(1)';
+        updateZoomLabel();
+        lightboxPrev.style.display = lightboxImages.length > 1 ? 'block' : 'none';
+        lightboxNext.style.display = lightboxImages.length > 1 ? 'block' : 'none';
     }
 
     function updateZoomLabel() {
         if (zoomLevelEl) zoomLevelEl.textContent = Math.round(currentZoom * 100) + '%';
     }
 
-    function applyZoomAndPan() {
-        lightboxImg.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+    function applyZoom() {
+        lightboxImg.style.transform = `scale(${currentZoom})`;
         updateZoomLabel();
     }
 
-    // Eventos de mouse para arrastar a imagem (apenas quando zoom > 1)
-    if (lightboxImg) {
-        lightboxImg.addEventListener('mousedown', (e) => {
-            if (currentZoom > 1) {
-                isDragging = true;
-                startX = e.clientX - translateX;
-                startY = e.clientY - translateY;
-                lightboxImg.style.cursor = 'grabbing';
-                e.preventDefault();
-            }
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging && currentZoom > 1) {
-                translateX = e.clientX - startX;
-                translateY = e.clientY - startY;
-                
-                // Limitar o movimento para não sair da área visível
-                const imgRect = lightboxImg.getBoundingClientRect();
-                const maxX = (imgRect.width * (currentZoom - 1)) / 2;
-                const maxY = (imgRect.height * (currentZoom - 1)) / 2;
-                
-                translateX = Math.min(Math.max(translateX, -maxX), maxX);
-                translateY = Math.min(Math.max(translateY, -maxY), maxY);
-                
-                applyZoomAndPan();
-                e.preventDefault();
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
-            }
-        });
-
-        // Scroll do mouse para zoom
-        lightboxImg.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            
-            const oldZoom = currentZoom;
-            
-            if (e.deltaY < 0 && currentZoom < ZOOM_MAX) {
-                currentZoom += ZOOM_STEP;
-            }
-            if (e.deltaY > 0 && currentZoom > ZOOM_MIN) {
-                currentZoom -= ZOOM_STEP;
-            }
-            
-            if (oldZoom !== currentZoom) {
-                // Resetar posição ao mudar zoom
-                translateX = 0;
-                translateY = 0;
-                applyZoomAndPan();
-                lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
-            }
-        }, { passive: false });
-    }
-
-    // Botões de zoom
-    if (zoomInBtn) {
-        zoomInBtn.addEventListener('click', () => {
-            if (currentZoom < ZOOM_MAX) {
-                currentZoom += ZOOM_STEP;
-                translateX = 0;
-                translateY = 0;
-                applyZoomAndPan();
-                lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
-            }
-        });
-    }
-
-    if (zoomOutBtn) {
-        zoomOutBtn.addEventListener('click', () => {
-            if (currentZoom > ZOOM_MIN) {
-                currentZoom -= ZOOM_STEP;
-                translateX = 0;
-                translateY = 0;
-                applyZoomAndPan();
-                lightboxImg.style.cursor = currentZoom > 1 ? 'grab' : 'default';
-            }
-        });
-    }
-
-    if (zoomResetBtn) {
-        zoomResetBtn.addEventListener('click', () => {
-            currentZoom = 1;
-            translateX = 0;
-            translateY = 0;
-            applyZoomAndPan();
-            lightboxImg.style.cursor = 'default';
-        });
-    }
-
-    // Fechar lightbox
-    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxClose)   lightboxClose.addEventListener('click', closeLightbox);
     if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
 
-    // Navegação entre imagens
     if (lightboxPrev) {
         lightboxPrev.addEventListener('click', () => {
             lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
-            lightboxImg.src = lightboxImages[lightboxIndex];
-            currentZoom = 1;
-            translateX = 0;
-            translateY = 0;
-            lightboxImg.style.transform = 'scale(1) translate(0px, 0px)';
-            lightboxImg.style.cursor = 'default';
-            updateZoomLabel();
+            updateLightboxImage();
         });
     }
-
     if (lightboxNext) {
         lightboxNext.addEventListener('click', () => {
             lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
-            lightboxImg.src = lightboxImages[lightboxIndex];
-            currentZoom = 1;
-            translateX = 0;
-            translateY = 0;
-            lightboxImg.style.transform = 'scale(1) translate(0px, 0px)';
-            lightboxImg.style.cursor = 'default';
-            updateZoomLabel();
+            updateLightboxImage();
         });
+    }
+
+    if (zoomInBtn) zoomInBtn.addEventListener('click', () => {
+        if (currentZoom < ZOOM_MAX) { currentZoom += ZOOM_STEP; applyZoom(); }
+    });
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => {
+        if (currentZoom > ZOOM_MIN) { currentZoom -= ZOOM_STEP; applyZoom(); }
+    });
+    if (zoomResetBtn) zoomResetBtn.addEventListener('click', () => {
+        currentZoom = 1; applyZoom();
+    });
+
+    // Scroll do mouse para zoom
+    if (lightboxImg) {
+        lightboxImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0 && currentZoom < ZOOM_MAX) currentZoom += ZOOM_STEP;
+            if (e.deltaY > 0 && currentZoom > ZOOM_MIN) currentZoom -= ZOOM_STEP;
+            applyZoom();
+        }, { passive: false });
     }
 
     // Teclas de atalho no lightbox
     document.addEventListener('keydown', (e) => {
         if (lightbox && lightbox.style.display === 'flex') {
-            if (e.key === 'ArrowLeft') lightboxPrev && lightboxPrev.click();
+            if (e.key === 'ArrowLeft')  lightboxPrev && lightboxPrev.click();
             if (e.key === 'ArrowRight') lightboxNext && lightboxNext.click();
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === '+' || e.key === '=') zoomInBtn && zoomInBtn.click();
-            if (e.key === '-' || e.key === '_') zoomOutBtn && zoomOutBtn.click();
-            if (e.key === '0') zoomResetBtn && zoomResetBtn.click();
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === '+')          zoomInBtn && zoomInBtn.click();
+            if (e.key === '-')          zoomOutBtn && zoomOutBtn.click();
         }
     });
 
-    // Clique na imagem principal do card abre o lightbox
+    // Clique na imagem principal do card abre o lightbox (modificado para capturar preço)
     if (productGrid) {
         productGrid.addEventListener('click', (e) => {
             const cardImg = e.target.closest('.card-image');
             if (cardImg) {
                 const card = cardImg.closest('.product-card');
-                // Array com todas as imagens do produto
                 const allImgs = [cardImg.src];
-                
-                // Adiciona as imagens thumbnail se existirem
-                const thumbImgs = card.querySelectorAll('.thumb-img-data');
-                thumbImgs.forEach(img => {
-                    if (img.dataset.src) {
-                        allImgs.push(img.dataset.src);
-                    }
-                });
-                
+                card.querySelectorAll('.thumb-img-data').forEach(t => allImgs.push(t.dataset.src));
                 openLightbox(allImgs, 0);
                 return;
             }
 
             const addBtn = e.target.closest('.add-to-interest');
             if (addBtn) {
-                e.preventDefault();
-                addProductToInterest(addBtn.dataset.productId, addBtn.dataset.productName);
+                // Capturar o preço do produto
+                const priceElement = addBtn.closest('.product-card').querySelector('.price');
+                let price = 0;
+                
+                // Extrair o valor numérico do preço
+                if (priceElement) {
+                    const priceText = priceElement.textContent;
+                    // Se for "Sob consulta", definir como 0
+                    if (priceText.includes('Sob consulta')) {
+                        price = 0;
+                    } else {
+                        // Extrair números do preço (formato R$ 120,00)
+                        const priceMatch = priceText.match(/R\$\s*([\d.,]+)/);
+                        if (priceMatch) {
+                            // Converter para número (substituir vírgula por ponto)
+                            price = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.'));
+                        }
+                    }
+                }
+                
+                addProductToInterest(
+                    addBtn.dataset.productId, 
+                    addBtn.dataset.productName,
+                    price
+                );
             }
         });
     }
 
     // =============================================
-    // LISTA DE INTERESSES
+    // LISTA DE INTERESSES (MODIFICADO PARA INCLUIR PREÇO)
     // =============================================
     const saveInterestList = () => {
         localStorage.setItem('shakawInterestList', JSON.stringify(interestList));
@@ -280,33 +193,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const getTotalItems = () =>
         interestList.reduce((total, item) => total + item.quantity, 0);
 
+    // NOVA FUNÇÃO: Calcular valor total da lista
+    const getTotalValue = () => {
+        return interestList.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
+
+    // NOVA FUNÇÃO: Formatar valor em reais
+    const formatCurrency = (value) => {
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
     const updateViewInterestsButton = () => {
         if (!viewInterestsBtn) return;
         const total = getTotalItems();
+        const totalValue = getTotalValue();
+        
         if (total > 0) {
             viewInterestsBtn.style.display = 'flex';
-            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total})`;
+            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total}) - ${formatCurrency(totalValue)}`;
         } else {
             viewInterestsBtn.style.display = 'none';
         }
     };
 
-    const addProductToInterest = (productId, productName) => {
+    // MODIFICADO: Incluir preço
+    const addProductToInterest = (productId, productName, productPrice) => {
         const existing = interestList.find(item => item.id === productId);
         if (existing) {
             existing.quantity += 1;
             saveInterestList();
-            showNotification(`"${productName}" — ${existing.quantity} un. na lista!`, 'success');
+            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency(existing.price * existing.quantity)}) na lista!`, 'success');
         } else {
-            interestList.push({ id: productId, name: productName, quantity: 1 });
+            interestList.push({ 
+                id: productId, 
+                name: productName, 
+                price: productPrice, 
+                quantity: 1 
+            });
             saveInterestList();
-            showNotification(`"${productName}" adicionado!`, 'success');
+            showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice)})`, 'success');
         }
     };
 
     const increaseQuantity = (productId) => {
         const item = interestList.find(i => i.id === productId);
-        if (item) { item.quantity += 1; saveInterestList(); renderInterestSummary(); }
+        if (item) { 
+            item.quantity += 1; 
+            saveInterestList(); 
+            renderInterestSummary(); 
+        }
     };
 
     const decreaseQuantity = (productId) => {
@@ -314,8 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item) {
             item.quantity -= 1;
             if (item.quantity <= 0) {
-                const index = interestList.findIndex(i => i.id === productId);
-                interestList.splice(index, 1);
+                interestList.splice(interestList.findIndex(i => i.id === productId), 1);
             }
             saveInterestList();
             renderInterestSummary();
@@ -324,7 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const removeProductFromInterest = (productId) => {
         const index = interestList.findIndex(i => i.id === productId);
-        if (index > -1) { interestList.splice(index, 1); saveInterestList(); renderInterestSummary(); }
+        if (index > -1) { 
+            interestList.splice(index, 1); 
+            saveInterestList(); 
+            renderInterestSummary(); 
+        }
     };
 
     // ── Notificações
@@ -334,10 +272,13 @@ document.addEventListener('DOMContentLoaded', () => {
         n.textContent = message;
         document.body.appendChild(n);
         setTimeout(() => n.classList.add('show'), 10);
-        setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 3000);
+        setTimeout(() => { 
+            n.classList.remove('show'); 
+            setTimeout(() => n.remove(), 400); 
+        }, 3000);
     };
 
-    // ── Modal 1: Resumo
+    // ── Modal 1: Resumo (MODIFICADO para incluir preços e totais)
     const renderInterestSummary = () => {
         if (!selectedItemsList) return;
         selectedItemsList.innerHTML = '';
@@ -345,27 +286,53 @@ document.addEventListener('DOMContentLoaded', () => {
         if (interestList.length === 0) {
             selectedItemsList.innerHTML = '<li class="empty-list">Sua lista está vazia.</li>';
             if (registerInterestsBtn) registerInterestsBtn.style.display = 'none';
+            if (interestSummaryModal) interestSummaryModal.style.display = 'none';
             return;
         }
 
+        // Criar elementos da lista
         interestList.forEach(item => {
             const li = document.createElement('li');
+            const itemTotal = item.price * item.quantity;
+            
             li.innerHTML = `
-                <span class="item-name">${item.name}</span>
-                <div class="item-controls">
-                    <button class="qty-btn decrease-btn" data-product-id="${item.id}">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <span class="item-quantity">${item.quantity}</span>
-                    <button class="qty-btn increase-btn" data-product-id="${item.id}">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="remove-item-btn" data-product-id="${item.id}">
-                        <i class="fas fa-times"></i>
-                    </button>
+                <div style="display: flex; flex-direction: column; width: 100%; gap: 5px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <span class="item-name"><strong>${item.name}</strong></span>
+                        <span class="item-price" style="color: #28a745; font-weight: bold;">${formatCurrency(item.price)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="item-controls">
+                            <button class="qty-btn decrease-btn" data-product-id="${item.id}">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="item-quantity">${item.quantity}</span>
+                            <button class="qty-btn increase-btn" data-product-id="${item.id}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="remove-item-btn" data-product-id="${item.id}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <span class="item-total" style="color: #ffc107; font-weight: bold;">
+                            Total: ${formatCurrency(itemTotal)}
+                        </span>
+                    </div>
                 </div>`;
             selectedItemsList.appendChild(li);
         });
+
+        // Adicionar linha com valor total geral
+        const totalLi = document.createElement('li');
+        totalLi.style.backgroundColor = 'rgba(0, 198, 255, 0.1)';
+        totalLi.style.fontWeight = 'bold';
+        totalLi.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0;">
+                <span style="color: #00c6ff; font-size: 1.1rem;">VALOR TOTAL GERAL:</span>
+                <span style="color: #ffc107; font-size: 1.2rem;">${formatCurrency(getTotalValue())}</span>
+            </div>
+        `;
+        selectedItemsList.appendChild(totalLi);
 
         if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
     };
@@ -394,13 +361,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Modal 2: Formulário
+    // ── Modal 2: Formulário (MODIFICADO para incluir valores no email)
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
             let itemsText = '';
+            let totalGeral = 0;
+            
             interestList.forEach((item, i) => {
-                itemsText += `${i + 1}. ${item.name} - Quantidade: ${item.quantity}\n`;
+                const itemTotal = item.price * item.quantity;
+                totalGeral += itemTotal;
+                const priceFormatted = formatCurrency(item.price);
+                const totalFormatted = formatCurrency(itemTotal);
+                
+                itemsText += `${i + 1}. ${item.name}\n`;
+                itemsText += `   Preço unitário: ${priceFormatted}\n`;
+                itemsText += `   Quantidade: ${item.quantity}\n`;
+                itemsText += `   Total do item: ${totalFormatted}\n\n`;
             });
+            
+            itemsText += `================================\n`;
+            itemsText += `VALOR TOTAL GERAL: ${formatCurrency(totalGeral)}`;
+            
             if (itemsDataInput) itemsDataInput.value = itemsText;
             interestSummaryModal.style.display = 'none';
             contactFormModal.style.display = 'flex';
@@ -423,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('click', (e) => {
         if (e.target === interestSummaryModal) interestSummaryModal.style.display = 'none';
-        if (e.target === contactFormModal) contactFormModal.style.display = 'none';
+        if (e.target === contactFormModal)     contactFormModal.style.display = 'none';
     });
 
     // ── Voltar ao topo
