@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ── Estado (modificado para incluir preço)
+    // ── Estado
     const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
 
     // ── Elementos
@@ -45,13 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =============================================
-    // FILTROS - AGORA REDIRECIONAM EM MOBILE
+    // FILTROS
     // =============================================
     if (filterBtns.length > 0) {
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 if (isMobile()) {
-                    // Em mobile, redirecionar para catálogo com filtro
                     const filter = btn.dataset.filter;
                     if (filter === 'all') {
                         window.location.href = 'catalogo.html';
@@ -59,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.location.href = `catalogo.html?filter=${filter}`;
                     }
                 } else {
-                    // Em desktop, comportamento normal
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     const filter = btn.dataset.filter;
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             ? 'flex' : 'none';
                     });
                     
-                    // Rolar suavemente para o início do catálogo
                     const catalogoSection = document.getElementById('catalogo');
                     if (catalogoSection) {
                         catalogoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -80,14 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =============================================
-    // APLICAR FILTRO DA URL (para mobile)
+    // APLICAR FILTRO DA URL
     // =============================================
     const applyFilterFromUrl = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const filter = urlParams.get('filter');
         
         if (filter && filterBtns.length > 0 && productCards.length > 0) {
-            // Ativar o botão correspondente
             filterBtns.forEach(btn => {
                 if (btn.dataset.filter === filter) {
                     btn.classList.add('active');
@@ -96,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
-            // Aplicar o filtro
             productCards.forEach(card => {
                 card.style.display =
                     (filter === 'all' || card.dataset.category === filter)
@@ -105,58 +100,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Chamar a função se estiver na página de catálogo
     if (window.location.pathname.includes('catalogo.html')) {
         applyFilterFromUrl();
     }
 
     // =============================================
-    // FUNÇÃO PARA EXPANDIR DESCRIÇÃO
+    // DESCRIÇÕES EXPANSÍVEIS (CORRIGIDO)
     // =============================================
     const createExpandableDescriptions = () => {
         document.querySelectorAll('.product-card').forEach(card => {
             const descriptionEl = card.querySelector('.description');
             const cardBody = card.querySelector('.card-body');
             
+            // Remover botões existentes para não duplicar
+            const existingBtn = card.querySelector('.expand-description-btn');
+            if (existingBtn) {
+                existingBtn.remove();
+            }
+            
             if (descriptionEl && cardBody) {
-                // Verificar se a descrição precisa de expansão
-                const lineHeight = parseInt(window.getComputedStyle(descriptionEl).lineHeight);
-                const maxHeight = lineHeight * 3; // 3 linhas
+                // Remover classe expanded se existir
+                descriptionEl.classList.remove('expanded');
                 
-                if (descriptionEl.scrollHeight > maxHeight) {
-                    // Criar botão "Ver mais"
-                    const expandBtn = document.createElement('button');
-                    expandBtn.className = 'expand-description-btn';
-                    expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
-                    
-                    // Adicionar antes do preço
-                    const priceEl = cardBody.querySelector('.price');
-                    if (priceEl) {
-                        cardBody.insertBefore(expandBtn, priceEl);
-                    } else {
-                        cardBody.appendChild(expandBtn);
-                    }
-                    
-                    // Estado expandido
-                    let expanded = false;
-                    
-                    expandBtn.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Não abrir lightbox
+                // Verificar se precisa de botão (se tem mais de 2 linhas)
+                const lineHeight = parseInt(window.getComputedStyle(descriptionEl).lineHeight) || 20;
+                const maxHeight = lineHeight * 2.5; // 2.5 linhas
+                
+                // Forçar um pequeno delay para garantir que o scrollHeight esteja correto
+                setTimeout(() => {
+                    if (descriptionEl.scrollHeight > maxHeight) {
+                        const expandBtn = document.createElement('button');
+                        expandBtn.className = 'expand-description-btn';
+                        expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
                         
-                        if (!expanded) {
-                            descriptionEl.style.display = 'block';
-                            descriptionEl.style.webkitLineClamp = 'unset';
-                            descriptionEl.style.maxHeight = 'none';
-                            expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+                        // Inserir antes do preço
+                        const priceEl = cardBody.querySelector('.price');
+                        if (priceEl) {
+                            cardBody.insertBefore(expandBtn, priceEl);
                         } else {
-                            descriptionEl.style.display = '-webkit-box';
-                            descriptionEl.style.webkitLineClamp = '2';
-                            descriptionEl.style.maxHeight = '';
-                            expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
+                            cardBody.appendChild(expandBtn);
                         }
-                        expanded = !expanded;
-                    });
-                }
+                        
+                        let expanded = false;
+                        
+                        expandBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            
+                            if (!expanded) {
+                                descriptionEl.classList.add('expanded');
+                                expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+                            } else {
+                                descriptionEl.classList.remove('expanded');
+                                expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
+                            }
+                            expanded = !expanded;
+                        });
+                    }
+                }, 50);
             }
         });
     };
@@ -171,387 +171,4 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLightboxImage();
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = '';
-        currentZoom = 1;
-        lightboxImg.style.transform = 'scale(1)';
-    }
-
-    function updateLightboxImage() {
-        lightboxImg.src = lightboxImages[lightboxIndex];
-        currentZoom = 1;
-        lightboxImg.style.transform = 'scale(1)';
-        updateZoomLabel();
-        lightboxPrev.style.display = lightboxImages.length > 1 ? 'block' : 'none';
-        lightboxNext.style.display = lightboxImages.length > 1 ? 'block' : 'none';
-    }
-
-    function updateZoomLabel() {
-        if (zoomLevelEl) zoomLevelEl.textContent = Math.round(currentZoom * 100) + '%';
-    }
-
-    function applyZoom() {
-        lightboxImg.style.transform = `scale(${currentZoom})`;
-        updateZoomLabel();
-    }
-
-    if (lightboxClose)   lightboxClose.addEventListener('click', closeLightbox);
-    if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
-
-    if (lightboxPrev) {
-        lightboxPrev.addEventListener('click', () => {
-            lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
-            updateLightboxImage();
-        });
-    }
-    if (lightboxNext) {
-        lightboxNext.addEventListener('click', () => {
-            lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
-            updateLightboxImage();
-        });
-    }
-
-    if (zoomInBtn) zoomInBtn.addEventListener('click', () => {
-        if (currentZoom < ZOOM_MAX) { currentZoom += ZOOM_STEP; applyZoom(); }
-    });
-    if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => {
-        if (currentZoom > ZOOM_MIN) { currentZoom -= ZOOM_STEP; applyZoom(); }
-    });
-    if (zoomResetBtn) zoomResetBtn.addEventListener('click', () => {
-        currentZoom = 1; applyZoom();
-    });
-
-    // Scroll do mouse para zoom
-    if (lightboxImg) {
-        lightboxImg.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            if (e.deltaY < 0 && currentZoom < ZOOM_MAX) currentZoom += ZOOM_STEP;
-            if (e.deltaY > 0 && currentZoom > ZOOM_MIN) currentZoom -= ZOOM_STEP;
-            applyZoom();
-        }, { passive: false });
-    }
-
-    // Teclas de atalho no lightbox
-    document.addEventListener('keydown', (e) => {
-        if (lightbox && lightbox.style.display === 'flex') {
-            if (e.key === 'ArrowLeft')  lightboxPrev && lightboxPrev.click();
-            if (e.key === 'ArrowRight') lightboxNext && lightboxNext.click();
-            if (e.key === 'Escape')     closeLightbox();
-            if (e.key === '+')          zoomInBtn && zoomInBtn.click();
-            if (e.key === '-')          zoomOutBtn && zoomOutBtn.click();
-        }
-    });
-
-    // Clique na imagem principal do card abre o lightbox
-    if (productGrid) {
-        productGrid.addEventListener('click', (e) => {
-            const cardImg = e.target.closest('.card-image');
-            if (cardImg) {
-                const card = cardImg.closest('.product-card');
-                const allImgs = [cardImg.src];
-                card.querySelectorAll('.thumb-img-data').forEach(t => allImgs.push(t.dataset.src));
-                openLightbox(allImgs, 0);
-                return;
-            }
-
-            const addBtn = e.target.closest('.add-to-interest');
-            if (addBtn) {
-                e.stopPropagation();
-                
-                // Capturar o preço do produto
-                const cardBody = addBtn.closest('.product-card').querySelector('.card-body');
-                const priceElement = cardBody ? cardBody.querySelector('.price') : null;
-                let price = 0;
-                
-                if (priceElement) {
-                    const priceText = priceElement.textContent.trim();
-                    
-                    if (priceText.includes('Sob consulta')) {
-                        price = 0;
-                    } else {
-                        const priceMatch = priceText.match(/R\$\s*([\d.,]+)/);
-                        if (priceMatch) {
-                            let priceStr = priceMatch[1].replace(/\./g, '').replace(',', '.');
-                            price = parseFloat(priceStr);
-                        }
-                    }
-                }
-                
-                addProductToInterest(
-                    addBtn.dataset.productId, 
-                    addBtn.dataset.productName,
-                    price
-                );
-            }
-
-            const expandBtn = e.target.closest('.expand-description-btn');
-            if (expandBtn) {
-                // O evento já foi tratado no próprio botão
-                return;
-            }
-        });
-    }
-
-    // =============================================
-    // LISTA DE INTERESSES
-    // =============================================
-    const saveInterestList = () => {
-        localStorage.setItem('shakawInterestList', JSON.stringify(interestList));
-        updateViewInterestsButton();
-    };
-
-    const getTotalItems = () =>
-        interestList.reduce((total, item) => total + item.quantity, 0);
-
-    const getTotalValue = () => {
-        return interestList.reduce((total, item) => {
-            const itemPrice = item.price || 0;
-            return total + (itemPrice * item.quantity);
-        }, 0);
-    };
-
-    const formatCurrency = (value) => {
-        if (isNaN(value) || value === null || value === undefined) {
-            return 'R$ 0,00';
-        }
-        return value.toLocaleString('pt-BR', { 
-            style: 'currency', 
-            currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    };
-
-    const updateViewInterestsButton = () => {
-        if (!viewInterestsBtn) return;
-        const total = getTotalItems();
-        const totalValue = getTotalValue();
-        
-        if (total > 0) {
-            viewInterestsBtn.style.display = 'flex';
-            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total}) - ${formatCurrency(totalValue)}`;
-        } else {
-            viewInterestsBtn.style.display = 'none';
-            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (0)`;
-        }
-    };
-
-    const addProductToInterest = (productId, productName, productPrice) => {
-        const existing = interestList.find(item => item.id === productId);
-        if (existing) {
-            existing.quantity += 1;
-            saveInterestList();
-            const itemTotal = (existing.price || 0) * existing.quantity;
-            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency(itemTotal)}) na lista!`, 'success');
-        } else {
-            interestList.push({ 
-                id: productId, 
-                name: productName, 
-                price: productPrice || 0, 
-                quantity: 1 
-            });
-            saveInterestList();
-            showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice || 0)})`, 'success');
-        }
-        renderInterestSummary();
-    };
-
-    const increaseQuantity = (productId) => {
-        const item = interestList.find(i => i.id === productId);
-        if (item) { 
-            item.quantity += 1; 
-            saveInterestList(); 
-            renderInterestSummary(); 
-        }
-    };
-
-    const decreaseQuantity = (productId) => {
-        const item = interestList.find(i => i.id === productId);
-        if (item) {
-            item.quantity -= 1;
-            if (item.quantity <= 0) {
-                interestList.splice(interestList.findIndex(i => i.id === productId), 1);
-            }
-            saveInterestList();
-            renderInterestSummary();
-        }
-    };
-
-    const removeProductFromInterest = (productId) => {
-        const index = interestList.findIndex(i => i.id === productId);
-        if (index > -1) { 
-            interestList.splice(index, 1); 
-            saveInterestList(); 
-            renderInterestSummary(); 
-        }
-    };
-
-    // ── Notificações
-    const showNotification = (message, type = 'success') => {
-        const n = document.createElement('div');
-        n.className = `notification ${type}`;
-        n.textContent = message;
-        document.body.appendChild(n);
-        setTimeout(() => n.classList.add('show'), 10);
-        setTimeout(() => { 
-            n.classList.remove('show'); 
-            setTimeout(() => n.remove(), 400); 
-        }, 3000);
-    };
-
-    // ── Modal 1: Resumo
-    const renderInterestSummary = () => {
-        if (!selectedItemsList) return;
-        selectedItemsList.innerHTML = '';
-
-        if (interestList.length === 0) {
-            selectedItemsList.innerHTML = '<li class="empty-list">Sua lista está vazia.</li>';
-            if (registerInterestsBtn) registerInterestsBtn.style.display = 'none';
-            return;
-        }
-
-        interestList.forEach(item => {
-            const li = document.createElement('li');
-            const itemPrice = item.price || 0;
-            const itemTotal = itemPrice * item.quantity;
-            
-            li.innerHTML = `
-                <div style="display: flex; flex-direction: column; width: 100%; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <span class="item-name"><strong>${item.name}</strong></span>
-                        <span class="item-price" style="color: #28a745; font-weight: bold; font-size: 1rem;">${formatCurrency(itemPrice)}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div class="item-controls" style="display: flex; gap: 8px; align-items: center;">
-                            <button class="qty-btn decrease-btn" data-product-id="${item.id}" style="width: 30px; height: 30px;">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <span class="item-quantity" style="font-size: 1rem; min-width: 25px; text-align: center;">${item.quantity}</span>
-                            <button class="qty-btn increase-btn" data-product-id="${item.id}" style="width: 30px; height: 30px;">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <button class="remove-item-btn" data-product-id="${item.id}" style="width: 30px; height: 30px;">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <span class="item-total" style="color: #ffc107; font-weight: bold; font-size: 1rem;">
-                            ${formatCurrency(itemTotal)}
-                        </span>
-                    </div>
-                </div>`;
-            selectedItemsList.appendChild(li);
-        });
-
-        const totalLi = document.createElement('li');
-        totalLi.style.backgroundColor = 'rgba(0, 198, 255, 0.1)';
-        totalLi.style.fontWeight = 'bold';
-        totalLi.style.borderTop = '2px solid #00c6ff';
-        totalLi.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 0;">
-                <span style="color: #00c6ff; font-size: 1.1rem; font-weight: bold;">VALOR TOTAL GERAL:</span>
-                <span style="color: #ffc107; font-size: 1.2rem; font-weight: bold;">${formatCurrency(getTotalValue())}</span>
-            </div>
-        `;
-        selectedItemsList.appendChild(totalLi);
-
-        if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
-    };
-
-    if (viewInterestsBtn) {
-        viewInterestsBtn.addEventListener('click', () => {
-            renderInterestSummary();
-            interestSummaryModal.style.display = 'flex';
-        });
-    }
-
-    if (closeSummaryModal) {
-        closeSummaryModal.addEventListener('click', () => {
-            interestSummaryModal.style.display = 'none';
-        });
-    }
-
-    if (selectedItemsList) {
-        selectedItemsList.addEventListener('click', (e) => {
-            const inc = e.target.closest('.increase-btn');
-            const dec = e.target.closest('.decrease-btn');
-            const rem = e.target.closest('.remove-item-btn');
-            if (inc) increaseQuantity(inc.dataset.productId);
-            if (dec) decreaseQuantity(dec.dataset.productId);
-            if (rem) removeProductFromInterest(rem.dataset.productId);
-        });
-    }
-
-    // ── Modal 2: Formulário
-    if (registerInterestsBtn) {
-        registerInterestsBtn.addEventListener('click', () => {
-            let itemsText = '';
-            let totalGeral = 0;
-            
-            interestList.forEach((item, i) => {
-                const itemPrice = item.price || 0;
-                const itemTotal = itemPrice * item.quantity;
-                totalGeral += itemTotal;
-                const priceFormatted = formatCurrency(itemPrice);
-                const totalFormatted = formatCurrency(itemTotal);
-                
-                itemsText += `${i + 1}. ${item.name}\n`;
-                itemsText += `   Preço unitário: ${priceFormatted}\n`;
-                itemsText += `   Quantidade: ${item.quantity}\n`;
-                itemsText += `   Total do item: ${totalFormatted}\n\n`;
-            });
-            
-            itemsText += `================================\n`;
-            itemsText += `VALOR TOTAL GERAL: ${formatCurrency(totalGeral)}`;
-            
-            if (itemsDataInput) itemsDataInput.value = itemsText;
-            interestSummaryModal.style.display = 'none';
-            contactFormModal.style.display = 'flex';
-        });
-    }
-
-    if (closeContactFormModal) {
-        closeContactFormModal.addEventListener('click', () => {
-            contactFormModal.style.display = 'none';
-        });
-    }
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', () => {
-            localStorage.removeItem('shakawInterestList');
-            interestList.length = 0;
-            updateViewInterestsButton();
-        });
-    }
-
-    window.addEventListener('click', (e) => {
-        if (e.target === interestSummaryModal) interestSummaryModal.style.display = 'none';
-        if (e.target === contactFormModal)     contactFormModal.style.display = 'none';
-    });
-
-    // ── Voltar ao topo
-    if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
-        });
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    // Inicializar descrições expansíveis
-    createExpandableDescriptions();
-
-    // Reaplicar em resize
-    window.addEventListener('resize', () => {
-        // Pequeno delay para evitar muitas chamadas
-        clearTimeout(window.resizeTimer);
-        window.resizeTimer = setTimeout(() => {
-            createExpandableDescriptions();
-        }, 250);
-    });
-
-    updateViewInterestsButton();
-});
+   
