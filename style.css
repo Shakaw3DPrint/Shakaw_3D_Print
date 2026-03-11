@@ -789,4 +789,78 @@ footer p { margin: 0; font-size: 0.95rem; }
     background: linear-gradient(135deg, #ff9800, #ffc107);
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(0,198,255,0.5);
+/* =============================================
+   MELHORIAS PARA MOBILE E CORREÇÕES
+   ============================================= */
+
+/* Melhorar visibilidade do botão Ver Interesses */
+#viewInterestsBtn {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #333;
+    font-weight: bold;
+    padding: 12px 22px;
+    border: 2px solid #00c6ff;
+    box-shadow: 0 4px 15px rgba(0,198,255,0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+#viewInterestsBtn:hover {
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,198,255,0.5);
+}
+
+/* Ajustes para o modal em mobile */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+        max-height: 80vh;
+    }
+    
+    .items-summary-list {
+        max-height: 50vh;
+    }
+    
+    .items-summary-list li > div {
+        gap: 10px;
+    }
+    
+    .item-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    #viewInterestsBtn {
+        bottom: 80px;
+        right: 10px;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Indicador visual de que a página rolou */
+.catalogo-section {
+    scroll-margin-top: 20px;
+}
+
+/* Melhorar visualização dos preços no modal */
+.item-price {
+    font-size: 1rem;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 3px 8px;
+    border-radius: 15px;
+}
+
+.item-total {
+    font-size: 1rem;
+    background: rgba(255, 193, 7, 0.1);
+    padding: 3px 8px;
+    border-radius: 15px;
+}
+
+/* Animação suave para scroll */
+html {
+    scroll-behavior: smooth;
 }
