@@ -1,6 +1,10 @@
 /* =============================================
    GERAL
    ============================================= */
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -19,12 +23,12 @@ body {
 }
 
 /* =============================================
-   CABEÇALHO
+   CABEÇALHO - MELHORADO PARA MOBILE
    ============================================= */
 header {
     background: linear-gradient(to bottom, #051131, #07112E);
     color: #fff;
-    padding: 0.3rem 0;
+    padding: 0.5rem 0;
     text-align: center;
     border-bottom: 1px solid #2a3a4a;
 }
@@ -33,19 +37,19 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .logo-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .logo {
-    width: 200px;
-    height: 200px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: contain;
     border: 3px solid #00c6ff;
@@ -55,7 +59,7 @@ header {
 header h2 {
     margin: 0;
     font-family: 'Algerian', serif;
-    font-size: 2.8rem;
+    font-size: 2rem;
     color: #fff;
     letter-spacing: 2px;
     text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
@@ -68,7 +72,7 @@ header nav ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 header nav ul li a {
@@ -76,13 +80,14 @@ header nav ul li a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    padding: 12px 25px;
+    padding: 10px 18px;
     border-radius: 30px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-size: 0.9rem;
 }
 
 header nav ul li a:hover {
@@ -93,28 +98,30 @@ header nav ul li a:hover {
 /* =============================================
    MAIN / HERO
    ============================================= */
-main { padding: 40px 0; }
+main { 
+    padding: 20px 0; 
+}
 
 .hero {
     background: linear-gradient(to bottom, #051131, #2B3550);
     text-align: center;
-    padding: 80px 0;
-    margin-bottom: 40px;
+    padding: 40px 20px;
+    margin-bottom: 30px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .hero h2 {
-    font-size: 3rem;
-    margin-bottom: 25px;
+    font-size: 2rem;
+    margin-bottom: 20px;
     color: #00c6ff;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .hero p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     max-width: 900px;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 15px auto;
     color: #f0f0f0;
 }
 
@@ -123,31 +130,36 @@ main { padding: 40px 0; }
     margin-top: 20px;
     background: #007bff;
     color: #fff;
-    padding: 12px 28px;
+    padding: 10px 22px;
     border-radius: 30px;
     text-decoration: none;
     font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    transition: all 0.3s;
 }
 
-.btn-voltar:hover { background: #0056b3; transform: translateY(-2px); }
+.btn-voltar:hover { 
+    background: #0056b3; 
+    transform: translateY(-2px); 
+}
 
-.section-padding { padding: 40px 0; }
+.section-padding { 
+    padding: 30px 0; 
+}
 
 /* =============================================
    CONTATO
    ============================================= */
 #contato h2, #catalogo h2 {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #00c6ff;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 #contato .contact-info {
     text-align: center;
     background-color: #2a3a4a;
-    padding: 30px;
+    padding: 25px 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     max-width: 600px;
@@ -155,9 +167,10 @@ main { padding: 40px 0; }
 }
 
 #contato .contact-info p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-bottom: 15px;
     color: #f0f0f0;
+    word-break: break-word;
 }
 
 #contato .contact-info a {
@@ -172,24 +185,29 @@ main { padding: 40px 0; }
 }
 
 /* =============================================
-   FILTROS
+   FILTROS - MELHORADO PARA MOBILE
    ============================================= */
 .filters {
     text-align: center;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
 
 .filter-btn {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 10px 22px;
-    margin: 6px;
-    border-radius: 30px;
+    padding: 8px 16px;
+    margin: 0;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    flex: 0 1 auto;
 }
 
 .filter-btn:hover, .filter-btn.active {
@@ -197,13 +215,18 @@ main { padding: 40px 0; }
     transform: translateY(-2px);
 }
 
+.filter-btn.active {
+    background: linear-gradient(135deg, #00c6ff, #007bff);
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+}
+
 /* =============================================
-   GRID DE PRODUTOS — 3 a 4 por linha
+   GRID DE PRODUTOS
    ============================================= */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 15px;
 }
 
 @media (max-width: 1200px) {
@@ -215,22 +238,26 @@ main { padding: 40px 0; }
 }
 
 @media (max-width: 500px) {
-    .product-grid { grid-template-columns: 1fr; }
+    .product-grid { 
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
 /* =============================================
-   CARD DE PRODUTO — imagem grande, card compacto
+   CARD DE PRODUTO - MELHORADO
    ============================================= */
 .product-card {
     background-color: #1a2a3a;
     border: 1px solid #3a4a5a;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    height: 100%;
 }
 
 .product-card:hover {
@@ -238,7 +265,6 @@ main { padding: 40px 0; }
     box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
-/* Imagem principal ocupa boa parte do card */
 .product-card .card-image {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -253,12 +279,11 @@ main { padding: 40px 0; }
     transform: scale(1.03);
 }
 
-/* Informações abaixo da imagem */
 .product-card .card-body {
-    padding: 12px 14px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     flex: 1;
 }
 
@@ -270,13 +295,22 @@ main { padding: 40px 0; }
 }
 
 .product-card .description {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: #b0c0d0;
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    line-height: 1.4;
+    max-height: 2.8em;
+    transition: max-height 0.3s ease;
+}
+
+.product-card .description.expanded {
+    -webkit-line-clamp: unset;
+    max-height: none;
+    display: block;
 }
 
 .product-card .price {
@@ -290,10 +324,10 @@ main { padding: 40px 0; }
     background-color: #ffc107;
     color: #333;
     border: none;
-    padding: 9px 14px;
-    border-radius: 0 0 10px 10px;
+    padding: 10px 12px;
+    border-radius: 0 0 12px 12px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: bold;
     transition: background-color 0.3s ease;
     display: flex;
@@ -304,7 +338,38 @@ main { padding: 40px 0; }
     margin-top: auto;
 }
 
-.add-to-interest:hover { background-color: #e0a800; }
+.add-to-interest:hover { 
+    background-color: #e0a800; 
+}
+
+/* =============================================
+   BOTÃO EXPANDIR DESCRIÇÃO
+   ============================================= */
+.expand-description-btn {
+    background: none;
+    border: 1px solid #00c6ff;
+    color: #00c6ff;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    width: fit-content;
+    align-self: flex-start;
+}
+
+.expand-description-btn:hover {
+    background: #00c6ff;
+    color: #051131;
+}
+
+.expand-description-btn i {
+    font-size: 0.7rem;
+}
 
 /* =============================================
    LIGHTBOX
@@ -331,12 +396,12 @@ main { padding: 40px 0; }
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    max-width: 90vw;
-    max-height: 90vh;
+    max-width: 95vw;
+    max-height: 95vh;
 }
 
 #lightbox-img {
-    max-width: 80vw;
+    max-width: 90vw;
     max-height: 70vh;
     border-radius: 8px;
     box-shadow: 0 0 40px rgba(0,0,0,0.8);
@@ -350,7 +415,7 @@ main { padding: 40px 0; }
 
 #lightbox-close {
     position: absolute;
-    top: -40px;
+    top: -35px;
     right: 0;
     background: none;
     border: none;
@@ -358,40 +423,43 @@ main { padding: 40px 0; }
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
+    padding: 5px;
 }
 
 #lightbox-prev, #lightbox-next {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15);
     border: none;
     color: #fff;
-    font-size: 1.5rem;
-    padding: 15px 18px;
+    font-size: 1.3rem;
+    padding: 12px 15px;
     border-radius: 50%;
     cursor: pointer;
     transition: background 0.2s;
+    z-index: 2002;
 }
 
-#lightbox-prev { left: 20px; }
-#lightbox-next { right: 20px; }
-#lightbox-prev:hover, #lightbox-next:hover { background: rgba(255,255,255,0.25); }
+#lightbox-prev { left: 10px; }
+#lightbox-next { right: 10px; }
+#lightbox-prev:hover, #lightbox-next:hover { background: rgba(255,255,255,0.3); }
 
 #lightbox-zoom-controls {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255,255,255,0.1);
-    padding: 8px 18px;
+    background: rgba(255,255,255,0.15);
+    padding: 6px 15px;
     border-radius: 30px;
+    margin-top: 10px;
 }
 
 #lightbox-zoom-controls button {
     background: none;
     border: none;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 6px;
@@ -403,8 +471,8 @@ main { padding: 40px 0; }
 #zoom-level {
     color: #00c6ff;
     font-weight: bold;
-    font-size: 0.95rem;
-    min-width: 48px;
+    font-size: 0.9rem;
+    min-width: 45px;
     text-align: center;
 }
 
@@ -415,33 +483,38 @@ footer {
     background: linear-gradient(to bottom, #2B3550, #051131);
     color: #a0a0a0;
     text-align: center;
-    padding: 1.5rem 0;
-    margin-top: 60px;
+    padding: 1.2rem 0;
+    margin-top: 40px;
     border-top: 1px solid #2a3a4a;
 }
 
-footer p { margin: 0; font-size: 0.95rem; }
+footer p { 
+    margin: 0; 
+    font-size: 0.85rem; 
+}
 
 /* =============================================
-   MODAIS
+   MODAIS - MELHORADO
    ============================================= */
 .modal {
     position: fixed;
     z-index: 1000;
     left: 0; top: 0;
     width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.75);
+    background-color: rgba(0,0,0,0.85);
+    display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px;
 }
 
 .modal-content {
     background: linear-gradient(to bottom, #0d1f3c, #1a2a4a);
     border: 1px solid #3a4a5a;
-    border-radius: 12px;
-    padding: 30px;
-    width: 90%;
-    max-width: 520px;
+    border-radius: 15px;
+    padding: 25px 20px;
+    width: 100%;
+    max-width: 500px;
     max-height: 85vh;
     overflow-y: auto;
     position: relative;
@@ -451,18 +524,19 @@ footer p { margin: 0; font-size: 0.95rem; }
 }
 
 @keyframes fadeInModal {
-    from { opacity: 0; transform: translateY(-25px); }
+    from { opacity: 0; transform: translateY(-20px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 .close-modal {
     position: absolute;
     top: 12px; right: 18px;
-    font-size: 26px;
+    font-size: 28px;
     font-weight: bold;
     color: #aaa;
     cursor: pointer;
     transition: color 0.3s;
+    line-height: 1;
 }
 
 .close-modal:hover { color: #fff; }
@@ -470,55 +544,54 @@ footer p { margin: 0; font-size: 0.95rem; }
 .modal-content h2 {
     color: #00c6ff;
     text-align: center;
-    margin: 0 0 22px 0;
-    font-size: 1.6rem;
+    margin: 0 0 20px 0;
+    font-size: 1.5rem;
+    padding-right: 30px;
+}
+
+.modal-content h2 i {
+    margin-right: 8px;
 }
 
 .items-summary-list {
     list-style: none;
-    padding: 0; margin: 0 0 15px 0;
+    padding: 0;
+    margin: 0 0 15px 0;
     border: 1px solid #3a4a5a;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
-    max-height: 220px;
+    max-height: 300px;
     overflow-y: auto;
 }
 
 .items-summary-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
+    padding: 12px;
     border-bottom: 1px solid #2a3a5a;
     background: rgba(255,255,255,0.03);
-    flex-wrap: wrap;
-    gap: 8px;
 }
 
-.items-summary-list li:last-child { border-bottom: none; }
+.items-summary-list li:last-child { 
+    border-bottom: none; 
+}
 
 .items-summary-list li.empty-list {
-    justify-content: center;
+    text-align: center;
     color: #a0a0a0;
     font-style: italic;
-    padding: 18px;
+    padding: 20px;
 }
 
-.item-name { flex: 1; color: #f0f0f0; font-size: 0.95rem; }
+.item-name { 
+    color: #f0f0f0; 
+    font-size: 0.95rem; 
+    font-weight: 500;
+}
 
 .item-controls {
     display: flex;
     align-items: center;
-    gap: 7px;
-    flex-shrink: 0;
-}
-
-.item-quantity {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #00c6ff;
-    min-width: 22px;
-    text-align: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .qty-btn {
@@ -526,7 +599,8 @@ footer p { margin: 0; font-size: 0.95rem; }
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 26px; height: 26px;
+    width: 32px;
+    height: 32px;
     font-size: 0.8rem;
     cursor: pointer;
     display: flex;
@@ -542,7 +616,8 @@ footer p { margin: 0; font-size: 0.95rem; }
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 26px; height: 26px;
+    width: 32px;
+    height: 32px;
     font-size: 0.8rem;
     cursor: pointer;
     display: flex;
@@ -562,19 +637,24 @@ footer p { margin: 0; font-size: 0.95rem; }
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.3);
 }
 
-.modal-action-btn:hover { background: #e0a800; transform: translateY(-2px); }
+.modal-action-btn:hover { 
+    background: #e0a800; 
+    transform: translateY(-2px); 
+}
 
-.form-section { margin-bottom: 14px; }
+.form-section { 
+    margin-bottom: 15px; 
+}
 
 .modal-content label {
     display: block;
@@ -591,16 +671,13 @@ footer p { margin: 0; font-size: 0.95rem; }
     width: 100%;
     padding: 10px 12px;
     border: 1px solid #4a5a6a;
-    border-radius: 6px;
+    border-radius: 8px;
     background: rgba(255,255,255,0.05);
     color: #f0f0f0;
     font-size: 0.95rem;
     box-sizing: border-box;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
 }
-
-.modal-content input::placeholder,
-.modal-content textarea::placeholder { color: #6a7a8a; }
 
 .modal-content input:focus,
 .modal-content textarea:focus {
@@ -609,7 +686,10 @@ footer p { margin: 0; font-size: 0.95rem; }
     box-shadow: 0 0 6px rgba(0,198,255,0.3);
 }
 
-.modal-content textarea { resize: vertical; }
+.modal-content textarea { 
+    resize: vertical;
+    min-height: 80px;
+}
 
 .modal-content button[type="submit"] {
     background: #007bff;
@@ -620,13 +700,13 @@ footer p { margin: 0; font-size: 0.95rem; }
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: 100%;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .modal-content button[type="submit"]:hover {
@@ -635,66 +715,82 @@ footer p { margin: 0; font-size: 0.95rem; }
 }
 
 /* =============================================
-   BOTÕES FLUTUANTES
+   BOTÕES FLUTUANTES - MELHORADO
    ============================================= */
 #viewInterestsBtn {
     display: none;
     position: fixed;
-    bottom: 90px; right: 20px;
-    background: #ffc107;
+    bottom: 80px;
+    right: 15px;
+    background: linear-gradient(135deg, #ffc107, #ff9800);
     color: #333;
-    border: none;
+    border: 2px solid #00c6ff;
     border-radius: 30px;
-    padding: 12px 20px;
-    font-size: 0.95rem;
+    padding: 10px 18px;
+    font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    transition: background 0.3s, transform 0.2s;
-    z-index: 998;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transition: all 0.3s;
+    z-index: 999;
     align-items: center;
     gap: 8px;
+    max-width: calc(100% - 30px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#viewInterestsBtn:hover { background: #e0a800; transform: translateY(-2px); }
+#viewInterestsBtn:hover {
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,198,255,0.5);
+}
 
 #backToTopBtn {
     display: none;
     position: fixed;
-    bottom: 20px; right: 20px;
+    bottom: 20px;
+    right: 15px;
     background: #007bff;
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 48px; height: 48px;
+    width: 44px;
+    height: 44px;
     font-size: 1.2rem;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    transition: background 0.3s, transform 0.2s;
-    z-index: 998;
+    transition: all 0.3s;
+    z-index: 999;
     align-items: center;
     justify-content: center;
 }
 
-#backToTopBtn:hover { background: #0056b3; transform: translateY(-2px); }
+#backToTopBtn:hover { 
+    background: #0056b3; 
+    transform: translateY(-3px); 
+}
 
 /* =============================================
    NOTIFICAÇÕES
    ============================================= */
 .notification {
     position: fixed;
-    bottom: 160px; right: 20px;
+    bottom: 140px;
+    right: 15px;
     padding: 12px 18px;
-    border-radius: 8px;
-    font-size: 0.95rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
     font-weight: bold;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     z-index: 1100;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    max-width: 280px;
+    transition: all 0.4s ease;
+    max-width: calc(100% - 30px);
+    word-break: break-word;
 }
 
 .notification.success { background: #28a745; }
@@ -702,212 +798,85 @@ footer p { margin: 0; font-size: 0.95rem; }
 .notification.show { opacity: 1; transform: translateY(0); }
 
 /* =============================================
-   RESPONSIVIDADE
+   PAGE INDICATOR
+   ============================================= */
+.page-indicator {
+    display: none;
+    text-align: center;
+    margin: 10px 0 20px;
+    padding: 8px 15px;
+    background: rgba(0, 198, 255, 0.1);
+    border-radius: 30px;
+    color: #00c6ff;
+    font-size: 0.85rem;
+    border: 1px solid rgba(0, 198, 255, 0.3);
+}
+
+.page-indicator i {
+    margin: 0 5px;
+}
+
+/* =============================================
+   RESPONSIVIDADE MOBILE - COMPLETO
    ============================================= */
 @media (max-width: 768px) {
-    header h2 { font-size: 1.8rem; }
-    header nav ul { flex-direction: column; gap: 10px; }
-    header nav ul li a { width: 80%; max-width: 300px; margin: 0 auto; justify-content: center; }
-    .hero h2 { font-size: 2rem; }
-    #contato h2, #catalogo h2 { font-size: 1.8rem; }
-    .modal-content { padding: 20px; }
-    #viewInterestsBtn { bottom: 75px; right: 12px; font-size: 0.85rem; padding: 10px 16px; }
-    #backToTopBtn { bottom: 14px; right: 12px; width: 42px; height: 42px; }
-    #lightbox-prev { left: 8px; }
-    #lightbox-next { right: 8px; }
-}
-/* =============================================
-   NOVAS REGRAS PARA LISTA DE INTERESSES COM PREÇOS
-   ============================================= */
-
-/* Estilo aprimorado para itens da lista */
-.items-summary-list li {
-    display: flex;
-    flex-direction: column;
-    padding: 12px 14px;
-    border-bottom: 1px solid #2a3a5a;
-    background: rgba(255,255,255,0.03);
-    gap: 8px;
-}
-
-.items-summary-list li:last-child {
-    border-bottom: none;
-}
-
-/* Preço unitário */
-.item-price {
-    font-size: 0.95rem;
-    color: #28a745;
-    font-weight: bold;
-}
-
-/* Total por item */
-.item-total {
-    font-size: 0.95rem;
-    color: #ffc107;
-    font-weight: bold;
-    margin-left: 10px;
-}
-
-/* Linha do valor total geral */
-.total-row {
-    background: linear-gradient(to right, rgba(0,198,255,0.15), rgba(255,193,7,0.15));
-    border-top: 2px solid #00c6ff;
-    border-bottom: 2px solid #ffc107;
-}
-
-/* Ajuste para mobile */
-@media (max-width: 500px) {
-    .items-summary-list li > div {
-        flex-direction: column;
-        align-items: flex-start !important;
-        gap: 8px;
+    /* Header */
+    header h2 { 
+        font-size: 1.5rem; 
     }
     
-    .item-controls {
+    .logo {
+        width: 100px;
+        height: 100px;
+    }
+    
+    header nav ul { 
+        flex-direction: column; 
+        gap: 8px; 
         width: 100%;
+        padding: 0 15px;
+    }
+    
+    header nav ul li a { 
+        width: 100%; 
+        max-width: none; 
+        margin: 0; 
         justify-content: center;
-    }
-    
-    .item-total {
-        margin-left: 0;
-        align-self: flex-end;
-    }
-
-/* Estilo para o botão Ver Interesses com valor total */
-#viewInterestsBtn {
-    background: linear-gradient(135deg, #ffc107, #ff9800);
-    color: #333;
-    font-weight: bold;
-    padding: 12px 22px;
-    border: 2px solid #00c6ff;
-    box-shadow: 0 4px 15px rgba(0,198,255,0.3);
-    transition: all 0.3s ease;
-}
-
-#viewInterestsBtn:hover {
-    background: linear-gradient(135deg, #ff9800, #ffc107);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,198,255,0.5);
-/* =============================================
-   MELHORIAS PARA MOBILE E CORREÇÕES
-   ============================================= */
-
-/* Melhorar visibilidade do botão Ver Interesses */
-#viewInterestsBtn {
-    background: linear-gradient(135deg, #ffc107, #ff9800);
-    color: #333;
-    font-weight: bold;
-    padding: 12px 22px;
-    border: 2px solid #00c6ff;
-    box-shadow: 0 4px 15px rgba(0,198,255,0.3);
-    transition: all 0.3s ease;
-    z-index: 999;
-}
-
-#viewInterestsBtn:hover {
-    background: linear-gradient(135deg, #ff9800, #ffc107);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,198,255,0.5);
-}
-
-/* Ajustes para o modal em mobile */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 95%;
-        padding: 15px;
-        max-height: 80vh;
-    }
-    
-    .items-summary-list {
-        max-height: 50vh;
-    }
-    
-    .items-summary-list li > div {
-        gap: 10px;
-    }
-    
-    .item-controls {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    #viewInterestsBtn {
-        bottom: 80px;
-        right: 10px;
         padding: 10px 15px;
         font-size: 0.9rem;
     }
-}
-
-/* Indicador visual de que a página rolou */
-.catalogo-section {
-    scroll-margin-top: 20px;
-}
-
-/* Melhorar visualização dos preços no modal */
-.item-price {
-    font-size: 1rem;
-    background: rgba(40, 167, 69, 0.1);
-    padding: 3px 8px;
-    border-radius: 15px;
-}
-
-.item-total {
-    font-size: 1rem;
-    background: rgba(255, 193, 7, 0.1);
-    padding: 3px 8px;
-    border-radius: 15px;
-}
-
-/* Animação suave para scroll */
-html {
-    scroll-behavior: smooth;
-}
-   /* =============================================
-   DESCRIÇÕES EXPANSÍVEIS
-   ============================================= */
-.product-card .description {
-    font-size: 0.82rem;
-    color: #b0c0d0;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.expand-description-btn {
-    background: none;
-    border: 1px solid #00c6ff;
-    color: #00c6ff;
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 15px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-    width: fit-content;
-}
-
-.expand-description-btn:hover {
-    background: #00c6ff;
-    color: #051131;
-}
-
-/* =============================================
-   MELHORIAS PARA MOBILE
-   ============================================= */
-@media (max-width: 768px) {
-    /* Ajustes nos cards para mobile */
-    .product-card {
-        margin-bottom: 15px;
+    
+    /* Hero */
+    .hero { 
+        padding: 30px 15px; 
     }
     
+    .hero h2 { 
+        font-size: 1.6rem; 
+    }
+    
+    .hero p { 
+        font-size: 0.95rem; 
+    }
+    
+    /* Títulos */
+    #contato h2, #catalogo h2 { 
+        font-size: 1.6rem; 
+        margin-bottom: 20px;
+    }
+    
+    /* Filtros */
+    .filters {
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    /* Cards */
     .product-card .card-body {
         padding: 10px;
     }
@@ -918,58 +887,152 @@ html {
     
     .product-card .description {
         font-size: 0.8rem;
-        -webkit-line-clamp: 3; /* Mostrar 3 linhas em mobile */
+        -webkit-line-clamp: 3;
     }
     
+    .product-card .price {
+        font-size: 1rem;
+    }
+    
+    .add-to-interest {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    
+    /* Expand button */
     .expand-description-btn {
         font-size: 0.7rem;
-        padding: 3px 6px;
+        padding: 3px 8px;
     }
     
-    /* Melhorar botões de filtro para mobile */
-    .filters {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 5px;
+    /* Page indicator */
+    .page-indicator {
+        display: block;
+    }
+    
+    /* Modal */
+    .modal-content {
+        padding: 20px 15px;
+        max-height: 80vh;
+    }
+    
+    .items-summary-list {
+        max-height: 250px;
+    }
+    
+    .item-controls {
+        gap: 6px;
+    }
+    
+    .qty-btn, .remove-item-btn {
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* Botões flutuantes */
+    #viewInterestsBtn {
+        bottom: 70px;
+        right: 10px;
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+    
+    #backToTopBtn {
+        bottom: 15px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    /* Lightbox */
+    #lightbox-prev { 
+        left: 5px; 
+        padding: 10px 12px;
+        font-size: 1.1rem;
+    }
+    
+    #lightbox-next { 
+        right: 5px; 
+        padding: 10px 12px;
+        font-size: 1.1rem;
+    }
+    
+    #lightbox-close {
+        top: -30px;
+        font-size: 1.8rem;
+    }
+    
+    #lightbox-zoom-controls {
+        padding: 4px 12px;
+    }
+    
+    /* Notification */
+    .notification {
+        bottom: 130px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        text-align: center;
+    }
+}
+
+/* =============================================
+   AJUSTES PARA TELAS MUITO PEQUENAS
+   ============================================= */
+@media (max-width: 380px) {
+    header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .logo {
+        width: 80px;
+        height: 80px;
     }
     
     .filter-btn {
-        padding: 8px 15px;
-        font-size: 0.85rem;
-        margin: 3px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
     }
     
-    /* Indicador de página para mobile */
-    .page-indicator {
-        display: block;
-        text-align: center;
-        margin: 10px 0;
-        padding: 8px;
-        background: rgba(0, 198, 255, 0.1);
-        border-radius: 20px;
-        color: #00c6ff;
-        font-size: 0.85rem;
+    .product-card h3 {
+        font-size: 0.9rem;
+    }
+    
+    .product-card .price {
+        font-size: 0.95rem;
+    }
+    
+    #viewInterestsBtn {
+        font-size: 0.8rem;
+        padding: 6px 12px;
     }
 }
 
 /* =============================================
-   INDICADOR DE PÁGINA (opcional)
+   PREÇOS E VALORES NO MODAL
    ============================================= */
-.page-indicator {
-    display: none;
+.item-price {
+    color: #28a745;
+    font-weight: bold;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 0.9rem;
 }
 
-@media (max-width: 768px) {
-    .page-indicator {
-        display: block;
-    }
+.item-total {
+    color: #ffc107;
+    font-weight: bold;
+    background: rgba(255, 193, 7, 0.1);
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 0.9rem;
 }
 
 /* =============================================
-   BOTÕES DE FILTRO ATIVOS
+   SCROLL SUAVE
    ============================================= */
-.filter-btn.active {
-    background: linear-gradient(135deg, #00c6ff, #007bff);
-    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+html {
+    scroll-behavior: smooth;
 }
