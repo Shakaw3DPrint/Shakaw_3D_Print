@@ -51,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         (filter === 'all' || card.dataset.category === filter)
                         ? 'flex' : 'none';
                 });
+                
+                // Rolar suavemente para o início do catálogo (melhoria para mobile)
+                const catalogoSection = document.getElementById('catalogo');
+                if (catalogoSection) {
+                    catalogoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
         });
     }
@@ -153,13 +159,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const addBtn = e.target.closest('.add-to-interest');
             if (addBtn) {
+                e.stopPropagation(); // Evitar propagação do evento
+                
                 // Capturar o preço do produto
-                const priceElement = addBtn.closest('.product-card').querySelector('.price');
+                const cardBody = addBtn.closest('.product-card').querySelector('.card-body');
+                const priceElement = cardBody ? cardBody.querySelector('.price') : null;
                 let price = 0;
                 
                 // Extrair o valor numérico do preço
                 if (priceElement) {
-                    const priceText = priceElement.textContent;
+                    const priceText = priceElement.textContent.trim();
+                    console.log('Texto do preço:', priceText); // Para debug
+                    
                     // Se for "Sob consulta", definir como 0
                     if (priceText.includes('Sob consulta')) {
                         price = 0;
@@ -168,7 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         const priceMatch = priceText.match(/R\$\s*([\d.,]+)/);
                         if (priceMatch) {
                             // Converter para número (substituir vírgula por ponto)
-                            price = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.'));
+                            let priceStr = priceMatch[1].replace(/\./g, '').replace(',', '.');
+                            price = parseFloat(priceStr);
+                            console.log('Preço convertido:', price); // Para debug
                         }
                     }
                 }
@@ -195,12 +208,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NOVA FUNÇÃO: Calcular valor total da lista
     const getTotalValue = () => {
-        return interestList.reduce((total, item) => total + (item.price * item.quantity), 0);
+        return interestList.reduce((total, item) => {
+            const itemPrice = item.price || 0;
+            return total + (itemPrice * item.quantity);
+        }, 0);
     };
 
     // NOVA FUNÇÃO: Formatar valor em reais
     const formatCurrency = (value) => {
-        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        if (isNaN(value) || value === null || value === undefined) {
+            return 'R$ 0,00';
+        }
+        return value.toLocaleString('pt-BR', { 
+            style: 'currency', 
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
     };
 
     const updateViewInterestsButton = () => {
@@ -213,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total}) - ${formatCurrency(totalValue)}`;
         } else {
             viewInterestsBtn.style.display = 'none';
+            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (0)`;
         }
     };
 
@@ -222,17 +247,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (existing) {
             existing.quantity += 1;
             saveInterestList();
-            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency(existing.price * existing.quantity)}) na lista!`, 'success');
+            const itemTotal = (existing.price || 0) * existing.quantity;
+            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency(itemTotal)}) na lista!`, 'success');
         } else {
             interestList.push({ 
                 id: productId, 
                 name: productName, 
-                price: productPrice, 
+                price: productPrice || 0, 
                 quantity: 1 
             });
             saveInterestList();
-            showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice)})`, 'success');
+            showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice || 0)})`, 'success');
         }
+        renderInterestSummary(); // Atualizar o modal se estiver aberto
     };
 
     const increaseQuantity = (productId) => {
@@ -286,36 +313,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (interestList.length === 0) {
             selectedItemsList.innerHTML = '<li class="empty-list">Sua lista está vazia.</li>';
             if (registerInterestsBtn) registerInterestsBtn.style.display = 'none';
-            if (interestSummaryModal) interestSummaryModal.style.display = 'none';
             return;
         }
 
         // Criar elementos da lista
         interestList.forEach(item => {
             const li = document.createElement('li');
-            const itemTotal = item.price * item.quantity;
+            const itemPrice = item.price || 0;
+            const itemTotal = itemPrice * item.quantity;
             
             li.innerHTML = `
-                <div style="display: flex; flex-direction: column; width: 100%; gap: 5px;">
+                <div style="display: flex; flex-direction: column; width: 100%; gap: 8px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                         <span class="item-name"><strong>${item.name}</strong></span>
-                        <span class="item-price" style="color: #28a745; font-weight: bold;">${formatCurrency(item.price)}</span>
+                        <span class="item-price" style="color: #28a745; font-weight: bold; font-size: 1rem;">${formatCurrency(itemPrice)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div class="item-controls">
-                            <button class="qty-btn decrease-btn" data-product-id="${item.id}">
+                        <div class="item-controls" style="display: flex; gap: 8px; align-items: center;">
+                            <button class="qty-btn decrease-btn" data-product-id="${item.id}" style="width: 30px; height: 30px;">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <span class="item-quantity">${item.quantity}</span>
-                            <button class="qty-btn increase-btn" data-product-id="${item.id}">
+                            <span class="item-quantity" style="font-size: 1rem; min-width: 25px; text-align: center;">${item.quantity}</span>
+                            <button class="qty-btn increase-btn" data-product-id="${item.id}" style="width: 30px; height: 30px;">
                                 <i class="fas fa-plus"></i>
                             </button>
-                            <button class="remove-item-btn" data-product-id="${item.id}">
+                            <button class="remove-item-btn" data-product-id="${item.id}" style="width: 30px; height: 30px;">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
-                        <span class="item-total" style="color: #ffc107; font-weight: bold;">
-                            Total: ${formatCurrency(itemTotal)}
+                        <span class="item-total" style="color: #ffc107; font-weight: bold; font-size: 1rem;">
+                            ${formatCurrency(itemTotal)}
                         </span>
                     </div>
                 </div>`;
@@ -326,10 +353,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalLi = document.createElement('li');
         totalLi.style.backgroundColor = 'rgba(0, 198, 255, 0.1)';
         totalLi.style.fontWeight = 'bold';
+        totalLi.style.borderTop = '2px solid #00c6ff';
         totalLi.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0;">
-                <span style="color: #00c6ff; font-size: 1.1rem;">VALOR TOTAL GERAL:</span>
-                <span style="color: #ffc107; font-size: 1.2rem;">${formatCurrency(getTotalValue())}</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 0;">
+                <span style="color: #00c6ff; font-size: 1.1rem; font-weight: bold;">VALOR TOTAL GERAL:</span>
+                <span style="color: #ffc107; font-size: 1.2rem; font-weight: bold;">${formatCurrency(getTotalValue())}</span>
             </div>
         `;
         selectedItemsList.appendChild(totalLi);
@@ -368,9 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let totalGeral = 0;
             
             interestList.forEach((item, i) => {
-                const itemTotal = item.price * item.quantity;
+                const itemPrice = item.price || 0;
+                const itemTotal = itemPrice * item.quantity;
                 totalGeral += itemTotal;
-                const priceFormatted = formatCurrency(item.price);
+                const priceFormatted = formatCurrency(itemPrice);
                 const totalFormatted = formatCurrency(itemTotal);
                 
                 itemsText += `${i + 1}. ${item.name}\n`;
@@ -416,6 +445,22 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+    // Adicionar smooth scroll para links de navegação (melhoria mobile)
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Se for link interno (mesma página)
+            if (link.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+            // Para links externos, deixar o comportamento padrão
+        });
+    });
 
     updateViewInterestsButton();
 });
