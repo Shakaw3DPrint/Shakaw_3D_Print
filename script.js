@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ── Estado
+    // ── Estado (modificado para incluir preço)
     const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
 
     // ── Elementos
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Clique na imagem principal do card abre o lightbox
+    // Clique na imagem principal do card abre o lightbox (modificado para capturar preço)
     if (productGrid) {
         productGrid.addEventListener('click', (e) => {
             const cardImg = e.target.closest('.card-image');
@@ -153,13 +153,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const addBtn = e.target.closest('.add-to-interest');
             if (addBtn) {
-                addProductToInterest(addBtn.dataset.productId, addBtn.dataset.productName);
+                // Capturar o preço do produto
+                const priceElement = addBtn.closest('.product-card').querySelector('.price');
+                let price = 0;
+                
+                // Extrair o valor numérico do preço
+                if (priceElement) {
+                    const priceText = priceElement.textContent;
+                    // Se for "Sob consulta", definir como 0
+                    if (priceText.includes('Sob consulta')) {
+                        price = 0;
+                    } else {
+                        // Extrair números do preço (formato R$ 120,00)
+                        const priceMatch = priceText.match(/R\$\s*([\d.,]+)/);
+                        if (priceMatch) {
+                            // Converter para número (substituir vírgula por ponto)
+                            price = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.'));
+                        }
+                    }
+                }
+                
+                addProductToInterest(
+                    addBtn.dataset.productId, 
+                    addBtn.dataset.productName,
+                    price
+                );
             }
         });
     }
 
     // =============================================
-    // LISTA DE INTERESSES
+    // LISTA DE INTERESSES (MODIFICADO PARA INCLUIR PREÇO)
     // =============================================
     const saveInterestList = () => {
         localStorage.setItem('shakawInterestList', JSON.stringify(interestList));
@@ -169,40 +193,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const getTotalItems = () =>
         interestList.reduce((total, item) => total + item.quantity, 0);
 
+    // NOVA FUNÇÃO: Calcular valor total da lista
+    const getTotalValue = () => {
+        return interestList.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
+
+    // NOVA FUNÇÃO: Formatar valor em reais
+    const formatCurrency = (value) => {
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
     const updateViewInterestsButton = () => {
         if (!viewInterestsBtn) return;
         const total = getTotalItems();
+        const totalValue = getTotalValue();
+        
         if (total > 0) {
             viewInterestsBtn.style.display = 'flex';
-            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total})`;
+            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total}) - ${formatCurrency(totalValue)}`;
         } else {
             viewInterestsBtn.style.display = 'none';
         }
     };
 
-    const addProductToInterest = (productId, productName) => {
+    // MODIFICADO: Incluir preço
+    const addProductToInterest = (productId, productName, productPrice) => {
         const existing = interestList.find(item => item.id === productId);
         if (existing) {
             existing.quantity += 1;
             saveInterestList();
-            showNotification(`"${productName}" — ${existing.quantity} un. na lista!`, 'success');
+            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency(existing.price * existing.quantity)}) na lista!`, 'success');
         } else {
-            interestList.push({ id: productId, name: productName, quantity: 1 });
+            interestList.push({ 
+                id: productId, 
+                name: productName, 
+                price: productPrice, 
+                quantity: 1 
+            });
             saveInterestList();
-            showNotification(`"${productName}" adicionado!`, 'success');
+            showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice)})`, 'success');
         }
     };
 
     const increaseQuantity = (productId) => {
         const item = interestList.find(i => i.id === productId);
-        if (item) { item.quantity += 1; saveInterestList(); renderInterestSummary(); }
+        if (item) { 
+            item.quantity += 1; 
+            saveInterestList(); 
+            renderInterestSummary(); 
+        }
     };
 
     const decreaseQuantity = (productId) => {
         const item = interestList.find(i => i.id === productId);
         if (item) {
             item.quantity -= 1;
-            if (item.quantity <= 0) interestList.splice(interestList.findIndex(i => i.id === productId), 1);
+            if (item.quantity <= 0) {
+                interestList.splice(interestList.findIndex(i => i.id === productId), 1);
+            }
             saveInterestList();
             renderInterestSummary();
         }
@@ -210,7 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const removeProductFromInterest = (productId) => {
         const index = interestList.findIndex(i => i.id === productId);
-        if (index > -1) { interestList.splice(index, 1); saveInterestList(); renderInterestSummary(); }
+        if (index > -1) { 
+            interestList.splice(index, 1); 
+            saveInterestList(); 
+            renderInterestSummary(); 
+        }
     };
 
     // ── Notificações
@@ -220,10 +272,13 @@ document.addEventListener('DOMContentLoaded', () => {
         n.textContent = message;
         document.body.appendChild(n);
         setTimeout(() => n.classList.add('show'), 10);
-        setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 3000);
+        setTimeout(() => { 
+            n.classList.remove('show'); 
+            setTimeout(() => n.remove(), 400); 
+        }, 3000);
     };
 
-    // ── Modal 1: Resumo
+    // ── Modal 1: Resumo (MODIFICADO para incluir preços e totais)
     const renderInterestSummary = () => {
         if (!selectedItemsList) return;
         selectedItemsList.innerHTML = '';
@@ -235,24 +290,49 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Criar elementos da lista
         interestList.forEach(item => {
             const li = document.createElement('li');
+            const itemTotal = item.price * item.quantity;
+            
             li.innerHTML = `
-                <span class="item-name">${item.name}</span>
-                <div class="item-controls">
-                    <button class="qty-btn decrease-btn" data-product-id="${item.id}">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <span class="item-quantity">${item.quantity}</span>
-                    <button class="qty-btn increase-btn" data-product-id="${item.id}">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="remove-item-btn" data-product-id="${item.id}">
-                        <i class="fas fa-times"></i>
-                    </button>
+                <div style="display: flex; flex-direction: column; width: 100%; gap: 5px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <span class="item-name"><strong>${item.name}</strong></span>
+                        <span class="item-price" style="color: #28a745; font-weight: bold;">${formatCurrency(item.price)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="item-controls">
+                            <button class="qty-btn decrease-btn" data-product-id="${item.id}">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="item-quantity">${item.quantity}</span>
+                            <button class="qty-btn increase-btn" data-product-id="${item.id}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="remove-item-btn" data-product-id="${item.id}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <span class="item-total" style="color: #ffc107; font-weight: bold;">
+                            Total: ${formatCurrency(itemTotal)}
+                        </span>
+                    </div>
                 </div>`;
             selectedItemsList.appendChild(li);
         });
+
+        // Adicionar linha com valor total geral
+        const totalLi = document.createElement('li');
+        totalLi.style.backgroundColor = 'rgba(0, 198, 255, 0.1)';
+        totalLi.style.fontWeight = 'bold';
+        totalLi.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0;">
+                <span style="color: #00c6ff; font-size: 1.1rem;">VALOR TOTAL GERAL:</span>
+                <span style="color: #ffc107; font-size: 1.2rem;">${formatCurrency(getTotalValue())}</span>
+            </div>
+        `;
+        selectedItemsList.appendChild(totalLi);
 
         if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
     };
@@ -281,13 +361,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Modal 2: Formulário
+    // ── Modal 2: Formulário (MODIFICADO para incluir valores no email)
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
             let itemsText = '';
+            let totalGeral = 0;
+            
             interestList.forEach((item, i) => {
-                itemsText += `${i + 1}. ${item.name} - Quantidade: ${item.quantity}\n`;
+                const itemTotal = item.price * item.quantity;
+                totalGeral += itemTotal;
+                const priceFormatted = formatCurrency(item.price);
+                const totalFormatted = formatCurrency(itemTotal);
+                
+                itemsText += `${i + 1}. ${item.name}\n`;
+                itemsText += `   Preço unitário: ${priceFormatted}\n`;
+                itemsText += `   Quantidade: ${item.quantity}\n`;
+                itemsText += `   Total do item: ${totalFormatted}\n\n`;
             });
+            
+            itemsText += `================================\n`;
+            itemsText += `VALOR TOTAL GERAL: ${formatCurrency(totalGeral)}`;
+            
             if (itemsDataInput) itemsDataInput.value = itemsText;
             interestSummaryModal.style.display = 'none';
             contactFormModal.style.display = 'flex';
