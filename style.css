@@ -1036,3 +1036,39 @@ footer p {
 html {
     scroll-behavior: smooth;
 }
+
+/* =============================================
+   AJUSTES ADICIONAIS PARA MOBILE
+   ============================================= */
+@media (max-width: 768px) {
+    .product-card .description {
+        -webkit-line-clamp: 3; /* Mostra até 3 linhas antes de expandir */
+    }
+    
+    .expand-description-btn {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    
+    /* Melhor espaçamento dos filtros */
+    .filters {
+        padding: 0 5px;
+    }
+    
+    .filter-btn {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+    }
+}
+
+/* Garantir que o botão "Ver Interesses" não suma em telas muito pequenas */
+@media (max-width: 480px) {
+    #viewInterestsBtn {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+        bottom: 60px;
+        right: 5px;
+    }
+}
