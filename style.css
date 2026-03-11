@@ -716,3 +716,77 @@ footer p { margin: 0; font-size: 0.95rem; }
     #lightbox-prev { left: 8px; }
     #lightbox-next { right: 8px; }
 }
+/* =============================================
+   NOVAS REGRAS PARA LISTA DE INTERESSES COM PREÇOS
+   ============================================= */
+
+/* Estilo aprimorado para itens da lista */
+.items-summary-list li {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 14px;
+    border-bottom: 1px solid #2a3a5a;
+    background: rgba(255,255,255,0.03);
+    gap: 8px;
+}
+
+.items-summary-list li:last-child {
+    border-bottom: none;
+}
+
+/* Preço unitário */
+.item-price {
+    font-size: 0.95rem;
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Total por item */
+.item-total {
+    font-size: 0.95rem;
+    color: #ffc107;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Linha do valor total geral */
+.total-row {
+    background: linear-gradient(to right, rgba(0,198,255,0.15), rgba(255,193,7,0.15));
+    border-top: 2px solid #00c6ff;
+    border-bottom: 2px solid #ffc107;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 500px) {
+    .items-summary-list li > div {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 8px;
+    }
+    
+    .item-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .item-total {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+
+/* Estilo para o botão Ver Interesses com valor total */
+#viewInterestsBtn {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #333;
+    font-weight: bold;
+    padding: 12px 22px;
+    border: 2px solid #00c6ff;
+    box-shadow: 0 4px 15px rgba(0,198,255,0.3);
+    transition: all 0.3s ease;
+}
+
+#viewInterestsBtn:hover {
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,198,255,0.5);
+}
