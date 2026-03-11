@@ -40,9 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     // DETECTAR SE É MOBILE
     // =============================================
-    const isMobile = () => {
-        return window.innerWidth <= 768;
-    };
+    const isMobile = () => window.innerWidth <= 768;
 
     // =============================================
     // FILTROS
@@ -52,25 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => {
                 if (isMobile()) {
                     const filter = btn.dataset.filter;
-                    if (filter === 'all') {
-                        window.location.href = 'catalogo.html';
-                    } else {
-                        window.location.href = `catalogo.html?filter=${filter}`;
-                    }
+                    window.location.href = filter === 'all' ? 'catalogo.html' : `catalogo.html?filter=${filter}`;
                 } else {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     const filter = btn.dataset.filter;
                     productCards.forEach(card => {
-                        card.style.display =
-                            (filter === 'all' || card.dataset.category === filter)
-                            ? 'flex' : 'none';
+                        card.style.display = (filter === 'all' || card.dataset.category === filter) ? 'flex' : 'none';
                     });
-                    
-                    const catalogoSection = document.getElementById('catalogo');
-                    if (catalogoSection) {
-                        catalogoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
@@ -82,77 +70,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyFilterFromUrl = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const filter = urlParams.get('filter');
-        
         if (filter && filterBtns.length > 0 && productCards.length > 0) {
-            filterBtns.forEach(btn => {
-                if (btn.dataset.filter === filter) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
+            filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
             productCards.forEach(card => {
-                card.style.display =
-                    (filter === 'all' || card.dataset.category === filter)
-                    ? 'flex' : 'none';
+                card.style.display = (filter === 'all' || card.dataset.category === filter) ? 'flex' : 'none';
             });
         }
     };
-
-    if (window.location.pathname.includes('catalogo.html')) {
-        applyFilterFromUrl();
-    }
+    if (window.location.pathname.includes('catalogo.html')) applyFilterFromUrl();
 
     // =============================================
-    // DESCRIÇÕES EXPANSÍVEIS (CORRIGIDO)
+    // DESCRIÇÕES EXPANSÍVEIS
     // =============================================
     const createExpandableDescriptions = () => {
         document.querySelectorAll('.product-card').forEach(card => {
             const descriptionEl = card.querySelector('.description');
             const cardBody = card.querySelector('.card-body');
-            
-            // Remover botões existentes para não duplicar
             const existingBtn = card.querySelector('.expand-description-btn');
-            if (existingBtn) {
-                existingBtn.remove();
-            }
+            if (existingBtn) existingBtn.remove();
             
             if (descriptionEl && cardBody) {
-                // Remover classe expanded se existir
                 descriptionEl.classList.remove('expanded');
-                
-                // Verificar se precisa de botão (se tem mais de 2 linhas)
                 const lineHeight = parseInt(window.getComputedStyle(descriptionEl).lineHeight) || 20;
-                const maxHeight = lineHeight * 2.5; // 2.5 linhas
-                
-                // Forçar um pequeno delay para garantir que o scrollHeight esteja correto
                 setTimeout(() => {
-                    if (descriptionEl.scrollHeight > maxHeight) {
+                    if (descriptionEl.scrollHeight > lineHeight * 2.5) {
                         const expandBtn = document.createElement('button');
                         expandBtn.className = 'expand-description-btn';
                         expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
-                        
-                        // Inserir antes do preço
                         const priceEl = cardBody.querySelector('.price');
-                        if (priceEl) {
-                            cardBody.insertBefore(expandBtn, priceEl);
-                        } else {
-                            cardBody.appendChild(expandBtn);
-                        }
+                        if (priceEl) cardBody.insertBefore(expandBtn, priceEl);
+                        else cardBody.appendChild(expandBtn);
                         
                         let expanded = false;
-                        
                         expandBtn.addEventListener('click', (e) => {
                             e.stopPropagation();
-                            
-                            if (!expanded) {
-                                descriptionEl.classList.add('expanded');
-                                expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
-                            } else {
-                                descriptionEl.classList.remove('expanded');
-                                expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
-                            }
+                            descriptionEl.classList.toggle('expanded');
+                            expandBtn.innerHTML = expanded 
+                                ? '<i class="fas fa-chevron-down"></i> Ver mais' 
+                                : '<i class="fas fa-chevron-up"></i> Ver menos';
                             expanded = !expanded;
                         });
                     }
@@ -166,12 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     function openLightbox(images, startIndex) {
         lightboxImages = images;
-        lightboxIndex  = startIndex;
-        currentZoom    = 1;
+        lightboxIndex = startIndex;
+        currentZoom = 1;
         updateLightboxImage();
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-            function closeLightbox() {
+    } // <--- CHAVE DE FECHAMENTO CORRIGIDA
+
+    function closeLightbox() {
         lightbox.style.display = 'none';
         document.body.style.overflow = '';
         currentZoom = 1;
@@ -179,9 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateLightboxImage() {
-        if (lightboxImages && lightboxImages.length > 0) {
-            lightboxImg.src = lightboxImages[lightboxIndex];
-        }
+        if (lightboxImages?.length) lightboxImg.src = lightboxImages[lightboxIndex];
         currentZoom = 1;
         lightboxImg.style.transform = 'scale(1)';
         updateZoomLabel();
@@ -203,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (lightboxPrev) {
         lightboxPrev.addEventListener('click', () => {
-            if (lightboxImages.length > 0) {
+            if (lightboxImages.length) {
                 lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
                 updateLightboxImage();
             }
@@ -212,39 +167,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (lightboxNext) {
         lightboxNext.addEventListener('click', () => {
-            if (lightboxImages.length > 0) {
+            if (lightboxImages.length) {
                 lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
                 updateLightboxImage();
             }
         });
     }
 
-    if (zoomInBtn) {
-        zoomInBtn.addEventListener('click', () => {
-            if (currentZoom < ZOOM_MAX) { 
-                currentZoom += ZOOM_STEP; 
-                applyZoom(); 
-            }
-        });
-    }
-    
-    if (zoomOutBtn) {
-        zoomOutBtn.addEventListener('click', () => {
-            if (currentZoom > ZOOM_MIN) { 
-                currentZoom -= ZOOM_STEP; 
-                applyZoom(); 
-            }
-        });
-    }
-    
-    if (zoomResetBtn) {
-        zoomResetBtn.addEventListener('click', () => {
-            currentZoom = 1; 
-            applyZoom();
-        });
-    }
+    if (zoomInBtn) zoomInBtn.addEventListener('click', () => { if (currentZoom < ZOOM_MAX) { currentZoom += ZOOM_STEP; applyZoom(); } });
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => { if (currentZoom > ZOOM_MIN) { currentZoom -= ZOOM_STEP; applyZoom(); } });
+    if (zoomResetBtn) zoomResetBtn.addEventListener('click', () => { currentZoom = 1; applyZoom(); });
 
-    // Scroll do mouse para zoom
     if (lightboxImg) {
         lightboxImg.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -254,15 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
     }
 
-    // Teclas de atalho no lightbox
     document.addEventListener('keydown', (e) => {
-        if (lightbox && lightbox.style.display === 'flex') {
-            if (e.key === 'ArrowLeft') lightboxPrev && lightboxPrev.click();
-            if (e.key === 'ArrowRight') lightboxNext && lightboxNext.click();
+        if (lightbox?.style.display === 'flex') {
+            if (e.key === 'ArrowLeft') lightboxPrev?.click();
+            if (e.key === 'ArrowRight') lightboxNext?.click();
             if (e.key === 'Escape') closeLightbox();
-            if (e.key === '+' || e.key === '=') zoomInBtn && zoomInBtn.click();
-            if (e.key === '-' || e.key === '_') zoomOutBtn && zoomOutBtn.click();
-            if (e.key === '0') zoomResetBtn && zoomResetBtn.click();
+            if (e.key === '+' || e.key === '=') zoomInBtn?.click();
+            if (e.key === '-' || e.key === '_') zoomOutBtn?.click();
+            if (e.key === '0') zoomResetBtn?.click();
         }
     });
 
@@ -273,9 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cardImg) {
                 const card = cardImg.closest('.product-card');
                 const allImgs = [cardImg.src];
-                card.querySelectorAll('.thumb-img-data').forEach(t => {
-                    if (t.dataset.src) allImgs.push(t.dataset.src);
-                });
+                card.querySelectorAll('.thumb-img-data').forEach(t => { if (t.dataset.src) allImgs.push(t.dataset.src); });
                 openLightbox(allImgs, 0);
                 return;
             }
@@ -283,35 +213,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const addBtn = e.target.closest('.add-to-interest');
             if (addBtn) {
                 e.stopPropagation();
-                
-                const cardBody = addBtn.closest('.product-card').querySelector('.card-body');
-                const priceElement = cardBody ? cardBody.querySelector('.price') : null;
+                const priceElement = addBtn.closest('.product-card').querySelector('.price');
                 let price = 0;
-                
                 if (priceElement) {
                     const priceText = priceElement.textContent.trim();
-                    
-                    if (priceText.includes('Sob consulta')) {
-                        price = 0;
-                    } else {
-                        const priceMatch = priceText.match(/R\$\s*([\d.,]+)/);
-                        if (priceMatch) {
-                            let priceStr = priceMatch[1].replace(/\./g, '').replace(',', '.');
-                            price = parseFloat(priceStr) || 0;
-                        }
+                    if (!priceText.includes('Sob consulta')) {
+                        const match = priceText.match(/R\$\s*([\d.,]+)/);
+                        if (match) price = parseFloat(match[1].replace(/\./g, '').replace(',', '.'));
                     }
                 }
-                
-                addProductToInterest(
-                    addBtn.dataset.productId, 
-                    addBtn.dataset.productName,
-                    price
-                );
-            }
-
-            const expandBtn = e.target.closest('.expand-description-btn');
-            if (expandBtn) {
-                return;
+                addProductToInterest(addBtn.dataset.productId, addBtn.dataset.productName, price);
             }
         });
     }
@@ -324,40 +235,22 @@ document.addEventListener('DOMContentLoaded', () => {
         updateViewInterestsButton();
     };
 
-    const getTotalItems = () =>
-        interestList.reduce((total, item) => total + (item.quantity || 0), 0);
-
-    const getTotalValue = () => {
-        return interestList.reduce((total, item) => {
-            const itemPrice = item.price || 0;
-            const itemQty = item.quantity || 0;
-            return total + (itemPrice * itemQty);
-        }, 0);
-    };
+    const getTotalItems = () => interestList.reduce((total, item) => total + (item.quantity || 0), 0);
+    const getTotalValue = () => interestList.reduce((total, item) => total + ((item.price || 0) * (item.quantity || 0)), 0);
 
     const formatCurrency = (value) => {
-        if (isNaN(value) || value === null || value === undefined) {
-            return 'R$ 0,00';
-        }
-        return value.toLocaleString('pt-BR', { 
-            style: 'currency', 
-            currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+        if (isNaN(value) || value == null) return 'R$ 0,00';
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
 
     const updateViewInterestsButton = () => {
         if (!viewInterestsBtn) return;
         const total = getTotalItems();
-        const totalValue = getTotalValue();
-        
         if (total > 0) {
             viewInterestsBtn.style.display = 'flex';
-            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total}) - ${formatCurrency(totalValue)}`;
+            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (${total}) - ${formatCurrency(getTotalValue())}`;
         } else {
             viewInterestsBtn.style.display = 'none';
-            viewInterestsBtn.innerHTML = `<i class="fas fa-list"></i> Ver Interesses (0)`;
         }
     };
 
@@ -366,36 +259,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (existing) {
             existing.quantity += 1;
             saveInterestList();
-            const itemTotal = (existing.price || 0) * existing.quantity;
-            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency(itemTotal)})`, 'success');
+            showNotification(`"${productName}" — ${existing.quantity} un. (${formatCurrency((existing.price || 0) * existing.quantity)})`, 'success');
         } else {
-            interestList.push({ 
-                id: productId, 
-                name: productName, 
-                price: productPrice || 0, 
-                quantity: 1 
-            });
+            interestList.push({ id: productId, name: productName, price: productPrice || 0, quantity: 1 });
             saveInterestList();
             showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice || 0)})`, 'success');
         }
-        if (interestSummaryModal.style.display === 'flex') {
-            renderInterestSummary();
-        }
+        if (interestSummaryModal.style.display === 'flex') renderInterestSummary();
     };
 
     const increaseQuantity = (productId) => {
         const item = interestList.find(i => i.id === productId);
-        if (item) { 
-            item.quantity += 1; 
-            saveInterestList(); 
-            renderInterestSummary(); 
-        }
+        if (item) { item.quantity++; saveInterestList(); renderInterestSummary(); }
     };
 
     const decreaseQuantity = (productId) => {
         const item = interestList.find(i => i.id === productId);
         if (item) {
-            item.quantity -= 1;
+            item.quantity--;
             if (item.quantity <= 0) {
                 const index = interestList.findIndex(i => i.id === productId);
                 if (index > -1) interestList.splice(index, 1);
@@ -407,27 +288,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const removeProductFromInterest = (productId) => {
         const index = interestList.findIndex(i => i.id === productId);
-        if (index > -1) { 
-            interestList.splice(index, 1); 
-            saveInterestList(); 
-            renderInterestSummary(); 
-        }
+        if (index > -1) { interestList.splice(index, 1); saveInterestList(); renderInterestSummary(); }
     };
 
-    // Notificações
     const showNotification = (message, type = 'success') => {
         const n = document.createElement('div');
         n.className = `notification ${type}`;
         n.textContent = message;
         document.body.appendChild(n);
         setTimeout(() => n.classList.add('show'), 10);
-        setTimeout(() => { 
-            n.classList.remove('show'); 
-            setTimeout(() => n.remove(), 400); 
-        }, 3000);
+        setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 3000);
     };
 
-    // Modal 1: Resumo
     const renderInterestSummary = () => {
         if (!selectedItemsList) return;
         selectedItemsList.innerHTML = '';
@@ -440,27 +312,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         interestList.forEach(item => {
             const li = document.createElement('li');
-            const itemPrice = item.price || 0;
-            const itemTotal = itemPrice * (item.quantity || 0);
-            
+            const itemTotal = (item.price || 0) * (item.quantity || 0);
             li.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span class="item-name"><strong>${item.name}</strong></span>
-                        <span class="item-price">${formatCurrency(itemPrice)}</span>
+                        <span class="item-price">${formatCurrency(item.price || 0)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="item-controls">
-                            <button class="qty-btn decrease-btn" data-product-id="${item.id}">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                            <button class="qty-btn decrease-btn" data-product-id="${item.id}"><i class="fas fa-minus"></i></button>
                             <span class="item-quantity">${item.quantity}</span>
-                            <button class="qty-btn increase-btn" data-product-id="${item.id}">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <button class="remove-item-btn" data-product-id="${item.id}">
-                                <i class="fas fa-times"></i>
-                            </button>
+                            <button class="qty-btn increase-btn" data-product-id="${item.id}"><i class="fas fa-plus"></i></button>
+                            <button class="remove-item-btn" data-product-id="${item.id}"><i class="fas fa-times"></i></button>
                         </div>
                         <span class="item-total">${formatCurrency(itemTotal)}</span>
                     </div>
@@ -479,7 +343,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         selectedItemsList.appendChild(totalLi);
-
         if (registerInterestsBtn) registerInterestsBtn.style.display = 'flex';
     };
 
@@ -490,11 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (closeSummaryModal) {
-        closeSummaryModal.addEventListener('click', () => {
-            interestSummaryModal.style.display = 'none';
-        });
-    }
+    if (closeSummaryModal) closeSummaryModal.addEventListener('click', () => interestSummaryModal.style.display = 'none');
+    if (closeContactFormModal) closeContactFormModal.addEventListener('click', () => contactFormModal.style.display = 'none');
 
     if (selectedItemsList) {
         selectedItemsList.addEventListener('click', (e) => {
@@ -507,35 +367,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Modal 2: Formulário
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
             let itemsText = '';
             let totalGeral = 0;
-            
             interestList.forEach((item, i) => {
-                const itemPrice = item.price || 0;
-                const itemTotal = itemPrice * (item.quantity || 0);
+                const itemTotal = (item.price || 0) * (item.quantity || 0);
                 totalGeral += itemTotal;
-                
-                itemsText += `${i + 1}. ${item.name}\n`;
-                itemsText += `   Preço unitário: ${formatCurrency(itemPrice)}\n`;
-                itemsText += `   Quantidade: ${item.quantity}\n`;
-                itemsText += `   Total do item: ${formatCurrency(itemTotal)}\n\n`;
+                itemsText += `${i + 1}. ${item.name}\n   Preço unitário: ${formatCurrency(item.price || 0)}\n   Quantidade: ${item.quantity}\n   Total do item: ${formatCurrency(itemTotal)}\n\n`;
             });
-            
-            itemsText += `================================\n`;
-            itemsText += `VALOR TOTAL GERAL: ${formatCurrency(totalGeral)}`;
-            
+            itemsText += `================================\nVALOR TOTAL GERAL: ${formatCurrency(totalGeral)}`;
             if (itemsDataInput) itemsDataInput.value = itemsText;
             interestSummaryModal.style.display = 'none';
             contactFormModal.style.display = 'flex';
-        });
-    }
-
-    if (closeContactFormModal) {
-        closeContactFormModal.addEventListener('click', () => {
-            contactFormModal.style.display = 'none';
         });
     }
 
@@ -554,30 +398,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === contactFormModal) contactFormModal.style.display = 'none';
     });
 
-    // Voltar ao topo
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
             backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
         });
-        
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
-    // Inicializar descrições expansíveis
-    setTimeout(() => {
-        createExpandableDescriptions();
-    }, 200);
-
-    // Reaplicar em resize
+    setTimeout(createExpandableDescriptions, 200);
     window.addEventListener('resize', () => {
         clearTimeout(window.resizeTimer);
-        window.resizeTimer = setTimeout(() => {
-            createExpandableDescriptions();
-        }, 250);
+        window.resizeTimer = setTimeout(createExpandableDescriptions, 250);
     });
 
     updateViewInterestsButton();
 });
-   
