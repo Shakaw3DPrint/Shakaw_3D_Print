@@ -38,28 +38,128 @@ document.addEventListener('DOMContentLoaded', () => {
     const ZOOM_MIN      = 0.5;
 
     // =============================================
-    // FILTROS
+    // DETECTAR SE É MOBILE
+    // =============================================
+    const isMobile = () => {
+        return window.innerWidth <= 768;
+    };
+
+    // =============================================
+    // FILTROS - AGORA REDIRECIONAM EM MOBILE
     // =============================================
     if (filterBtns.length > 0) {
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.dataset.filter;
-                productCards.forEach(card => {
-                    card.style.display =
-                        (filter === 'all' || card.dataset.category === filter)
-                        ? 'flex' : 'none';
-                });
-                
-                // Rolar suavemente para o início do catálogo (melhoria para mobile)
-                const catalogoSection = document.getElementById('catalogo');
-                if (catalogoSection) {
-                    catalogoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (isMobile()) {
+                    // Em mobile, redirecionar para catálogo com filtro
+                    const filter = btn.dataset.filter;
+                    if (filter === 'all') {
+                        window.location.href = 'catalogo.html';
+                    } else {
+                        window.location.href = `catalogo.html?filter=${filter}`;
+                    }
+                } else {
+                    // Em desktop, comportamento normal
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.dataset.filter;
+                    productCards.forEach(card => {
+                        card.style.display =
+                            (filter === 'all' || card.dataset.category === filter)
+                            ? 'flex' : 'none';
+                    });
+                    
+                    // Rolar suavemente para o início do catálogo
+                    const catalogoSection = document.getElementById('catalogo');
+                    if (catalogoSection) {
+                        catalogoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 }
             });
         });
     }
+
+    // =============================================
+    // APLICAR FILTRO DA URL (para mobile)
+    // =============================================
+    const applyFilterFromUrl = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filter = urlParams.get('filter');
+        
+        if (filter && filterBtns.length > 0 && productCards.length > 0) {
+            // Ativar o botão correspondente
+            filterBtns.forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Aplicar o filtro
+            productCards.forEach(card => {
+                card.style.display =
+                    (filter === 'all' || card.dataset.category === filter)
+                    ? 'flex' : 'none';
+            });
+        }
+    };
+
+    // Chamar a função se estiver na página de catálogo
+    if (window.location.pathname.includes('catalogo.html')) {
+        applyFilterFromUrl();
+    }
+
+    // =============================================
+    // FUNÇÃO PARA EXPANDIR DESCRIÇÃO
+    // =============================================
+    const createExpandableDescriptions = () => {
+        document.querySelectorAll('.product-card').forEach(card => {
+            const descriptionEl = card.querySelector('.description');
+            const cardBody = card.querySelector('.card-body');
+            
+            if (descriptionEl && cardBody) {
+                // Verificar se a descrição precisa de expansão
+                const lineHeight = parseInt(window.getComputedStyle(descriptionEl).lineHeight);
+                const maxHeight = lineHeight * 3; // 3 linhas
+                
+                if (descriptionEl.scrollHeight > maxHeight) {
+                    // Criar botão "Ver mais"
+                    const expandBtn = document.createElement('button');
+                    expandBtn.className = 'expand-description-btn';
+                    expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
+                    
+                    // Adicionar antes do preço
+                    const priceEl = cardBody.querySelector('.price');
+                    if (priceEl) {
+                        cardBody.insertBefore(expandBtn, priceEl);
+                    } else {
+                        cardBody.appendChild(expandBtn);
+                    }
+                    
+                    // Estado expandido
+                    let expanded = false;
+                    
+                    expandBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Não abrir lightbox
+                        
+                        if (!expanded) {
+                            descriptionEl.style.display = 'block';
+                            descriptionEl.style.webkitLineClamp = 'unset';
+                            descriptionEl.style.maxHeight = 'none';
+                            expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+                        } else {
+                            descriptionEl.style.display = '-webkit-box';
+                            descriptionEl.style.webkitLineClamp = '2';
+                            descriptionEl.style.maxHeight = '';
+                            expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Ver mais';
+                        }
+                        expanded = !expanded;
+                    });
+                }
+            }
+        });
+    };
 
     // =============================================
     // LIGHTBOX
@@ -145,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Clique na imagem principal do card abre o lightbox (modificado para capturar preço)
+    // Clique na imagem principal do card abre o lightbox
     if (productGrid) {
         productGrid.addEventListener('click', (e) => {
             const cardImg = e.target.closest('.card-image');
@@ -159,29 +259,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const addBtn = e.target.closest('.add-to-interest');
             if (addBtn) {
-                e.stopPropagation(); // Evitar propagação do evento
+                e.stopPropagation();
                 
                 // Capturar o preço do produto
                 const cardBody = addBtn.closest('.product-card').querySelector('.card-body');
                 const priceElement = cardBody ? cardBody.querySelector('.price') : null;
                 let price = 0;
                 
-                // Extrair o valor numérico do preço
                 if (priceElement) {
                     const priceText = priceElement.textContent.trim();
-                    console.log('Texto do preço:', priceText); // Para debug
                     
-                    // Se for "Sob consulta", definir como 0
                     if (priceText.includes('Sob consulta')) {
                         price = 0;
                     } else {
-                        // Extrair números do preço (formato R$ 120,00)
                         const priceMatch = priceText.match(/R\$\s*([\d.,]+)/);
                         if (priceMatch) {
-                            // Converter para número (substituir vírgula por ponto)
                             let priceStr = priceMatch[1].replace(/\./g, '').replace(',', '.');
                             price = parseFloat(priceStr);
-                            console.log('Preço convertido:', price); // Para debug
                         }
                     }
                 }
@@ -192,11 +286,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     price
                 );
             }
+
+            const expandBtn = e.target.closest('.expand-description-btn');
+            if (expandBtn) {
+                // O evento já foi tratado no próprio botão
+                return;
+            }
         });
     }
 
     // =============================================
-    // LISTA DE INTERESSES (MODIFICADO PARA INCLUIR PREÇO)
+    // LISTA DE INTERESSES
     // =============================================
     const saveInterestList = () => {
         localStorage.setItem('shakawInterestList', JSON.stringify(interestList));
@@ -206,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const getTotalItems = () =>
         interestList.reduce((total, item) => total + item.quantity, 0);
 
-    // NOVA FUNÇÃO: Calcular valor total da lista
     const getTotalValue = () => {
         return interestList.reduce((total, item) => {
             const itemPrice = item.price || 0;
@@ -214,7 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0);
     };
 
-    // NOVA FUNÇÃO: Formatar valor em reais
     const formatCurrency = (value) => {
         if (isNaN(value) || value === null || value === undefined) {
             return 'R$ 0,00';
@@ -241,7 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // MODIFICADO: Incluir preço
     const addProductToInterest = (productId, productName, productPrice) => {
         const existing = interestList.find(item => item.id === productId);
         if (existing) {
@@ -259,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveInterestList();
             showNotification(`"${productName}" adicionado! (${formatCurrency(productPrice || 0)})`, 'success');
         }
-        renderInterestSummary(); // Atualizar o modal se estiver aberto
+        renderInterestSummary();
     };
 
     const increaseQuantity = (productId) => {
@@ -305,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     };
 
-    // ── Modal 1: Resumo (MODIFICADO para incluir preços e totais)
+    // ── Modal 1: Resumo
     const renderInterestSummary = () => {
         if (!selectedItemsList) return;
         selectedItemsList.innerHTML = '';
@@ -316,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Criar elementos da lista
         interestList.forEach(item => {
             const li = document.createElement('li');
             const itemPrice = item.price || 0;
@@ -349,7 +445,6 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedItemsList.appendChild(li);
         });
 
-        // Adicionar linha com valor total geral
         const totalLi = document.createElement('li');
         totalLi.style.backgroundColor = 'rgba(0, 198, 255, 0.1)';
         totalLi.style.fontWeight = 'bold';
@@ -389,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Modal 2: Formulário (MODIFICADO para incluir valores no email)
+    // ── Modal 2: Formulário
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
             let itemsText = '';
@@ -446,20 +541,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Adicionar smooth scroll para links de navegação (melhoria mobile)
-    document.querySelectorAll('nav a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            // Se for link interno (mesma página)
-            if (link.getAttribute('href').startsWith('#')) {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }
-            // Para links externos, deixar o comportamento padrão
-        });
+    // Inicializar descrições expansíveis
+    createExpandableDescriptions();
+
+    // Reaplicar em resize
+    window.addEventListener('resize', () => {
+        // Pequeno delay para evitar muitas chamadas
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(() => {
+            createExpandableDescriptions();
+        }, 250);
     });
 
     updateViewInterestsButton();
