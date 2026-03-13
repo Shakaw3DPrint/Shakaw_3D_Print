@@ -1,44 +1,30 @@
-function escolherImpressora(altura,tipo){
-
-if(tipo === "Funcional"){
-return "A1 Mini"
-}
-
-if(altura <= 10){
-return "Mars 3 Pro"
-}
-
-if(altura <= 18){
-return "Saturn 2"
-}
-
-return "Saturn 4 Ultra"
-
-}
-
-
-
 function enviar(){
 
 let altura = parseFloat(document.getElementById("altura").value)
 let tipo = document.getElementById("tipo").value
 
+let peso = parseFloat(document.getElementById("peso").value)
+let tempo = parseFloat(document.getElementById("tempo").value)
+let pintura = document.getElementById("pintura").value
+
 let impressora = escolherImpressora(altura,tipo)
+
+let valor = calcularValor(peso,tempo,pintura)
 
 let dados = {
 
 cliente: document.getElementById("cliente").value,
 projeto: document.getElementById("projeto").value,
 altura: altura,
-peso: document.getElementById("peso").value,
-tempo: document.getElementById("tempo").value,
-pintura: document.getElementById("pintura").value,
-valor: document.getElementById("valor").value,
+peso: peso,
+tempo: tempo,
+pintura: pintura,
+valor: valor,
 impressora: impressora
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbzC50WlSUNsODQTh1kHM-bvtX02-a0KUEMfDjKMzPxGmf_KCkFljC3HLETtnhNSIl8h/exec",{
+fetch("https://script.google.com/macros/s/AKfycbz4xp2W2jvV869UAo-c3IlUoipb-2U5xJbuKcdfOTGnBywjUaRy_mgm90sRi2xePGTE/exec",{
 
 method:"POST",
 mode:"no-cors",
@@ -49,6 +35,6 @@ body: JSON.stringify(dados)
 
 })
 
-alert("OS criada para " + impressora)
+alert("Pedido enviado 🚀\nValor calculado: R$ " + valor)
 
 }
