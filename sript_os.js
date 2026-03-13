@@ -12,7 +12,9 @@ valor: document.getElementById("valor").value
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbwOzBQZDLqHKCCFVwZ7xrlYJ__MeTOeENwqCpE9SGnHgIb8A1BRK2Jqc8v5hZZJaKFV/exec",{
+console.log("Dados enviados:",dados)
+
+fetch("COLE_AQUI_SUA_URL_APPS_SCRIPT",{
 
 method:"POST",
 body: JSON.stringify(dados)
@@ -22,6 +24,12 @@ body: JSON.stringify(dados)
 .then(data=>{
 
 alert("Pedido registrado com sucesso!")
+
+})
+.catch(error=>{
+
+alert("Erro ao enviar pedido")
+console.error(error)
 
 })
 
