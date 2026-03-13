@@ -38,3 +38,27 @@ body: JSON.stringify(dados)
 alert("Pedido enviado 🚀\nValor calculado: R$ " + valor)
 
 }
+function calcularValor(peso,tempo,pintura){
+
+let custoResina = peso * 0.35
+let custoTempo = tempo * 2
+
+let valorPintura = 0
+
+if(pintura === "Básico"){
+valorPintura = 40
+}
+
+if(pintura === "Médio"){
+valorPintura = 80
+}
+
+if(pintura === "Avançado"){
+valorPintura = 150
+}
+
+let valorTotal = custoResina + custoTempo + valorPintura
+
+return Math.round(valorTotal)
+
+}
