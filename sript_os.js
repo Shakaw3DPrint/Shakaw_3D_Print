@@ -12,7 +12,7 @@ valor: document.getElementById("valor").value
 
 }
 
-fetch("COLE_AQUI_URL_DO_SCRIPT",{
+fetch("https://script.google.com/macros/s/AKfycbwOzBQZDLqHKCCFVwZ7xrlYJ__MeTOeENwqCpE9SGnHgIb8A1BRK2Jqc8v5hZZJaKFV/exec",{
 
 method:"POST",
 body: JSON.stringify(dados)
