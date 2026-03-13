@@ -14,7 +14,7 @@ valor: document.getElementById("valor").value
 
 console.log("Dados enviados:", dados)
 
-fetch("https://script.google.com/macros/s/AKfycbwOzBQZDLqHKCCFVwZ7xrlYJ__MeTOeENwqCpE9SGnHgIb8A1BRK2Jqc8v5hZZJaKFV/exec",{
+fetch("https://script.google.com/macros/s/AKfycbz4xp2W2jvV869UAo-c3IlUoipb-2U5xJbuKcdfOTGnBywjUaRy_mgm90sRi2xePGTE/exec",{
 
 method:"POST",
 mode:"no-cors",
