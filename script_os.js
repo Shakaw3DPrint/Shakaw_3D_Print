@@ -12,25 +12,19 @@ valor: document.getElementById("valor").value
 
 }
 
-console.log("Dados enviados:",dados)
+console.log("Dados enviados:", dados)
 
 fetch("https://script.google.com/macros/s/AKfycbwOzBQZDLqHKCCFVwZ7xrlYJ__MeTOeENwqCpE9SGnHgIb8A1BRK2Jqc8v5hZZJaKFV/exec",{
 
 method:"POST",
+mode:"no-cors",
+headers:{
+"Content-Type":"application/json"
+},
 body: JSON.stringify(dados)
 
 })
-.then(res=>res.text())
-.then(data=>{
 
-alert("Pedido registrado com sucesso!")
-
-})
-.catch(error=>{
-
-alert("Erro ao enviar pedido")
-console.error(error)
-
-})
+alert("Pedido enviado para produção 🚀")
 
 }
