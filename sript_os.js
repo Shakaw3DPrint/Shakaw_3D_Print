@@ -14,7 +14,7 @@ valor: document.getElementById("valor").value
 
 console.log("Dados enviados:",dados)
 
-fetch("COLE_AQUI_SUA_URL_APPS_SCRIPT",{
+fetch("https://script.google.com/macros/s/AKfycbwOzBQZDLqHKCCFVwZ7xrlYJ__MeTOeENwqCpE9SGnHgIb8A1BRK2Jqc8v5hZZJaKFV/exec",{
 
 method:"POST",
 body: JSON.stringify(dados)
