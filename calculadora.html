@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Shakaw OS - Novo Pedido</title>
+
+<style>
+body{
+font-family: Arial;
+background:#0f172a;
+color:white;
+padding:30px;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+background:#1e293b;
+padding:25px;
+border-radius:10px;
+}
+
+input, select{
+width:100%;
+padding:8px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:5px;
+border:none;
+}
+
+button{
+background:#38bdf8;
+border:none;
+padding:10px;
+width:100%;
+font-size:16px;
+border-radius:6px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Novo Pedido</h2>
+
+<label>Cliente</label>
+<input id="cliente">
+
+<label>Projeto</label>
+<input id="projeto">
+
+<label>Altura (cm)</label>
+<input id="altura" type="number">
+
+<label>Peso resina (g)</label>
+<input id="peso" type="number">
+
+<label>Tempo impressão (h)</label>
+<input id="tempo" type="number">
+
+<label>Nível pintura</label>
+<select id="pintura">
+<option>Básico</option>
+<option>Médio</option>
+<option>Avançado</option>
+</select>
+
+<label>Valor Final</label>
+<input id="valor" type="number">
+
+<button onclick="enviar()">Registrar Pedido</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
