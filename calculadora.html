@@ -5,6 +5,7 @@
 <title>Shakaw OS - Novo Pedido</title>
 
 <style>
+
 body{
 font-family: Arial;
 background:#0f172a;
@@ -38,7 +39,9 @@ font-size:16px;
 border-radius:6px;
 cursor:pointer;
 }
+
 </style>
+
 </head>
 
 <body>
@@ -64,20 +67,20 @@ cursor:pointer;
 </select>
 
 <label>Peso resina (g)</label>
-<input id="peso" type="number">
+<input id="peso" type="number" oninput="atualizarValor()">
 
 <label>Tempo impressão (h)</label>
-<input id="tempo" type="number">
+<input id="tempo" type="number" oninput="atualizarValor()">
 
 <label>Nível pintura</label>
-<select id="pintura">
+<select id="pintura" onchange="atualizarValor()">
 <option>Básico</option>
 <option>Médio</option>
 <option>Avançado</option>
 </select>
 
-<label>Valor Final</label>
-<input id="valor" type="number">
+<label>Valor Calculado</label>
+<input id="valor" readonly>
 
 <button onclick="enviar()">Registrar Pedido</button>
 
