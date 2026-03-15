@@ -1,36 +1,25 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzM3SrL8uxUudEtPX0AUXBwAt8uGO7sYOVqvvXZjEJwrpPbjbn6n-iFfB5QHxYTO1nZbA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-F2a9tVuGEiqbIrayNZPRZ8TRABCyjED0nyxyoegFRsmfKKVeCm9QkdEYODcI_TQ6Rw/exec";
 
 function escolherImpressora(altura, tipo) {
-  if (tipo === "Funcional") {
-    return "A1 Mini";
-  }
-
-  if (altura <= 10) {
-    return "Mars 3 Pro";
-  }
-
-  if (altura <= 18) {
-    return "Saturn 2";
-  }
-
+  if (tipo === "Funcional") return "A1 Mini";
+  if (altura <= 10) return "Mars 3 Pro";
+  if (altura <= 18) return "Saturn 2";
   return "Saturn 4 Ultra";
 }
 
 function multiplicadorPintura(tipo, pintura) {
-  if (tipo === "Funcional") {
-    return 1;
-  }
-
+  if (tipo === "Funcional") return 1;
   if (pintura === "Sem pintura") return 1;
   if (pintura === "Básico") return 1.75;
   if (pintura === "Médio") return 2.00;
   if (pintura === "Avançado") return 2.50;
   if (pintura === "Extrema") return 3.25;
-
   return 1;
 }
 
-function custoMaterial(material) {
+// Só para o preview do site.
+// O cálculo "oficial" final continua sendo feito pela planilha usando a aba Estoque.
+function custoMaterialPreview(material) {
   const mapa = {
     "Resina": 0.15,
     "PLA Preto": 0.10,
@@ -39,26 +28,17 @@ function custoMaterial(material) {
     "PLA Duo Verde": 0.16,
     "PETG Preto": 0.11
   };
-
   return mapa[material] ?? 0.10;
 }
 
-function calcularValor(peso, tempo, tipo, pintura, material) {
-  const perdaPercentual = 0.20;
-  const pesoComPerda = peso * (1 + perdaPercentual);
-
-  const custoGrama = custoMaterial(material);
-  const custoMaterialTotal = pesoComPerda * custoGrama;
-
+function calcularValorPreview(peso, tempo, tipo, pintura, material) {
+  const pesoComPerda = peso * 1.20;
+  const custoMaterialTotal = pesoComPerda * custoMaterialPreview(material);
   const energia = 5;
   const manutencao = tempo * 1;
-
   const custoBase = custoMaterialTotal + energia + manutencao;
   const multiplicador = multiplicadorPintura(tipo, pintura);
-
-  const valorTotal = custoBase * multiplicador;
-
-  return Math.round(valorTotal);
+  return Math.round(custoBase * multiplicador);
 }
 
 function atualizarPreview() {
@@ -70,7 +50,7 @@ function atualizarPreview() {
   const pintura = document.getElementById("pintura").value;
 
   const impressora = escolherImpressora(altura, tipo);
-  const valor = calcularValor(peso, tempo, tipo, pintura, material);
+  const valor = calcularValorPreview(peso, tempo, tipo, pintura, material);
 
   document.getElementById("impressoraPreview").value = impressora;
   document.getElementById("valorPreview").value = "R$ " + valor;
@@ -99,7 +79,7 @@ async function enviar() {
   }
 
   if (peso <= 0) {
-    alert("Informe o peso do slicer em gramas.");
+    alert("Informe o peso do slicer.");
     return;
   }
 
@@ -109,7 +89,7 @@ async function enviar() {
   }
 
   const impressora = escolherImpressora(altura, tipo);
-  const valor = calcularValor(peso, tempo, tipo, pintura, material);
+  const valorPreview = calcularValorPreview(peso, tempo, tipo, pintura, material);
 
   const formData = new FormData();
   formData.append("cliente", cliente);
@@ -121,7 +101,7 @@ async function enviar() {
   formData.append("tempo", tempo);
   formData.append("impressora", impressora);
   formData.append("pintura", pintura);
-  formData.append("valor", valor);
+  formData.append("valorPreview", valorPreview);
   formData.append("linkSTL", linkSTL);
   formData.append("observacoes", observacoes);
 
@@ -132,10 +112,9 @@ async function enviar() {
     });
 
     const text = await response.text();
-
-    alert(`Pedido enviado 🚀\nValor calculado: R$ ${valor}\nImpressora: ${impressora}`);
-
     console.log("Resposta do Apps Script:", text);
+
+    alert(`Pedido enviado 🚀\nValor estimado: R$ ${valorPreview}\nImpressora: ${impressora}`);
 
     document.getElementById("cliente").value = "";
     document.getElementById("projeto").value = "";
