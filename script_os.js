@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-F2a9tVuGEiqbIrayNZPRZ8TRABCyjED0nyxyoegFRsmfKKVeCm9QkdEYODcI_TQ6Rw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkB0OxilkyVRYkBmrXX4nQxzdjEC2QQjC3qMPI4N1Qx3zRI5Ma9JI7hFkLQXfi4gKazQ/exec";
 
 function escolherImpressora(altura, tipo) {
   if (tipo === "Funcional") return "A1 Mini";
