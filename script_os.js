@@ -1,26 +1,33 @@
 function enviar(){
 
-let altura = parseFloat(document.getElementById("altura").value) || 0
-let tipo = document.getElementById("tipo").value
+let cliente = document.getElementById("cliente").value
+let projeto = document.getElementById("projeto").value
+let altura = parseFloat(document.getElementById("altura").value)
 
-let peso = parseFloat(document.getElementById("peso").value) || 0
-let tempo = parseFloat(document.getElementById("tempo").value) || 0
+let tipo = document.getElementById("tipo").value
+let material = document.getElementById("material").value
+
+let peso = parseFloat(document.getElementById("peso").value)
+let tempo = parseFloat(document.getElementById("tempo").value)
+
 let pintura = document.getElementById("pintura").value
 
 let impressora = escolherImpressora(altura,tipo)
 
-let valor = calcularValor(peso,tempo,pintura)
+let valor = calcularValor(peso,tempo,pintura,tipo,material)
 
 let dados = {
 
-cliente: document.getElementById("cliente").value,
-projeto: document.getElementById("projeto").value,
-altura: altura,
-peso: peso,
-tempo: tempo,
-pintura: pintura,
-valor: valor,
-impressora: impressora
+cliente:cliente,
+projeto:projeto,
+altura:altura,
+tipo:tipo,
+material:material,
+peso:peso,
+tempo:tempo,
+pintura:pintura,
+valor:valor,
+impressora:impressora
 
 }
 
@@ -39,30 +46,47 @@ alert("Pedido enviado 🚀\nValor calculado: R$ " + valor)
 
 }
 
-function escolherImpressora(altura,tipo){
+function custoMaterial(material){
 
-if(tipo === "Funcional"){
-return "A1 Mini"
+if(material === "Resina"){
+return 0.35
 }
 
-if(altura <= 10){
-return "Mars 3 Pro"
+if(material === "PLA"){
+return 0.09
 }
 
-if(altura <= 18){
-return "Saturn 2"
+if(material === "PLA Silk"){
+return 0.12
 }
 
-return "Saturn 4 Ultra"
+if(material === "PLA Duo"){
+return 0.16
+}
+
+if(material === "PETG"){
+return 0.11
+}
+
+return 0.10
 
 }
 
-function calcularValor(peso,tempo,pintura){
+function calcularValor(peso,tempo,pintura,tipo,material){
 
-let custoResina = peso * 0.35
+let custoGrama = custoMaterial(material)
+
+let custoMaterialTotal = peso * custoGrama
+
 let custoTempo = tempo * 2
 
 let valorPintura = 0
+
+// peças funcionais não possuem pintura
+if(tipo === "Funcional"){
+valorPintura = 0
+}
+else{
 
 if(pintura === "Básico"){
 valorPintura = 40
@@ -76,20 +100,10 @@ if(pintura === "Avançado"){
 valorPintura = 150
 }
 
-let valorTotal = custoResina + custoTempo + valorPintura
-
-return Math.round(valorTotal)
-
 }
 
-function atualizarValor(){
+let valorTotal = custoMaterialTotal + custoTempo + valorPintura
 
-let peso = parseFloat(document.getElementById("peso").value) || 0
-let tempo = parseFloat(document.getElementById("tempo").value) || 0
-let pintura = document.getElementById("pintura").value
-
-let valor = calcularValor(peso,tempo,pintura)
-
-document.getElementById("valor").value = valor
+return Math.round(valorTotal)
 
 }
