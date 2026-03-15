@@ -31,7 +31,7 @@ impressora:impressora
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbwe8LpX17zi0zOGmKZzcZ4cBC3oKNW8LlucsIfqhtti3tZIn4AcIAgFMh73aWftcC5L_A/exec",{
+fetch("https://script.google.com/macros/s/AKfycbyKBlla4R_fZfe4i91H7Ffn8jLo7ZfgCBq4ZrDne3vb3jKKbOlHDC6fA7ilYedvzU_3hw/exec",{
 
 method:"POST",
 mode:"no-cors",
@@ -43,6 +43,24 @@ body: JSON.stringify(dados)
 })
 
 alert("Pedido enviado 🚀\nValor calculado: R$ " + valor)
+
+}
+
+function escolherImpressora(altura,tipo){
+
+if(tipo === "Funcional"){
+return "A1 Mini"
+}
+
+if(altura <= 10){
+return "Mars 3 Pro"
+}
+
+if(altura <= 18){
+return "Saturn 2"
+}
+
+return "Saturn 4 Ultra"
 
 }
 
@@ -82,7 +100,6 @@ let custoTempo = tempo * 2
 
 let valorPintura = 0
 
-// peças funcionais não possuem pintura
 if(tipo === "Funcional"){
 valorPintura = 0
 }
@@ -107,3 +124,23 @@ let valorTotal = custoMaterialTotal + custoTempo + valorPintura
 return Math.round(valorTotal)
 
 }
+
+function atualizarValor(){
+
+let peso = parseFloat(document.getElementById("peso").value) || 0
+let tempo = parseFloat(document.getElementById("tempo").value) || 0
+let pintura = document.getElementById("pintura").value
+let tipo = document.getElementById("tipo").value
+let material = document.getElementById("material").value
+
+let valor = calcularValor(peso,tempo,pintura,tipo,material)
+
+document.getElementById("valorPreview").value = "R$ " + valor
+
+}
+
+document.getElementById("peso").addEventListener("input", atualizarValor)
+document.getElementById("tempo").addEventListener("input", atualizarValor)
+document.getElementById("pintura").addEventListener("change", atualizarValor)
+document.getElementById("material").addEventListener("change", atualizarValor)
+document.getElementById("tipo").addEventListener("change", atualizarValor)
