@@ -1,134 +1,165 @@
-function enviar(){
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzM3SrL8uxUudEtPX0AUXBwAt8uGO7sYOVqvvXZjEJwrpPbjbn6n-iFfB5QHxYTO1nZbA/exec";
 
-let cliente = document.getElementById("cliente").value
-let projeto = document.getElementById("projeto").value
-let altura = parseFloat(document.getElementById("altura").value) || 0
+function escolherImpressora(altura, tipo) {
+  if (tipo === "Funcional") {
+    return "A1 Mini";
+  }
 
-let tipo = document.getElementById("tipo").value
-let material = document.getElementById("material").value
+  if (altura <= 10) {
+    return "Mars 3 Pro";
+  }
 
-let peso = parseFloat(document.getElementById("peso").value) || 0
-let tempo = parseFloat(document.getElementById("tempo").value) || 0
+  if (altura <= 18) {
+    return "Saturn 2";
+  }
 
-let pintura = "Sem pintura"
-
-let impressora = escolherImpressora(altura,tipo)
-
-let valor = calcularValor(peso,tempo,pintura,material)
-
-let formData = new FormData()
-
-formData.append("cliente", cliente)
-formData.append("projeto", projeto)
-formData.append("altura", altura)
-formData.append("tipo", tipo)
-formData.append("material", material)
-formData.append("peso", peso)
-formData.append("tempo", tempo)
-formData.append("pintura", pintura)
-formData.append("valor", valor)
-formData.append("impressora", impressora)
-
-fetch("https://script.google.com/macros/s/AKfycbx-0miRM89EDXKSeUBtFOSHDkBO6sOC7jVTu6LTAtjvcH6Op1MA5Ob8bweR5KcIB1cKlg/exec",{
-
-method: "POST",
-body: formData
-
-})
-.then(response => response.text())
-.then(data => {
-
-alert("Pedido enviado 🚀\nValor calculado: R$ " + valor)
-
-})
-.catch(error => {
-
-alert("Erro ao enviar pedido")
-
-console.error(error)
-
-})
-
+  return "Saturn 4 Ultra";
 }
 
-function escolherImpressora(altura,tipo){
+function multiplicadorPintura(tipo, pintura) {
+  if (tipo === "Funcional") {
+    return 1;
+  }
 
-if(tipo === "Funcional"){
-return "A1 Mini"
+  if (pintura === "Sem pintura") return 1;
+  if (pintura === "Básico") return 1.75;
+  if (pintura === "Médio") return 2.00;
+  if (pintura === "Avançado") return 2.50;
+  if (pintura === "Extrema") return 3.25;
+
+  return 1;
 }
 
-if(altura <= 10){
-return "Mars 3 Pro"
+function custoMaterial(material) {
+  const mapa = {
+    "Resina": 0.15,
+    "PLA Preto": 0.10,
+    "PLA Branco": 0.10,
+    "PLA Silk Azul": 0.12,
+    "PLA Duo Verde": 0.16,
+    "PETG Preto": 0.11
+  };
+
+  return mapa[material] ?? 0.10;
 }
 
-if(altura <= 18){
-return "Saturn 2"
+function calcularValor(peso, tempo, tipo, pintura, material) {
+  const perdaPercentual = 0.20;
+  const pesoComPerda = peso * (1 + perdaPercentual);
+
+  const custoGrama = custoMaterial(material);
+  const custoMaterialTotal = pesoComPerda * custoGrama;
+
+  const energia = 5;
+  const manutencao = tempo * 1;
+
+  const custoBase = custoMaterialTotal + energia + manutencao;
+  const multiplicador = multiplicadorPintura(tipo, pintura);
+
+  const valorTotal = custoBase * multiplicador;
+
+  return Math.round(valorTotal);
 }
 
-return "Saturn 4 Ultra"
+function atualizarPreview() {
+  const altura = parseFloat(document.getElementById("altura").value) || 0;
+  const tipo = document.getElementById("tipo").value;
+  const material = document.getElementById("material").value;
+  const peso = parseFloat(document.getElementById("peso").value) || 0;
+  const tempo = parseFloat(document.getElementById("tempo").value) || 0;
+  const pintura = document.getElementById("pintura").value;
 
+  const impressora = escolherImpressora(altura, tipo);
+  const valor = calcularValor(peso, tempo, tipo, pintura, material);
+
+  document.getElementById("impressoraPreview").value = impressora;
+  document.getElementById("valorPreview").value = "R$ " + valor;
 }
 
-function custoMaterial(material){
+async function enviar() {
+  const cliente = document.getElementById("cliente").value.trim();
+  const projeto = document.getElementById("projeto").value.trim();
+  const altura = parseFloat(document.getElementById("altura").value) || 0;
+  const tipo = document.getElementById("tipo").value;
+  const material = document.getElementById("material").value;
+  const peso = parseFloat(document.getElementById("peso").value) || 0;
+  const tempo = parseFloat(document.getElementById("tempo").value) || 0;
+  const pintura = document.getElementById("pintura").value;
+  const linkSTL = document.getElementById("linkSTL").value.trim();
+  const observacoes = document.getElementById("observacoes").value.trim();
 
-if(material === "Resina"){
-return 0.15
+  if (!cliente) {
+    alert("Informe o cliente.");
+    return;
+  }
+
+  if (!projeto) {
+    alert("Informe o projeto.");
+    return;
+  }
+
+  if (peso <= 0) {
+    alert("Informe o peso do slicer em gramas.");
+    return;
+  }
+
+  if (tempo <= 0) {
+    alert("Informe o tempo de impressão.");
+    return;
+  }
+
+  const impressora = escolherImpressora(altura, tipo);
+  const valor = calcularValor(peso, tempo, tipo, pintura, material);
+
+  const formData = new FormData();
+  formData.append("cliente", cliente);
+  formData.append("projeto", projeto);
+  formData.append("altura", altura);
+  formData.append("tipo", tipo);
+  formData.append("material", material);
+  formData.append("peso", peso);
+  formData.append("tempo", tempo);
+  formData.append("impressora", impressora);
+  formData.append("pintura", pintura);
+  formData.append("valor", valor);
+  formData.append("linkSTL", linkSTL);
+  formData.append("observacoes", observacoes);
+
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: formData
+    });
+
+    const text = await response.text();
+
+    alert(`Pedido enviado 🚀\nValor calculado: R$ ${valor}\nImpressora: ${impressora}`);
+
+    console.log("Resposta do Apps Script:", text);
+
+    document.getElementById("cliente").value = "";
+    document.getElementById("projeto").value = "";
+    document.getElementById("altura").value = "";
+    document.getElementById("peso").value = "";
+    document.getElementById("tempo").value = "";
+    document.getElementById("linkSTL").value = "";
+    document.getElementById("observacoes").value = "";
+    document.getElementById("tipo").value = "Figure";
+    document.getElementById("material").selectedIndex = 0;
+    document.getElementById("pintura").value = "Sem pintura";
+
+    atualizarPreview();
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao enviar pedido.");
+  }
 }
 
-if(material === "PLA"){
-return 0.10
-}
+document.getElementById("altura").addEventListener("input", atualizarPreview);
+document.getElementById("tipo").addEventListener("change", atualizarPreview);
+document.getElementById("material").addEventListener("change", atualizarPreview);
+document.getElementById("peso").addEventListener("input", atualizarPreview);
+document.getElementById("tempo").addEventListener("input", atualizarPreview);
+document.getElementById("pintura").addEventListener("change", atualizarPreview);
 
-if(material === "PLA Silk"){
-return 0.12
-}
-
-if(material === "PLA Duo"){
-return 0.16
-}
-
-if(material === "PETG"){
-return 0.11
-}
-
-return 0.10
-
-}
-
-function calcularValor(peso,tempo,pintura,material){
-
-let pesoComPerda = peso * 1.2
-
-let custoGrama = custoMaterial(material)
-
-let materialTotal = pesoComPerda * custoGrama
-
-let energia = 5
-
-let manutencao = tempo * 1
-
-let custoTotal = materialTotal + energia + manutencao
-
-let margem = 2.5
-
-let valorTotal = custoTotal * margem
-
-return Math.round(valorTotal)
-
-}
-
-function atualizarValor(){
-
-let peso = parseFloat(document.getElementById("peso").value) || 0
-let tempo = parseFloat(document.getElementById("tempo").value) || 0
-let material = document.getElementById("material").value
-
-let valor = calcularValor(peso,tempo,"",material)
-
-document.getElementById("valorPreview").value = "R$ " + valor
-
-}
-
-document.getElementById("peso").addEventListener("input", atualizarValor)
-document.getElementById("tempo").addEventListener("input", atualizarValor)
-document.getElementById("material").addEventListener("change", atualizarValor)
+atualizarPreview();
