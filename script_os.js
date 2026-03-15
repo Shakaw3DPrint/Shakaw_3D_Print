@@ -2,15 +2,15 @@ function enviar(){
 
 let cliente = document.getElementById("cliente").value
 let projeto = document.getElementById("projeto").value
-let altura = parseFloat(document.getElementById("altura").value)
+let altura = parseFloat(document.getElementById("altura").value) || 0
 
 let tipo = document.getElementById("tipo").value
 let material = document.getElementById("material").value
 
-let peso = parseFloat(document.getElementById("peso").value)
-let tempo = parseFloat(document.getElementById("tempo").value)
+let peso = parseFloat(document.getElementById("peso").value) || 0
+let tempo = parseFloat(document.getElementById("tempo").value) || 0
 
-let pintura = document.getElementById("pintura").value
+let pintura = "Sem pintura"
 
 let impressora = escolherImpressora(altura,tipo)
 
@@ -31,18 +31,28 @@ impressora:impressora
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbwO9LJ2fLHKeNOz26a4X2CVJJtZ-nmRcfti1j7OU2Budn_0uklupJMwGU5miU2cTbeM3g/exec",{
+fetch("https://script.google.com/macros/s/AKfycbyWq7DwX4-qp5Yva5xoJ4jTbfwLQS9zKnbrP98WYWsxDru6WMI06BuCXVdiKUDAG17H/exec",{
 
 method:"POST",
-mode:"no-cors",
 headers:{
 "Content-Type":"application/json"
 },
 body: JSON.stringify(dados)
 
 })
+.then(response => response.text())
+.then(data => {
 
 alert("Pedido enviado 🚀\nValor calculado: R$ " + valor)
+
+})
+.catch(error => {
+
+alert("Erro ao enviar pedido")
+
+console.error(error)
+
+})
 
 }
 
