@@ -67,11 +67,11 @@ return "Saturn 4 Ultra"
 function custoMaterial(material){
 
 if(material === "Resina"){
-return 0.35
+return 0.15
 }
 
 if(material === "PLA"){
-return 0.09
+return 0.10
 }
 
 if(material === "PLA Silk"){
@@ -110,11 +110,11 @@ valorPintura = 40
 }
 
 if(pintura === "Médio"){
-valorPintura = 80
+valorPintura = 100
 }
 
 if(pintura === "Avançado"){
-valorPintura = 150
+valorPintura = 180
 }
 
 }
