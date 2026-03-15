@@ -16,28 +16,23 @@ let impressora = escolherImpressora(altura,tipo)
 
 let valor = calcularValor(peso,tempo,pintura,material)
 
-let dados = {
+let formData = new FormData()
 
-cliente:cliente,
-projeto:projeto,
-altura:altura,
-tipo:tipo,
-material:material,
-peso:peso,
-tempo:tempo,
-pintura:pintura,
-valor:valor,
-impressora:impressora
+formData.append("cliente", cliente)
+formData.append("projeto", projeto)
+formData.append("altura", altura)
+formData.append("tipo", tipo)
+formData.append("material", material)
+formData.append("peso", peso)
+formData.append("tempo", tempo)
+formData.append("pintura", pintura)
+formData.append("valor", valor)
+formData.append("impressora", impressora)
 
-}
+fetch("https://script.google.com/macros/s/AKfycbx-0miRM89EDXKSeUBtFOSHDkBO6sOC7jVTu6LTAtjvcH6Op1MA5Ob8bweR5KcIB1cKlg/exec",{
 
-fetch("https://script.google.com/macros/s/AKfycbyWq7DwX4-qp5Yva5xoJ4jTbfwLQS9zKnbrP98WYWsxDru6WMI06BuCXVdiKUDAG17H/exec",{
-
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body: JSON.stringify(dados)
+method: "POST",
+body: formData
 
 })
 .then(response => response.text())
