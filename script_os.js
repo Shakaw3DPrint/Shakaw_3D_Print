@@ -31,7 +31,7 @@ impressora:impressora
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbw0MHZedccmFH-z49HboxOxDzpWjAbxOUvpPSrZhGQNsgYagMFq9gT_H3sbm-cENSa6DQ/exec",{
+fetch("https://script.google.com/macros/s/AKfycbwO9LJ2fLHKeNOz26a4X2CVJJtZ-nmRcfti1j7OU2Budn_0uklupJMwGU5miU2cTbeM3g/exec",{
 
 method:"POST",
 mode:"no-cors",
