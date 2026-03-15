@@ -1,93 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Shakaw OS - Novo Pedido</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shakaw OS - Novo Pedido</title>
 
-<style>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#0f172a;
+      color:white;
+      padding:30px;
+      margin:0;
+    }
 
-body{
-font-family: Arial;
-background:#0f172a;
-color:white;
-padding:30px;
-}
+    .container{
+      max-width:700px;
+      margin:auto;
+      background:#1e293b;
+      padding:25px;
+      border-radius:12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
 
-.container{
-max-width:600px;
-margin:auto;
-background:#1e293b;
-padding:25px;
-border-radius:10px;
-}
+    h2{
+      margin-top:0;
+      margin-bottom:20px;
+    }
 
-input, select{
-width:100%;
-padding:8px;
-margin-top:5px;
-margin-bottom:15px;
-border-radius:5px;
-border:none;
-}
+    label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:bold;
+    }
 
-button{
-background:#38bdf8;
-border:none;
-padding:10px;
-width:100%;
-font-size:16px;
-border-radius:6px;
-cursor:pointer;
-}
+    input, select, textarea{
+      width:100%;
+      padding:10px;
+      margin-top:4px;
+      margin-bottom:16px;
+      border-radius:8px;
+      border:none;
+      box-sizing:border-box;
+      font-size:14px;
+    }
 
-</style>
+    input[readonly]{
+      background:#cbd5e1;
+      color:#111827;
+      font-weight:bold;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+    }
+
+    .full{
+      grid-column: 1 / -1;
+    }
+
+    button{
+      background:#38bdf8;
+      color:#082f49;
+      border:none;
+      padding:12px;
+      width:100%;
+      font-size:16px;
+      font-weight:bold;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    button:hover{
+      background:#67e8f9;
+    }
+
+    .hint{
+      font-size:12px;
+      color:#cbd5e1;
+      margin-top:-10px;
+      margin-bottom:14px;
+    }
+
+    @media (max-width: 700px){
+      .grid{
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="container">
+    <h2>Shakaw OS - Novo Pedido</h2>
 
-<h2>Novo Pedido</h2>
+    <div class="grid">
+      <div>
+        <label for="cliente">Cliente</label>
+        <input id="cliente" type="text" placeholder="Nome do cliente">
+      </div>
 
-<label>Cliente</label>
-<input id="cliente">
+      <div>
+        <label for="projeto">Projeto</label>
+        <input id="projeto" type="text" placeholder="Ex: Gengar Diorama">
+      </div>
 
-<label>Projeto</label>
-<input id="projeto">
+      <div>
+        <label for="altura">Altura (cm)</label>
+        <input id="altura" type="number" step="0.1" min="0" placeholder="Ex: 16">
+      </div>
 
-<label>Altura (cm)</label>
-<input id="altura" type="number">
+      <div>
+        <label for="tipo">Tipo de peça</label>
+        <select id="tipo">
+          <option value="Figure">Figure</option>
+          <option value="Diorama">Diorama</option>
+          <option value="Funcional">Funcional</option>
+        </select>
+      </div>
 
-<label>Tipo de peça</label>
-<select id="tipo">
-<option>Figure</option>
-<option>Diorama</option>
-<option>Funcional</option>
-</select>
+      <div>
+        <label for="material">Material</label>
+        <select id="material">
+          <option value="Resina">Resina</option>
+          <option value="PLA Preto">PLA Preto</option>
+          <option value="PLA Branco">PLA Branco</option>
+          <option value="PLA Silk Azul">PLA Silk Azul</option>
+          <option value="PLA Duo Verde">PLA Duo Verde</option>
+          <option value="PETG Preto">PETG Preto</option>
+        </select>
+        <div class="hint">O nome precisa bater com a aba Estoque.</div>
+      </div>
 
-<label>Material</label>
-<select id="material">
-<option>Resina</option>
-<option>PLA</option>
-<option>PLA Silk</option>
-<option>PLA Duo</option>
-<option>PETG</option>
-</select>
+      <div>
+        <label for="peso">Peso do slicer (g)</label>
+        <input id="peso" type="number" step="0.01" min="0" placeholder="Ex: 100">
+        <div class="hint">Informe o peso antes da perda. O sistema soma 20% automaticamente.</div>
+      </div>
 
-<label>Peso material (g)</label>
-<input id="peso" type="number">
+      <div>
+        <label for="tempo">Tempo de impressão (h)</label>
+        <input id="tempo" type="number" step="0.01" min="0" placeholder="Ex: 7">
+      </div>
 
-<label>Tempo impressão (h)</label>
-<input id="tempo" type="number">
+      <div>
+        <label for="pintura">Nível de pintura</label>
+        <select id="pintura">
+          <option value="Sem pintura">Sem pintura</option>
+          <option value="Básico">Básico</option>
+          <option value="Médio">Médio</option>
+          <option value="Avançado">Avançado</option>
+          <option value="Extrema">Extrema</option>
+        </select>
+      </div>
 
-<label>Valor estimado</label>
-<input id="valorPreview" readonly>
+      <div>
+        <label for="linkSTL">Link STL</label>
+        <input id="linkSTL" type="text" placeholder="Cole aqui o link do OneDrive">
+      </div>
 
-<button onclick="enviar()">Registrar Pedido</button>
+      <div class="full">
+        <label for="observacoes">Observações</label>
+        <textarea id="observacoes" rows="3" placeholder="Detalhes do pedido, cor, acabamento, observações do cliente..."></textarea>
+      </div>
 
-</div>
+      <div>
+        <label for="impressoraPreview">Impressora sugerida</label>
+        <input id="impressoraPreview" type="text" readonly>
+      </div>
 
-<script src="script_os.js"></script>
+      <div>
+        <label for="valorPreview">Valor estimado</label>
+        <input id="valorPreview" type="text" readonly>
+      </div>
 
+      <div class="full">
+        <button onclick="enviar()">Registrar Pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script_os.js"></script>
 </body>
 </html>
