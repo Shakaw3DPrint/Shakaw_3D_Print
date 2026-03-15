@@ -41,7 +41,6 @@ cursor:pointer;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -66,21 +65,28 @@ cursor:pointer;
 <option>Funcional</option>
 </select>
 
-<label>Peso resina (g)</label>
-<input id="peso" type="number" oninput="atualizarValor()">
+<label>Material</label>
+<select id="material">
+<option>Resina</option>
+<option>PLA</option>
+<option>PLA Silk</option>
+<option>PLA Duo</option>
+<option>PETG</option>
+</select>
+
+<label>Peso material (g)</label>
+<input id="peso" type="number">
 
 <label>Tempo impressão (h)</label>
-<input id="tempo" type="number" oninput="atualizarValor()">
+<input id="tempo" type="number">
 
 <label>Nível pintura</label>
-<select id="pintura" onchange="atualizarValor()">
+<select id="pintura">
 <option>Básico</option>
 <option>Médio</option>
 <option>Avançado</option>
+<option>Sem pintura</option>
 </select>
-
-<label>Valor Calculado</label>
-<input id="valor" readonly>
 
 <button onclick="enviar()">Registrar Pedido</button>
 
