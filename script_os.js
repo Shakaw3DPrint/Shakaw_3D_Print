@@ -14,7 +14,7 @@ let pintura = document.getElementById("pintura").value
 
 let impressora = escolherImpressora(altura,tipo)
 
-let valor = calcularValor(peso,tempo,pintura,tipo,material)
+let valor = calcularValor(peso,tempo,pintura,material)
 
 let dados = {
 
@@ -31,7 +31,7 @@ impressora:impressora
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbyKBlla4R_fZfe4i91H7Ffn8jLo7ZfgCBq4ZrDne3vb3jKKbOlHDC6fA7ilYedvzU_3hw/exec",{
+fetch("COLE_AQUI_URL_DO_APPS_SCRIPT",{
 
 method:"POST",
 mode:"no-cors",
@@ -90,36 +90,23 @@ return 0.10
 
 }
 
-function calcularValor(peso,tempo,pintura,tipo,material){
+function calcularValor(peso,tempo,pintura,material){
+
+let pesoComPerda = peso * 1.2
 
 let custoGrama = custoMaterial(material)
 
-let custoMaterialTotal = peso * custoGrama
+let materialTotal = pesoComPerda * custoGrama
 
-let custoTempo = tempo * 2
+let energia = 5
 
-let valorPintura = 0
+let manutencao = tempo * 1
 
-if(tipo === "Funcional"){
-valorPintura = 0
-}
-else{
+let custoTotal = materialTotal + energia + manutencao
 
-if(pintura === "Básico"){
-valorPintura = 40
-}
+let margem = 2.5
 
-if(pintura === "Médio"){
-valorPintura = 100
-}
-
-if(pintura === "Avançado"){
-valorPintura = 180
-}
-
-}
-
-let valorTotal = custoMaterialTotal + custoTempo + valorPintura
+let valorTotal = custoTotal * margem
 
 return Math.round(valorTotal)
 
@@ -129,11 +116,9 @@ function atualizarValor(){
 
 let peso = parseFloat(document.getElementById("peso").value) || 0
 let tempo = parseFloat(document.getElementById("tempo").value) || 0
-let pintura = document.getElementById("pintura").value
-let tipo = document.getElementById("tipo").value
 let material = document.getElementById("material").value
 
-let valor = calcularValor(peso,tempo,pintura,tipo,material)
+let valor = calcularValor(peso,tempo,"",material)
 
 document.getElementById("valorPreview").value = "R$ " + valor
 
@@ -141,6 +126,4 @@ document.getElementById("valorPreview").value = "R$ " + valor
 
 document.getElementById("peso").addEventListener("input", atualizarValor)
 document.getElementById("tempo").addEventListener("input", atualizarValor)
-document.getElementById("pintura").addEventListener("change", atualizarValor)
 document.getElementById("material").addEventListener("change", atualizarValor)
-document.getElementById("tipo").addEventListener("change", atualizarValor)
