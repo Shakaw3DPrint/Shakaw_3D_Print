@@ -24,7 +24,7 @@ impressora: impressora
 
 }
 
-fetch("https://script.google.com/macros/s/AKfycbwc1Jkxe-SPTEFsrI1SZTxAmmUpc8IAzwl9-8wSD2B9KR4AODJt8j3kU9MXGjJgBiO77g/exec",{
+fetch("https://script.google.com/macros/s/AKfycbwe8LpX17zi0zOGmKZzcZ4cBC3oKNW8LlucsIfqhtti3tZIn4AcIAgFMh73aWftcC5L_A/exec",{
 
 method:"POST",
 mode:"no-cors",
