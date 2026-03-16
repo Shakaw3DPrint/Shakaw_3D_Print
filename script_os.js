@@ -1,4 +1,4 @@
-const SCRIPT_URL = "://script.google.com/macros/s/AKfycbydHb_3RYP5JC9OcCWinqYmHgkeadb_TXhlm3pRldoH6lL7Pzt_7iPH07TfX3mfV_4vCg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydHb_3RYP5JC9OcCWinqYmHgkeadb_TXhlm3pRldoH6lL7Pzt_7iPH07TfX3mfV_4vCg/exec";
 
 const CONFIG_PREVIEW = {
   perdaPct: 20,
