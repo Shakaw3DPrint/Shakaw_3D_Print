@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/library/d/10Caazhz8SktBUVVo5Da4A05LBFH7ywcnR38M60bA0GyzPkq7IQeBCX0k/11";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydHb_3RYP5JC9OcCWinqYmHgkeadb_TXhlm3pRldoH6lL7Pzt_7iPH07TfX3mfV_4vCg/exec";
 
 const CONFIG_PREVIEW = {
   perdaPct: 20,
@@ -21,6 +21,23 @@ const CONFIG_PREVIEW = {
     "Médio": 1.5,
     "Avançado": 1.6,
     "Extrema": 1.8
+  },
+  custoMaterial: {
+    "Resina": 0.15,
+    "PLA Preto": 0.10,
+    "PLA Branco": 0.10,
+    "PLA Silk Azul": 0.12,
+    "PLA Duo Verde": 0.16,
+    "PETG Preto": 0.11,
+    "Filamento Dual Color Rosa": 0.16,
+    "Filamento Dual Color Vermelho": 0.16,
+    "PLA Rosa": 0.10,
+    "PLA Azul": 0.10,
+    "PLA Azul Metálico": 0.12,
+    "PLA Marrom": 0.10,
+    "PLA Vermelho": 0.10,
+    "PLA Verde": 0.10,
+    "PLA Pele": 0.11
   }
 };
 
@@ -32,15 +49,7 @@ function escolherImpressora(altura, tipo) {
 }
 
 function custoMaterialPreview(material) {
-  const mapa = {
-    "Resina": 0.15,
-    "PLA Preto": 0.10,
-    "PLA Branco": 0.10,
-    "PLA Silk Azul": 0.12,
-    "PLA Duo Verde": 0.16,
-    "PETG Preto": 0.11
-  };
-  return mapa[material] ?? 0.10;
+  return CONFIG_PREVIEW.custoMaterial[material] ?? 0.10;
 }
 
 function maoObraBasePreview(tipo) {
