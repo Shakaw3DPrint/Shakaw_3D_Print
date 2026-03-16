@@ -130,6 +130,81 @@ async function enviar() {
   formData.append("observacoes", observacoes);
 
   try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: formData
+    });
+
+    alert(`Pedido enviado 🚀\nValor estimado: R$ ${valorPreview}\nImpressora: ${impressora}\n\nConfirme na planilha se a linha entrou com a versão V4-NOCORS na coluna Z.`);
+
+    document.getElementById("cliente").value = "";
+    document.getElementById("projeto").value = "";
+    document.getElementById("altura").value = "";
+    document.getElementById("peso").value = "";
+    document.getElementById("tempo").value = "";
+    document.getElementById("linkSTL").value = "";
+    document.getElementById("observacoes").value = "";
+    document.getElementById("tipo").value = "Figure";
+    document.getElementById("material").selectedIndex = 0;
+    document.getElementById("pintura").value = "Sem pintura";
+
+    atualizarPreview();
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao enviar pedido.");
+  }
+}
+
+document.getElementById("altura").value) || 0;
+  const tipo = document.getElementById("tipo").value;
+  const material = document.getElementById("material").value;
+  const peso = parseFloat(document.getElementById("peso").value) || 0;
+  const tempo = parseFloat(document.getElementById("tempo").value) || 0;
+  const pintura = document.getElementById("pintura").value;
+
+  const impressora = escolherImpressora(altura, tipo);
+  const valor = calcularValorPreview(peso, tempo, tipo, pintura, material);
+
+  document.getElementById("impressoraPreview").value = impressora;
+  document.getElementById("valorPreview").value = "R$ " + valor;
+}
+
+async function enviar() {
+  const cliente = document.getElementById("cliente").value.trim();
+  const projeto = document.getElementById("projeto").value.trim();
+  const altura = parseFloat(document.getElementById("altura").value) || 0;
+  const tipo = document.getElementById("tipo").value;
+  const material = document.getElementById("material").value;
+  const peso = parseFloat(document.getElementById("peso").value) || 0;
+  const tempo = parseFloat(document.getElementById("tempo").value) || 0;
+  const pintura = document.getElementById("pintura").value;
+  const linkSTL = document.getElementById("linkSTL").value.trim();
+  const observacoes = document.getElementById("observacoes").value.trim();
+
+  if (!cliente) return alert("Informe o cliente.");
+  if (!projeto) return alert("Informe o projeto.");
+  if (peso <= 0) return alert("Informe o peso do slicer.");
+  if (tempo <= 0) return alert("Informe o tempo de impressão.");
+
+  const impressora = escolherImpressora(altura, tipo);
+  const valorPreview = calcularValorPreview(peso, tempo, tipo, pintura, material);
+
+  const formData = new FormData();
+  formData.append("cliente", cliente);
+  formData.append("projeto", projeto);
+  formData.append("altura", altura);
+  formData.append("tipo", tipo);
+  formData.append("material", material);
+  formData.append("peso", peso);
+  formData.append("tempo", tempo);
+  formData.append("impressora", impressora);
+  formData.append("pintura", pintura);
+  formData.append("valorPreview", valorPreview);
+  formData.append("linkSTL", linkSTL);
+  formData.append("observacoes", observacoes);
+
+  try {
     const response = await fetch(SCRIPT_URL, {
       method: "POST",
       body: formData
