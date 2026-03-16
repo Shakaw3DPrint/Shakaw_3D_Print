@@ -1,4 +1,28 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkB0OxilkyVRYkBmrXX4nQxzdjEC2QQjC3qMPI4N1Qx3zRI5Ma9JI7hFkLQXfi4gKazQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydHb_3RYP5JC9OcCWinqYmHgkeadb_TXhlm3pRldoH6lL7Pzt_7iPH07TfX3mfV_4vCg/exec";
+
+const CONFIG_PREVIEW = {
+  perdaPct: 20,
+  energiaFixa: 5,
+  manutencaoHora: 1,
+  maoObraBase: {
+    funcional: 20,
+    figureDiorama: 30
+  },
+  pinturaFixa: {
+    "Sem pintura": 0,
+    "Básico": 35,
+    "Médio": 60,
+    "Avançado": 100,
+    "Extrema": 150
+  },
+  multiplicadores: {
+    "Sem pintura": 1.3,
+    "Básico": 1.4,
+    "Médio": 1.5,
+    "Avançado": 1.6,
+    "Extrema": 1.8
+  }
+};
 
 function escolherImpressora(altura, tipo) {
   if (tipo === "Funcional") return "A1 Mini";
@@ -7,18 +31,6 @@ function escolherImpressora(altura, tipo) {
   return "Saturn 4 Ultra";
 }
 
-function multiplicadorPintura(tipo, pintura) {
-  if (tipo === "Funcional") return 1;
-  if (pintura === "Sem pintura") return 1;
-  if (pintura === "Básico") return 1.75;
-  if (pintura === "Médio") return 2.00;
-  if (pintura === "Avançado") return 2.50;
-  if (pintura === "Extrema") return 3.25;
-  return 1;
-}
-
-// Só para o preview do site.
-// O cálculo "oficial" final continua sendo feito pela planilha usando a aba Estoque.
 function custoMaterialPreview(material) {
   const mapa = {
     "Resina": 0.15,
@@ -31,12 +43,30 @@ function custoMaterialPreview(material) {
   return mapa[material] ?? 0.10;
 }
 
+function maoObraBasePreview(tipo) {
+  return tipo === "Funcional"
+    ? CONFIG_PREVIEW.maoObraBase.funcional
+    : CONFIG_PREVIEW.maoObraBase.figureDiorama;
+}
+
+function maoObraPinturaPreview(tipo, pintura) {
+  if (tipo === "Funcional") return 0;
+  return CONFIG_PREVIEW.pinturaFixa[pintura] ?? 0;
+}
+
+function multiplicadorPintura(tipo, pintura) {
+  if (tipo === "Funcional") return CONFIG_PREVIEW.multiplicadores["Sem pintura"];
+  return CONFIG_PREVIEW.multiplicadores[pintura] ?? CONFIG_PREVIEW.multiplicadores["Sem pintura"];
+}
+
 function calcularValorPreview(peso, tempo, tipo, pintura, material) {
-  const pesoComPerda = peso * 1.20;
+  const pesoComPerda = peso * (1 + CONFIG_PREVIEW.perdaPct / 100);
   const custoMaterialTotal = pesoComPerda * custoMaterialPreview(material);
-  const energia = 5;
-  const manutencao = tempo * 1;
-  const custoBase = custoMaterialTotal + energia + manutencao;
+  const energia = CONFIG_PREVIEW.energiaFixa;
+  const manutencao = tempo * CONFIG_PREVIEW.manutencaoHora;
+  const maoObraBase = maoObraBasePreview(tipo);
+  const maoObraPintura = maoObraPinturaPreview(tipo, pintura);
+  const custoBase = custoMaterialTotal + energia + manutencao + maoObraBase + maoObraPintura;
   const multiplicador = multiplicadorPintura(tipo, pintura);
   return Math.round(custoBase * multiplicador);
 }
@@ -68,25 +98,10 @@ async function enviar() {
   const linkSTL = document.getElementById("linkSTL").value.trim();
   const observacoes = document.getElementById("observacoes").value.trim();
 
-  if (!cliente) {
-    alert("Informe o cliente.");
-    return;
-  }
-
-  if (!projeto) {
-    alert("Informe o projeto.");
-    return;
-  }
-
-  if (peso <= 0) {
-    alert("Informe o peso do slicer.");
-    return;
-  }
-
-  if (tempo <= 0) {
-    alert("Informe o tempo de impressão.");
-    return;
-  }
+  if (!cliente) return alert("Informe o cliente.");
+  if (!projeto) return alert("Informe o projeto.");
+  if (peso <= 0) return alert("Informe o peso do slicer.");
+  if (tempo <= 0) return alert("Informe o tempo de impressão.");
 
   const impressora = escolherImpressora(altura, tipo);
   const valorPreview = calcularValorPreview(peso, tempo, tipo, pintura, material);
@@ -114,6 +129,10 @@ async function enviar() {
     const text = await response.text();
     console.log("Resposta do Apps Script:", text);
 
+    if (!response.ok || String(text).startsWith("ERRO")) {
+      throw new Error(text || "Erro ao enviar pedido.");
+    }
+
     alert(`Pedido enviado 🚀\nValor estimado: R$ ${valorPreview}\nImpressora: ${impressora}`);
 
     document.getElementById("cliente").value = "";
@@ -130,7 +149,7 @@ async function enviar() {
     atualizarPreview();
   } catch (error) {
     console.error(error);
-    alert("Erro ao enviar pedido.");
+    alert("Erro ao enviar pedido: " + error.message);
   }
 }
 
