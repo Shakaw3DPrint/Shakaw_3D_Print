@@ -16,7 +16,7 @@ function multiplicadorPintura(tipo, pintura) {
 
   if (tipo === "Funcional") return 1;
 
-  if (pintura === "Sem pintura") return 1;
+  if (pintura === "Sem pintura") return 0.8;
 
   if (pintura === "Básico") return 1.4;
 
