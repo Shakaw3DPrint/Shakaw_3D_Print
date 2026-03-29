@@ -14,7 +14,7 @@ function escolherImpressora(altura, tipo) {
 
 function multiplicadorPintura(tipo, pintura) {
 
-  if (tipo === "Funcional") return 1;
+  if (tipo === "Funcional") return 0.8;
 
   if (pintura === "Sem pintura") return 0.8;
 
@@ -72,7 +72,7 @@ function calcularValorPreview(peso, tempo, tipo, pintura, material) {
 
   const materialTotal = pesoComPerda * custoMaterialPreview(material);
 
-  const energia = 5;
+  const energia = 3;
 
   const manutencao = tempo * 1;
 
