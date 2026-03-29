@@ -14,9 +14,9 @@ function escolherImpressora(altura, tipo) {
 
 function multiplicadorPintura(tipo, pintura) {
 
-  if (tipo === "Funcional") return 0.8;
+  if (tipo === "Funcional") return 0.9;
 
-  if (pintura === "Sem pintura") return 0.8;
+  if (pintura === "Sem pintura") return 0.9;
 
   if (pintura === "Básico") return 1.4;
 
