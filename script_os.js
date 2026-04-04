@@ -48,7 +48,6 @@ function custoMaterialPreview(material) {
 // =========================
 
 function calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual = 0) {
-
   const pesoComPerda = Math.round((peso * 1.2) * 100) / 100;
 
   const custoMaterial = pesoComPerda * custoMaterialPreview(material);
@@ -74,7 +73,6 @@ function calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual = 0)
 
   const multiplicador = multiplicadorPintura(tipo, pintura);
   const valorCalculado = Math.round(custoBase * multiplicador);
-
   const valorFinal = Math.round((valorCalculado + ajusteManual) * 100) / 100;
 
   return {
@@ -89,7 +87,6 @@ function calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual = 0)
 // =========================
 
 function atualizarPreview() {
-
   const altura = parseFloat(document.getElementById("altura").value) || 0;
   const tipo = document.getElementById("tipo").value;
   const material = document.getElementById("material").value;
@@ -102,10 +99,8 @@ function atualizarPreview() {
   const calc = calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual);
 
   document.getElementById("impressoraPreview").value = impressora;
-
   document.getElementById("valorPreview").value =
     "R$ " + calc.valorFinal.toFixed(2).replace(".", ",");
-
 }
 
 // =========================
@@ -113,7 +108,6 @@ function atualizarPreview() {
 // =========================
 
 function enviar() {
-
   const cliente = document.getElementById("cliente").value.trim();
   const projeto = document.getElementById("projeto").value.trim();
   const altura = parseFloat(document.getElementById("altura").value) || 0;
@@ -161,5 +155,31 @@ function enviar() {
     `Valor final: R$ ${calc.valorFinal.toFixed(2).replace(".", ",")}`
   );
 
-  document.getElementById("formAppsScript").reset();
+  document.getElementById("cliente").value = "";
+  document.getElementById("projeto").value = "";
+  document.getElementById("altura").value = "";
+  document.getElementById("peso").value = "";
+  document.getElementById("tempo").value = "";
+  document.getElementById("linkSTL").value = "";
+  document.getElementById("observacoes").value = "";
+  document.getElementById("ajusteManual").value = "0";
+  document.getElementById("motivoAjuste").value = "";
+  document.getElementById("tipo").value = "Figure";
+  document.getElementById("material").selectedIndex = 0;
+  document.getElementById("pintura").value = "Sem pintura";
+
+  atualizarPreview();
 }
+
+// =========================
+// EVENTOS
+// =========================
+document.getElementById("altura").addEventListener("input", atualizarPreview);
+document.getElementById("tipo").addEventListener("change", atualizarPreview);
+document.getElementById("material").addEventListener("change", atualizarPreview);
+document.getElementById("peso").addEventListener("input", atualizarPreview);
+document.getElementById("tempo").addEventListener("input", atualizarPreview);
+document.getElementById("pintura").addEventListener("change", atualizarPreview);
+document.getElementById("ajusteManual").addEventListener("input", atualizarPreview);
+
+atualizarPreview();
