@@ -1,9 +1,24 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdPBJ9mZBpN5p-_Cdx-zxjpcJKgxL-dF9xUMY0UyFPgwKLgl8Pb-jrFbxgKFMTAtPa/exec";
-const SCRIPT_VERSION = "V10-LUME";
+const SCRIPT_VERSION = "V11-CONFIG-DINAMICA";
 
-// =========================
-// REGRAS
-// =========================
+let SHAKAW_CONFIG = {
+  perdaPercent: 20,
+  energiaFixa: 5,
+  manutencaoHora: 1,
+  multSemPintura: 1.3,
+  multBasico: 1.4,
+  multMedio: 1.5,
+  multAvancado: 1.6,
+  multExtrema: 1.8,
+  maoObraFuncional: 20,
+  maoObraFigure: 30,
+  pinturaBasico: 35,
+  pinturaMedio: 60,
+  pinturaAvancado: 100,
+  pinturaExtrema: 150
+};
+
+let SHAKAW_MATERIAIS = [];
 
 function escolherImpressora(altura, tipo) {
   if (tipo === "Funcional") return "A1 Mini";
@@ -13,55 +28,50 @@ function escolherImpressora(altura, tipo) {
 }
 
 function multiplicadorPintura(tipo, pintura) {
-  if (tipo === "Funcional") return 1.3;
-  if (pintura === "Sem pintura") return 1.3;
-  if (pintura === "Básico") return 1.4;
-  if (pintura === "Médio") return 1.5;
-  if (pintura === "Avançado") return 1.6;
-  if (pintura === "Extrema") return 1.8;
-  return 1.3;
+  if (tipo === "Funcional") return SHAKAW_CONFIG.multSemPintura;
+  if (pintura === "Sem pintura") return SHAKAW_CONFIG.multSemPintura;
+  if (pintura === "Básico") return SHAKAW_CONFIG.multBasico;
+  if (pintura === "Médio") return SHAKAW_CONFIG.multMedio;
+  if (pintura === "Avançado") return SHAKAW_CONFIG.multAvancado;
+  if (pintura === "Extrema") return SHAKAW_CONFIG.multExtrema;
+  return SHAKAW_CONFIG.multSemPintura;
 }
 
 function custoMaterialPreview(material) {
-  const mapa = {
-    "Resina": 0.15,
-    "PLA Preto": 0.10,
-    "PLA Branco": 0.10,
-    "PLA Azul": 0.10,
-    "PLA Vermelho": 0.10,
-    "PLA Verde": 0.10,
-    "PLA Rosa": 0.10,
-    "PLA Marrom": 0.10,
-    "PLA Pele": 0.11,
-    "PLA Azul Metálico": 0.12,
-    "PLA Silk Azul": 0.12,
-    "PLA Duo Verde": 0.16,
-    "Filamento Dual Color Rosa": 0.16,
-    "Filamento Dual Color Vermelho": 0.16,
-    "PETG Preto": 0.11
-  };
-  return mapa[material] ?? 0.10;
+  const encontrado = SHAKAW_MATERIAIS.find(
+    item => normalizarTexto(item.material) === normalizarTexto(material)
+  );
+
+  return encontrado ? Number(encontrado.custo_g || 0) : 0.10;
 }
 
-// =========================
-// CÁLCULO
-// =========================
+function normalizarTexto(texto) {
+  return String(texto || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toUpperCase();
+}
 
 function calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual = 0) {
-  const pesoComPerda = Math.round((peso * 1.2) * 100) / 100;
+  const pesoComPerda = Math.round((peso * (1 + SHAKAW_CONFIG.perdaPercent / 100)) * 100) / 100;
 
   const custoMaterial = pesoComPerda * custoMaterialPreview(material);
-  const energia = 5;
-  const manutencao = tempo * 1;
+  const energia = Number(SHAKAW_CONFIG.energiaFixa || 0);
+  const manutencao = tempo * Number(SHAKAW_CONFIG.manutencaoHora || 0);
 
-  const maoObraBase = tipo === "Funcional" ? 20 : 30;
+  const maoObraBase =
+    tipo === "Funcional"
+      ? Number(SHAKAW_CONFIG.maoObraFuncional || 0)
+      : Number(SHAKAW_CONFIG.maoObraFigure || 0);
 
   let maoObraPintura = 0;
   if (tipo !== "Funcional") {
-    if (pintura === "Básico") maoObraPintura = 35;
-    if (pintura === "Médio") maoObraPintura = 60;
-    if (pintura === "Avançado") maoObraPintura = 100;
-    if (pintura === "Extrema") maoObraPintura = 150;
+    if (pintura === "Básico") maoObraPintura = Number(SHAKAW_CONFIG.pinturaBasico || 0);
+    if (pintura === "Médio") maoObraPintura = Number(SHAKAW_CONFIG.pinturaMedio || 0);
+    if (pintura === "Avançado") maoObraPintura = Number(SHAKAW_CONFIG.pinturaAvancado || 0);
+    if (pintura === "Extrema") maoObraPintura = Number(SHAKAW_CONFIG.pinturaExtrema || 0);
   }
 
   const custoBase =
@@ -82,10 +92,6 @@ function calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual = 0)
   };
 }
 
-// =========================
-// PREVIEW
-// =========================
-
 function atualizarPreview() {
   const altura = parseFloat(document.getElementById("altura").value) || 0;
   const tipo = document.getElementById("tipo").value;
@@ -102,10 +108,6 @@ function atualizarPreview() {
   document.getElementById("valorPreview").value =
     "R$ " + calc.valorFinal.toFixed(2).replace(".", ",");
 }
-
-// =========================
-// ENVIO
-// =========================
 
 function enviar() {
   const cliente = document.getElementById("cliente").value.trim();
@@ -171,9 +173,24 @@ function enviar() {
   atualizarPreview();
 }
 
-// =========================
-// EVENTOS
-// =========================
+function carregarConfigShakaw(payload) {
+  if (!payload || !payload.ok) {
+    console.error("Erro ao carregar Config:", payload);
+    return;
+  }
+
+  SHAKAW_CONFIG = payload.config || SHAKAW_CONFIG;
+  SHAKAW_MATERIAIS = payload.materiais || [];
+
+  atualizarPreview();
+}
+
+function carregarConfigRemota() {
+  const script = document.createElement("script");
+  script.src = `${SCRIPT_URL}?action=config&callback=carregarConfigShakaw&_=${Date.now()}`;
+  document.body.appendChild(script);
+}
+
 document.getElementById("altura").addEventListener("input", atualizarPreview);
 document.getElementById("tipo").addEventListener("change", atualizarPreview);
 document.getElementById("material").addEventListener("change", atualizarPreview);
@@ -183,3 +200,4 @@ document.getElementById("pintura").addEventListener("change", atualizarPreview);
 document.getElementById("ajusteManual").addEventListener("input", atualizarPreview);
 
 atualizarPreview();
+carregarConfigRemota();
