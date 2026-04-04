@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWrGm6chKfqRk3_8PhZXVR1vkXhEEt0iVjpB4ac89F0c7PrsGVzujqHeR74CFM0tuvWg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdPBJ9mZBpN5p-_Cdx-zxjpcJKgxL-dF9xUMY0UyFPgwKLgl8Pb-jrFbxgKFMTAtPa/exec";
 const SCRIPT_VERSION = "V9-AJUSTE-MANUAL";
 
 function escolherImpressora(altura, tipo) {
