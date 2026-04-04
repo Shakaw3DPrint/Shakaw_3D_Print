@@ -1,9 +1,6 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-HwTYP1I3HqXGX5CLeMBC5kZU1DY9FUX-wIzuqIeQ6oSUJOnVl8sxY2JDGzrrMfbJSQ/exec";
-const SCRIPT_VERSION = "V8-FINAL-OK";
+const SCRIPT_VERSION = "V9-AJUSTE-MANUAL";
 
-// =========================
-// IMPRESSORA
-// =========================
 function escolherImpressora(altura, tipo) {
   if (tipo === "Funcional") return "A1 Mini";
   if (altura <= 10) return "Mars 3 Pro";
@@ -11,9 +8,6 @@ function escolherImpressora(altura, tipo) {
   return "Saturn 4 Ultra";
 }
 
-// =========================
-// MULTIPLICADOR
-// =========================
 function multiplicadorPintura(tipo, pintura) {
   if (tipo === "Funcional") return 1.3;
   if (pintura === "Sem pintura") return 1.3;
@@ -24,9 +18,6 @@ function multiplicadorPintura(tipo, pintura) {
   return 1.3;
 }
 
-// =========================
-// CUSTO MATERIAL
-// =========================
 function custoMaterialPreview(material) {
   const mapa = {
     "Resina": 0.15,
@@ -49,10 +40,7 @@ function custoMaterialPreview(material) {
   return mapa[material] ?? 0.10;
 }
 
-// =========================
-// CÁLCULO
-// =========================
-function calcularPreview(peso, tempo, tipo, pintura, material) {
+function calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual = 0) {
   const pesoComPerda = Math.round((peso * 1.2) * 100) / 100;
 
   const custoMaterial = pesoComPerda * custoMaterialPreview(material);
@@ -77,17 +65,17 @@ function calcularPreview(peso, tempo, tipo, pintura, material) {
     maoObraPintura;
 
   const multiplicador = multiplicadorPintura(tipo, pintura);
-  const valorFinal = Math.round(custoBase * multiplicador);
+  const valorCalculado = Math.round(custoBase * multiplicador);
+  const valorFinalAjustado = Math.round((valorCalculado + ajusteManual) * 100) / 100;
 
   return {
     pesoComPerda,
-    valorFinal
+    custoBase,
+    valorCalculado,
+    valorFinalAjustado
   };
 }
 
-// =========================
-// PREVIEW
-// =========================
 function atualizarPreview() {
   const altura = parseFloat(document.getElementById("altura").value) || 0;
   const tipo = document.getElementById("tipo").value;
@@ -95,17 +83,16 @@ function atualizarPreview() {
   const peso = parseFloat(document.getElementById("peso").value) || 0;
   const tempo = parseFloat(document.getElementById("tempo").value) || 0;
   const pintura = document.getElementById("pintura").value;
+  const ajusteManual = parseFloat(document.getElementById("ajusteManual").value) || 0;
 
   const impressora = escolherImpressora(altura, tipo);
-  const calc = calcularPreview(peso, tempo, tipo, pintura, material);
+  const calc = calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual);
 
   document.getElementById("impressoraPreview").value = impressora;
-  document.getElementById("valorPreview").value = "R$ " + calc.valorFinal;
+  document.getElementById("valorPreview").value =
+    "R$ " + calc.valorFinalAjustado.toFixed(2).replace(".", ",");
 }
 
-// =========================
-// ENVIO (SEM CORS BUG)
-// =========================
 function enviar() {
   const cliente = document.getElementById("cliente").value.trim();
   const projeto = document.getElementById("projeto").value.trim();
@@ -117,6 +104,8 @@ function enviar() {
   const pintura = document.getElementById("pintura").value;
   const linkSTL = document.getElementById("linkSTL").value.trim();
   const observacoes = document.getElementById("observacoes").value.trim();
+  const ajusteManual = parseFloat(document.getElementById("ajusteManual").value) || 0;
+  const motivoAjuste = document.getElementById("motivoAjuste").value.trim();
 
   if (!cliente) return alert("Informe o cliente.");
   if (!projeto) return alert("Informe o projeto.");
@@ -124,7 +113,7 @@ function enviar() {
   if (tempo <= 0) return alert("Informe o tempo.");
 
   const impressora = escolherImpressora(altura, tipo);
-  const calc = calcularPreview(peso, tempo, tipo, pintura, material);
+  const calc = calcularPreview(peso, tempo, tipo, pintura, material, ajusteManual);
 
   const form = document.getElementById("formAppsScript");
   form.action = SCRIPT_URL;
@@ -142,16 +131,18 @@ function enviar() {
   document.getElementById("f_linkSTL").value = linkSTL;
   document.getElementById("f_observacoes").value = observacoes;
   document.getElementById("f_scriptVersion").value = SCRIPT_VERSION;
+  document.getElementById("f_ajusteManual").value = ajusteManual;
+  document.getElementById("f_motivoAjuste").value = motivoAjuste;
 
   form.submit();
 
   alert(
     `Pedido enviado 🚀\n` +
-    `Valor: R$ ${calc.valorFinal}\n` +
-    `Peso final: ${calc.pesoComPerda}g`
+    `Valor base: R$ ${calc.valorCalculado}\n` +
+    `Ajuste: R$ ${ajusteManual}\n` +
+    `Valor final: R$ ${calc.valorFinalAjustado.toFixed(2).replace(".", ",")}`
   );
 
-  // reset
   document.getElementById("cliente").value = "";
   document.getElementById("projeto").value = "";
   document.getElementById("altura").value = "";
@@ -159,18 +150,21 @@ function enviar() {
   document.getElementById("tempo").value = "";
   document.getElementById("linkSTL").value = "";
   document.getElementById("observacoes").value = "";
+  document.getElementById("ajusteManual").value = "0";
+  document.getElementById("motivoAjuste").value = "";
+  document.getElementById("tipo").value = "Figure";
+  document.getElementById("material").selectedIndex = 0;
+  document.getElementById("pintura").value = "Sem pintura";
 
   atualizarPreview();
 }
 
-// =========================
-// EVENTOS
-// =========================
 document.getElementById("altura").addEventListener("input", atualizarPreview);
 document.getElementById("tipo").addEventListener("change", atualizarPreview);
 document.getElementById("material").addEventListener("change", atualizarPreview);
 document.getElementById("peso").addEventListener("input", atualizarPreview);
 document.getElementById("tempo").addEventListener("input", atualizarPreview);
 document.getElementById("pintura").addEventListener("change", atualizarPreview);
+document.getElementById("ajusteManual").addEventListener("input", atualizarPreview);
 
 atualizarPreview();
