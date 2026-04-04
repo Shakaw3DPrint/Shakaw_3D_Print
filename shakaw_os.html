@@ -115,13 +115,13 @@
           <option value="PLA Verde">PLA Verde</option>
           <option value="PLA Pele">PLA Pele</option>
         </select>
-        <div class="hint">O nome precisa ser exatamente igual ao da aba Estoque.</div>
+        <div class="hint">O nome precisa ser igual ao da aba Estoque.</div>
       </div>
 
       <div>
         <label for="peso">Peso do slicer (g)</label>
         <input id="peso" type="number" step="0.01" min="0" placeholder="Ex: 150">
-        <div class="hint">Digite o peso do slicer sem perda. O sistema calcula +20% uma única vez.</div>
+        <div class="hint">Digite o peso sem perda. O sistema soma 20% apenas uma vez.</div>
       </div>
 
       <div>
@@ -148,6 +148,17 @@
       <div class="full">
         <label for="observacoes">Observações</label>
         <textarea id="observacoes" rows="3" placeholder="Detalhes do pedido, cor, acabamento, observações do cliente..."></textarea>
+      </div>
+
+      <div>
+        <label for="ajusteManual">Acréscimo / Desconto (R$)</label>
+        <input id="ajusteManual" type="number" step="0.01" value="0" placeholder="Ex: -10 ou 15">
+        <div class="hint">Use valor negativo para desconto e positivo para acréscimo.</div>
+      </div>
+
+      <div>
+        <label for="motivoAjuste">Motivo do ajuste</label>
+        <input id="motivoAjuste" type="text" placeholder="Ex: amigo, cliente recorrente, urgência, peça simples">
       </div>
 
       <div>
@@ -182,6 +193,8 @@
     <input type="hidden" name="linkSTL" id="f_linkSTL">
     <input type="hidden" name="observacoes" id="f_observacoes">
     <input type="hidden" name="scriptVersion" id="f_scriptVersion">
+    <input type="hidden" name="ajusteManual" id="f_ajusteManual">
+    <input type="hidden" name="motivoAjuste" id="f_motivoAjuste">
   </form>
 
   <script src="script_os.js"></script>
