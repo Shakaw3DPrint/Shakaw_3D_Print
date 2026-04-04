@@ -1,3 +1,4 @@
+alert("SCRIPT CARREGOU");
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdPBJ9mZBpN5p-_Cdx-zxjpcJKgxL-dF9xUMY0UyFPgwKLgl8Pb-jrFbxgKFMTAtPa/exec";
 
 function enviar() {
