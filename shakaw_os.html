@@ -5,78 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shakaw OS - Novo Pedido</title>
   <style>
-    body {
+    body{
       font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      padding: 30px;
-      margin: 0;
+      background:#0f172a;
+      color:white;
+      padding:30px;
+      margin:0;
     }
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 12px;
+    .container{
+      max-width:700px;
+      margin:auto;
+      background:#1e293b;
+      padding:25px;
+      border-radius:12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.25);
     }
-    h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
+    h2{ margin-top:0; margin-bottom:20px; }
+    label{ display:block; margin-bottom:6px; font-weight:bold; }
+    input, select, textarea{
+      width:100%;
+      padding:10px;
+      margin-top:4px;
+      margin-bottom:16px;
+      border-radius:8px;
+      border:none;
+      box-sizing:border-box;
+      font-size:14px;
     }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
+    input[readonly]{
+      background:#cbd5e1;
+      color:#111827;
+      font-weight:bold;
     }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 4px;
-      margin-bottom: 16px;
-      border-radius: 8px;
-      border: none;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-    input[readonly] {
-      background: #cbd5e1;
-      color: #111827;
-      font-weight: bold;
-    }
-    .grid {
-      display: grid;
+    .grid{
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap:16px;
     }
-    .full {
-      grid-column: 1 / -1;
+    .full{ grid-column: 1 / -1; }
+    button{
+      background:#38bdf8;
+      color:#082f49;
+      border:none;
+      padding:12px;
+      width:100%;
+      font-size:16px;
+      font-weight:bold;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.2s;
     }
-    button {
-      background: #38bdf8;
-      color: #082f49;
-      border: none;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
+    button:hover{ background:#67e8f9; }
+    .hint{
+      font-size:12px;
+      color:#cbd5e1;
+      margin-top:-10px;
+      margin-bottom:14px;
     }
-    button:hover {
-      background: #67e8f9;
-    }
-    .hint {
-      font-size: 12px;
-      color: #cbd5e1;
-      margin-top: -10px;
-      margin-bottom: 14px;
-    }
-    @media (max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 700px){
+      .grid{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -128,13 +115,13 @@
           <option value="PLA Verde">PLA Verde</option>
           <option value="PLA Pele">PLA Pele</option>
         </select>
-        <div class="hint">O nome precisa ser igual ao da aba Estoque.</div>
+        <div class="hint">O nome precisa ser exatamente igual ao da aba Estoque.</div>
       </div>
 
       <div>
         <label for="peso">Peso do slicer (g)</label>
         <input id="peso" type="number" step="0.01" min="0" placeholder="Ex: 150">
-        <div class="hint">O sistema calcula 20% de perda apenas uma vez.</div>
+        <div class="hint">Digite o peso do slicer sem perda. O sistema calcula +20% uma única vez.</div>
       </div>
 
       <div>
@@ -174,10 +161,28 @@
       </div>
 
       <div class="full">
-        <button onclick="enviar()">Registrar Pedido</button>
+        <button type="button" onclick="enviar()">Registrar Pedido</button>
       </div>
     </div>
   </div>
+
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+  <form id="formAppsScript" method="POST" target="hidden_iframe" style="display:none;">
+    <input type="hidden" name="cliente" id="f_cliente">
+    <input type="hidden" name="projeto" id="f_projeto">
+    <input type="hidden" name="altura" id="f_altura">
+    <input type="hidden" name="tipo" id="f_tipo">
+    <input type="hidden" name="material" id="f_material">
+    <input type="hidden" name="peso" id="f_peso">
+    <input type="hidden" name="pesoComPerda" id="f_pesoComPerda">
+    <input type="hidden" name="tempo" id="f_tempo">
+    <input type="hidden" name="impressora" id="f_impressora">
+    <input type="hidden" name="pintura" id="f_pintura">
+    <input type="hidden" name="linkSTL" id="f_linkSTL">
+    <input type="hidden" name="observacoes" id="f_observacoes">
+    <input type="hidden" name="scriptVersion" id="f_scriptVersion">
+  </form>
 
   <script src="script_os.js"></script>
 </body>
