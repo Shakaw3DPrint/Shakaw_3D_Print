@@ -7,323 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Algerian&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        .hero-home {
-            background: linear-gradient(135deg, rgba(5,17,49,0.98), rgba(43,53,80,0.96));
-            border-radius: 18px;
-            padding: 55px 24px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-            margin-bottom: 30px;
-        }
-
-        .hero-home h1 {
-            color: #00c6ff;
-            font-size: 2.3rem;
-            margin-bottom: 18px;
-            line-height: 1.2;
-        }
-
-        .hero-home p {
-            max-width: 900px;
-            margin: 0 auto 12px;
-            font-size: 1.05rem;
-            color: #f0f0f0;
-        }
-
-        .hero-badges {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin: 24px 0 28px;
-        }
-
-        .hero-badge {
-            background: rgba(0,198,255,0.1);
-            color: #9fe9ff;
-            border: 1px solid rgba(0,198,255,0.35);
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        .cta-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 24px;
-        }
-
-        .btn-main, .btn-secondary-home, .btn-whats {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 13px 24px;
-            border-radius: 999px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.25s ease;
-            border: none;
-        }
-
-        .btn-main {
-            background: linear-gradient(135deg, #00c6ff, #007bff);
-            color: #fff;
-            box-shadow: 0 6px 16px rgba(0, 123, 255, 0.35);
-        }
-
-        .btn-main:hover, .btn-secondary-home:hover, .btn-whats:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary-home {
-            background: #1f304f;
-            color: #fff;
-            border: 1px solid #3a4a5a;
-        }
-
-        .btn-whats {
-            background: #25d366;
-            color: #fff;
-            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
-        }
-
-        .section-card {
-            background: #13233f;
-            border: 1px solid #2f4361;
-            border-radius: 16px;
-            padding: 28px 22px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.22);
-            margin-bottom: 28px;
-        }
-
-        .section-card h2 {
-            color: #00c6ff;
-            font-size: 1.8rem;
-            margin-top: 0;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-
-        .section-card > p.section-intro {
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto 24px;
-            color: #dce6f3;
-        }
-
-        .featured-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-        }
-
-        .featured-card {
-            background: #1a2a3a;
-            border: 1px solid #3a4a5a;
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .featured-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.26);
-        }
-
-        .featured-card img {
-            width: 100%;
-            height: 220px;
-            object-fit: contain;
-            object-position: center;
-            display: block;
-            background: linear-gradient(to bottom, #f3f6fb, #dfe7f2);
-            padding: 14px;
-        }
-
-        .featured-body {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .featured-body h3 {
-            margin: 0;
-            font-size: 1.05rem;
-            color: #fff;
-        }
-
-        .featured-body p {
-            margin: 0;
-            color: #d8e2ef;
-            font-size: 0.92rem;
-        }
-
-        .price-home {
-            color: #00c6ff;
-            font-weight: bold;
-            font-size: 1.05rem;
-        }
-
-        .steps-grid, .trust-grid, .reviews-grid {
-            display: grid;
-            gap: 18px;
-        }
-
-        .steps-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .trust-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .reviews-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .info-box, .review-box {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid #314764;
-            border-radius: 14px;
-            padding: 20px;
-        }
-
-        .step-number {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #00c6ff, #007bff);
-            color: #fff;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-        .info-box h3, .review-box h3 {
-            margin: 0 0 10px;
-            color: #fff;
-            font-size: 1.08rem;
-        }
-
-        .info-box p, .review-box p {
-            margin: 0;
-            color: #d7e0ea;
-        }
-
-        .media-strip {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-        }
-
-        .media-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 14px;
-            border: 1px solid #314764;
-            background: #0f172a;
-        }
-
-        .media-item img {
-            width: 100%;
-            height: 260px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .media-item span {
-            position: absolute;
-            left: 10px;
-            bottom: 10px;
-            background: rgba(5,17,49,0.85);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-
-        .cta-final {
-            text-align: center;
-            padding: 40px 24px;
-            background: linear-gradient(135deg, rgba(0,198,255,0.12), rgba(0,123,255,0.12));
-            border: 1px solid rgba(0,198,255,0.25);
-            border-radius: 18px;
-            margin-bottom: 20px;
-        }
-
-        .cta-final h2 {
-            color: #00c6ff;
-            margin-top: 0;
-            margin-bottom: 14px;
-            font-size: 2rem;
-        }
-
-        .cta-final p {
-            color: #f0f0f0;
-            max-width: 760px;
-            margin: 0 auto 20px;
-        }
-
-        .floating-whatsapp {
-            position: fixed;
-            right: 18px;
-            bottom: 18px;
-            background: #25d366;
-            color: white;
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.7rem;
-            text-decoration: none;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.35);
-            z-index: 999;
-        }
-
-        @media (max-width: 1100px) {
-            .featured-grid, .media-strip {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 850px) {
-            .steps-grid, .reviews-grid, .trust-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-home h1 {
-                font-size: 1.9rem;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .featured-grid, .media-strip {
-                grid-template-columns: 1fr;
-            }
-
-            .featured-card img,
-            .media-item img {
-                height: 220px;
-            }
-
-            .hero-home {
-                padding: 42px 18px;
-            }
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -371,44 +54,47 @@
                 <div class="featured-grid">
                     <article class="featured-card">
                         <a href="catalogo.html#m3d_1" style="text-decoration:none; color:inherit; display:block;">
-                        <img src="images/miniaturas3d/klee_genshin_impact.webp" alt="Klee - Genshin Impact">
-                        <div class="featured-body">
-                            <h3>Klee - Genshin Impact</h3>
-                            <p>Miniatura em resina 3D com pintura manual e acabamento detalhado.</p>
-                            <span class="price-home">R$ 120,00</span>
-                        </div>
+                          <img src="images/miniaturas3d/klee_genshin_impact.webp" alt="Klee - Genshin impact">
+                          <div class="featured-body">
+                              <h3>Klee - Genshin Impact</h3>
+                              <p>Produto artesanal produzido em resina 3D e pintado a mão. Altura aproximada 13cm.</p>
+                              <span class="price-home">R$ 120,00</span>
+                          </div>
                         </a>
-                    </article>
-
+                      </article>
+                    
                     <article class="featured-card">
                         <a href="catalogo.html#m3d_2" style="text-decoration:none; color:inherit; display:block;">
-                        <img src="images/miniaturas3d/legolas_senhor_dos_aneis.webp" alt="Legolas - Senhor dos Anéis">
-                        <div class="featured-body">
-                            <h3>Legolas - Senhor dos Anéis</h3>
-                            <p>Peça feita para quem gosta de personagens marcantes e acabamento artesanal.</p>
-                            <span class="price-home">R$ 150,00</span>
-                        </div>
+                          <img src="images/miniaturas3d/legolas_senhor_dos_aneis.webp" alt="Legolas - Senhor dos Anéis">
+                          <div class="featured-body">
+                              <h3>Legolas - Senhor dos Anéis</h3>
+                              <p>Produto artesanal produzido em resina 3D e pintado a mão. Altura aproximada 17cm.</p>
+                              <span class="price-home">R$ 150,00</span>
+                          </div>
                         </a>
-                    </article>
-
+                      </article>
+                    
                     <article class="featured-card">
                         <a href="catalogo.html#if_5" style="text-decoration:none; color:inherit; display:block;">
-                        <img src="images/itensfuncionais/suporte_de_celular_d_d_dragao.webp" alt="Suporte Smartphone - Dragão D&D">
-                        <div class="featured-body">
-                            <h3>Suporte Smartphone - Dragão D&D</h3>
-                            <p>Item funcional com visual forte, ideal para presentear ou usar no dia a dia.</p>
-                            <span class="price-home">R$ 25,00</span>
-                        </div>
-                    </article>
-
+                          <img src="images/itensfuncionais/suporte_de_celular_d_d_dragao.webp" alt="Suporte Smartphone - Dragão D&amp;D">
+                          <div class="featured-body">
+                              <h3>Suporte Smartphone - Dragão D&amp;D</h3>
+                              <p>Produto artesanal produzido em Filamento PLA de alta qualidade.</p>
+                              <span class="price-home">R$ 25,00</span>
+                          </div>
+                        </a>
+                      </article>
+                    
                     <article class="featured-card">
-                        <img src="images/miniaturas3d/yennefer_the_witcher.webp" alt="Yennefer - The Witcher">
-                        <div class="featured-body">
-                            <h3>Yennefer - The Witcher</h3>
-                            <p>Projeto em resina 3D com pintura feita à mão e presença de coleção.</p>
-                            <span class="price-home">R$ 150,00</span>
-                        </div>
-                    </article>
+                        <a href="catalogo.html#m3d_4" style="text-decoration:none; color:inherit; display:block;">
+                          <img src="images/miniaturas3d/yennefer_the_witcher.webp" alt="Yennefer - The Witcher">
+                          <div class="featured-body">
+                              <h3>Yennefer - The Witcher</h3>
+                              <p>Produto artesanal produzido em resina 3D e pintado a mão. Altura aproximada 17cm.</p>
+                              <span class="price-home">R$ 150,00</span>
+                          </div>
+                        </a>
+                      </article>
                 </div>
 
                 <div class="cta-row" style="margin-top: 24px;">
@@ -439,83 +125,6 @@
                         <div class="step-number">3</div>
                         <h3>Produção e entrega</h3>
                         <p>Depois da aprovação, a peça entra em produção com atenção aos detalhes, seja para coleção, decoração ou uso funcional.</p>
-                    </div>
-                </div>
-
-                <div class="cta-row">
-                    <a href="https://wa.me/5511954846647?text=Ol%C3%A1%2C%20quero%20entender%20como%20funciona%20um%20or%C3%A7amento%20na%20Shakaw%203D%20Print" target="_blank" class="btn-main"><i class="fab fa-whatsapp"></i> Tirar dúvidas e pedir orçamento</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="container">
-            <div class="section-card">
-                <h2>Peças Sob Encomenda</h2>
-                <p class="section-intro">Quer algo diferente do catálogo? A Shakaw trabalha com impressão de modelos STL prontos para transformar ideias em peças reais, com possibilidade de pintura e acabamento personalizado.</p>
-
-                <div class="trust-grid">
-                    <div class="info-box">
-                        <h3><i class="fas fa-cube"></i> Trabalhamos com STL pronto</h3>
-                        <p>Se você já tiver o arquivo STL, ótimo. Se não tiver, também pode mandar a referência do que procura para avaliarmos uma opção viável.</p>
-                    </div>
-
-                    <div class="info-box">
-                        <h3><i class="fas fa-star"></i> Personalização no acabamento</h3>
-                        <p>Mesmo usando um modelo pronto, a peça pode ganhar personalidade com material, pintura, escala e apresentação mais alinhadas ao seu gosto.</p>
-                    </div>
-                </div>
-
-                <div class="cta-row">
-                    <a href="https://wa.me/5511954846647?text=Ol%C3%A1%2C%20tenho%20uma%20ideia%20ou%20um%20STL%20pronto%20e%20quero%20um%20or%C3%A7amento" target="_blank" class="btn-whats"><i class="fab fa-whatsapp"></i> Quero algo sob encomenda</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="container">
-            <div class="section-card">
-                <h2>Projetos em Andamento</h2>
-                <p class="section-intro">Processo de criação.</p>
-
-                <div class="media-strip">
-                    <div class="media-item">
-                        <img src="images/miniaturas3d/mascotes_de_futebol.webp" alt="Projeto em produção 1">
-                        <span><i class="fas fa-camera"></i> Processo real</span>
-                    </div>
-                    <div class="media-item">
-                        <img src="images/miniaturas3d/scar_o_rei_leao.webp" alt="Projeto em produção 2">
-                        <span><i class="fas fa-paint-brush"></i> Pintura</span>
-                    </div>
-                    <div class="media-item">
-                        <img src="images/itensfuncionais/porta_lapis_dragao_1.webp" alt="Projeto em produção 3">
-                        <span><i class="fas fa-cogs"></i> Acabamento</span>
-                    </div>
-                    <div class="media-item">
-                        <img src="images/itensfuncionais/suporte_alexa_t800.webp" alt="Projeto em produção 4">
-                        <span><i class="fas fa-check"></i> Resultado final</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="container">
-            <div class="section-card">
-                <h2>Por que escolher a Shakaw?</h2>
-                <p class="section-intro">Mais do que imprimir, a ideia aqui é entregar uma peça que tenha presença, valor visual e carinho no acabamento.</p>
-
-                <div class="reviews-grid">
-                    <div class="review-box">
-                        <h3><i class="fas fa-medal"></i> Acabamento caprichado</h3>
-                        <p>Cada peça recebe atenção real no pós-processo, limpeza, montagem e pintura quando o projeto pede isso.</p>
-                    </div>
-
-                    <div class="review-box">
-                        <h3><i class="fas fa-comments"></i> Atendimento direto</h3>
-                        <p>O cliente fala com gente de verdade, tira dúvidas rápido e entende o que está comprando sem enrolação.</p>
-                    </div>
-
-                    <div class="review-box">
-                        <h3><i class="fas fa-heart"></i> Feito com paixão</h3>
-                        <p>A Shakaw nasceu da vontade de transformar criatividade em peças físicas bonitas, úteis e memoráveis.</p>
                     </div>
                 </div>
             </div>
