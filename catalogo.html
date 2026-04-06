@@ -112,7 +112,7 @@
                         <div class="card-body">
                             <h3>Dragão Branco de Olhos Azuis Mundo de Toon - Yugi-Oh</h3>
                             <p class="description">Produto artesanal produzido em resina 3D e pintado a mão. Altura aproximada 15cm.</p>
-                            <p class="price">R$ 180,00</p>
+                            <p class="price">R$ 210,00</p>
                         </div>
                         <button class="add-to-interest"
                                 data-product-id="m3d_6"
@@ -1513,7 +1513,7 @@
                         <div class="card-body">
                             <h3>Super Mario World Collection</h3>
                             <p class="description">Produto artesanal produzido em resina 3D e pintado a mão. Altura aproximada 38cm.</p>
-                            <p class="price">699</p>
+                            <p class="price">R$ 699,00</p>
                         </div>
                         <button class="add-to-interest"
                                 data-product-id="m3d_14"
@@ -1630,6 +1630,77 @@
             <p>&copy; 2026 Shakaw 3D Print. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <button id="viewInterestsBtn" title="Ver Lista de Interesses">
+        <i class="fas fa-list"></i> Ver Interesses (0)
+    </button>
+
+    <button id="backToTopBtn" title="Voltar ao Topo">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div id="interestSummaryModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" id="closeSummaryModal">&times;</span>
+            <h2><i class="fas fa-list"></i> Sua Lista de Interesses</h2>
+            <ul id="selectedItemsList" class="items-summary-list"></ul>
+            <button id="registerInterestsBtn" class="modal-action-btn">
+                <i class="fas fa-paper-plane"></i> Registrar Interesses
+            </button>
+        </div>
+    </div>
+
+    <div id="contactFormModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" id="closeContactFormModal">&times;</span>
+            <h2><i class="fas fa-envelope"></i> Enviar Interesses</h2>
+            <form id="contactForm"
+                  action="https://formsubmit.co/contato@shakaw3dprint.com.br"
+                  method="POST">
+                <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
+                <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="obrigado.html">
+                <input type="hidden" name="itens_de_interesse" id="itemsData">
+
+                <div class="form-section">
+                    <label for="name">Nome Completo:</label>
+                    <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-section">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-section">
+                    <label for="whatsapp">WhatsApp:</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
+                </div>
+                <div class="form-section">
+                    <label for="message">Mensagem Adicional:</label>
+                    <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
+                </div>
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i> Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="lightbox" style="display:none;">
+        <div id="lightbox-overlay"></div>
+        <div id="lightbox-container">
+            <button id="lightbox-close">&times;</button>
+            <button id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+            <img id="lightbox-img" src="" alt="">
+            <button id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+            <div id="lightbox-zoom-controls">
+                <button id="zoom-out"><i class="fas fa-search-minus"></i></button>
+                <span id="zoom-level">100%</span>
+                <button id="zoom-in"><i class="fas fa-search-plus"></i></button>
+                <button id="zoom-reset"><i class="fas fa-expand"></i></button>
+            </div>
+        </div>
+    </div>
 
     <a href="https://wa.me/5511954846647" target="_blank" class="floating-whatsapp" aria-label="Chamar no WhatsApp">
         <i class="fab fa-whatsapp"></i>
