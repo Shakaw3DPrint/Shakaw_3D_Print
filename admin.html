@@ -1,652 +1,215 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shakaw Admin Web</title>
+  <title>Shakaw Admin Web v2</title>
   <style>
-    * { box-sizing: border-box; }
-    body { margin:0; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:linear-gradient(to bottom,#051131,#091127); color:#e0e0e0; }
-    .hidden { display:none !important; }
-    .container { width:min(1320px,94%); margin:0 auto; padding:22px 0 36px; }
-    .card { background:linear-gradient(to bottom,#0d1f3c,#1a2a4a); border:1px solid #324863; border-radius:16px; box-shadow:0 10px 28px rgba(0,0,0,.22); }
-    .login-wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-    .login-card { width:min(470px,100%); padding:28px; }
-    h1,h2,h3 { margin-top:0; }
-    h1,h2 { color:#00c6ff; }
-    p, small { color:#d9e5f3; }
-    label { display:block; margin-bottom:6px; font-weight:700; color:#c8d8e8; }
-    input, select, textarea, button { font:inherit; }
-    input, select, textarea {
-      width:100%; padding:12px 14px; border-radius:10px; border:1px solid #445b77; background:rgba(255,255,255,.05);
-      color:#fff; margin-bottom:14px; outline:none;
-    }
-    input:focus, select:focus, textarea:focus { border-color:#00c6ff; box-shadow:0 0 0 3px rgba(0,198,255,.14); }
-    textarea { min-height:100px; resize:vertical; }
-    button {
-      border:none; border-radius:999px; padding:12px 18px; font-weight:700; cursor:pointer;
-      transition:transform .18s ease, opacity .18s ease;
-    }
-    button:hover { transform:translateY(-1px); }
-    button:disabled { opacity:.6; cursor:not-allowed; }
-    .btn-primary { background:linear-gradient(135deg,#00c6ff,#007bff); color:#fff; }
-    .btn-success { background:#28a745; color:#fff; }
-    .btn-secondary { background:#334761; color:#fff; }
-    .btn-danger { background:#dc3545; color:#fff; }
-    .btn-upload { background:#6f42c1; color:#fff; }
-    .message { margin-top:12px; padding:12px 14px; border-radius:10px; font-weight:600; display:none; }
-    .message.show { display:block; }
-    .message.success { background:rgba(40,167,69,.15); border:1px solid rgba(40,167,69,.4); color:#9ff0b3; }
-    .message.error { background:rgba(220,53,69,.15); border:1px solid rgba(220,53,69,.4); color:#ffb2bb; }
-    .app-header { position:sticky; top:0; z-index:10; backdrop-filter:blur(8px); background:rgba(5,17,49,.88); border-bottom:1px solid #2f4260; }
-    .app-header .container { padding:16px 0; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
-    .toolbar, .toolbar-right, .toolbar-left { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .status-pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(0,198,255,.12); border:1px solid rgba(0,198,255,.28); color:#9eeaff; font-size:.88rem; font-weight:700; }
-    .grid { display:grid; grid-template-columns:320px 1fr; gap:18px; align-items:start; }
-    .panel { padding:18px; }
-    .product-list { max-height:calc(100vh - 220px); overflow:auto; padding-right:4px; }
-    .product-item { border:1px solid #314764; border-radius:12px; padding:12px; background:rgba(255,255,255,.04); margin-bottom:10px; cursor:pointer; transition:border-color .2s ease, background .2s ease; }
-    .product-item:hover, .product-item.active { border-color:#00c6ff; background:rgba(0,198,255,.08); }
-    .product-item small { color:#9fb5cb; display:block; margin-top:4px; }
-    .layout-right { display:grid; grid-template-columns: 1fr; gap:18px; }
-    .editor-header { display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
-    .editor-image { width:200px; height:200px; border-radius:16px; background:linear-gradient(to bottom,#f1f5fb,#dbe6f1); display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px solid #445a78; }
-    .editor-image img { max-width:100%; max-height:100%; object-fit:contain; padding:10px; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .full { grid-column:1 / -1; }
-    .upload-group { display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:end; }
-    .thumbs-list { background:rgba(255,255,255,.04); border:1px solid #314764; border-radius:12px; padding:12px; min-height:80px; }
-    .thumb-tag { display:inline-flex; align-items:center; gap:8px; background:rgba(0,198,255,.12); border:1px solid rgba(0,198,255,.25); color:#dff7ff; border-radius:999px; padding:8px 10px; margin:4px; font-size:.85rem; }
-    .thumb-tag button { padding:4px 8px; border-radius:999px; font-size:.75rem; background:#dc3545; color:#fff; }
-    table { width:100%; border-collapse:collapse; }
-    th, td { padding:10px 12px; border-bottom:1px solid #324863; text-align:left; font-size:.92rem; }
-    th { color:#9eeaff; }
-    .note { color:#a8bfd3; font-size:.88rem; line-height:1.5; }
-    @media (max-width: 980px) { .grid { grid-template-columns:1fr; } .product-list { max-height:none; } }
-    @media (max-width: 720px) { .form-grid { grid-template-columns:1fr; } .editor-image { width:100%; height:240px; } }
+    *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(to bottom,#051131,#091127);color:#e0e0e0}
+    .container{width:min(1200px,94%);margin:0 auto;padding:24px 0 40px}.card{background:linear-gradient(to bottom,#0d1f3c,#1a2a4a);border:1px solid #344761;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.login-card{width:min(460px,100%);padding:28px}
+    h1,h2,h3{margin-top:0}h1{color:#00c6ff;font-size:2rem}h2{color:#00c6ff}p{color:#dbe5f1}
+    label{display:block;margin-bottom:6px;font-size:.92rem;font-weight:600;color:#c9d8ea}
+    input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #465a77;background:rgba(255,255,255,.05);color:#fff;margin-bottom:14px;outline:none}textarea{min-height:90px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:#00c6ff;box-shadow:0 0 0 3px rgba(0,198,255,.15)}
+    button{border:none;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;transition:transform .18s ease,opacity .18s ease}button:hover{transform:translateY(-1px)}button:disabled{opacity:.6;cursor:not-allowed}
+    .btn-primary{background:linear-gradient(135deg,#00c6ff,#007bff);color:#fff}.btn-success{background:#28a745;color:#fff}.btn-secondary{background:#334761;color:#fff}.btn-danger{background:#dc3545;color:#fff}.btn-accent{background:linear-gradient(135deg,#8a5cff,#6b35d8);color:#fff}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:18px}.toolbar-left,.toolbar-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .status-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(0,198,255,.12);border:1px solid rgba(0,198,255,.3);color:#9eeaff;font-size:.88rem;font-weight:700}.hidden{display:none!important}
+    .app-header{position:sticky;top:0;z-index:10;backdrop-filter:blur(8px);background:rgba(5,17,49,.88);border-bottom:1px solid #2f4260}.app-header .container{padding:16px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.app-header h1{margin:0;font-size:1.4rem}
+    .grid{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}.panel{padding:18px}.search-box{position:sticky;top:96px}.product-list{max-height:calc(100vh - 180px);overflow:auto;padding-right:4px}
+    .product-item{border:1px solid #314764;border-radius:12px;padding:12px;background:rgba(255,255,255,.04);margin-bottom:10px;cursor:pointer;transition:border-color .2s ease,background .2s ease}.product-item:hover,.product-item.active{border-color:#00c6ff;background:rgba(0,198,255,.08)}.product-item small{color:#9fb5cb;display:block;margin-top:4px}
+    .editor-header{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:16px}.editor-image{width:180px;height:180px;border-radius:16px;background:linear-gradient(to bottom,#f1f5fb,#dbe6f1);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #445a78;flex-shrink:0}.editor-image img{max-width:100%;max-height:100%;object-fit:contain;padding:10px}
+    .editor-meta{flex:1;min-width:220px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}.note{margin-top:12px;font-size:.88rem;color:#a8bfd3;line-height:1.5}
+    .message{margin-top:12px;padding:12px 14px;border-radius:10px;font-weight:600;display:none}.message.show{display:block}.message.success{background:rgba(40,167,69,.15);border:1px solid rgba(40,167,69,.4);color:#9ff0b3}.message.error{background:rgba(220,53,69,.15);border:1px solid rgba(220,53,69,.4);color:#ffb2bb}
+    .raw-box{margin-top:18px;border-top:1px solid #304662;padding-top:16px}.upload-row{display:flex;gap:12px;align-items:center}.upload-row input{margin-bottom:0;flex:1}.upload-row button{white-space:nowrap}
+    .logs-box{margin-top:18px;max-height:260px;overflow:auto;border-top:1px solid #304662;padding-top:16px}.log-item{padding:10px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}.log-item small{display:block;color:#8eb0d1;margin-top:4px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}.search-box{position:static}.product-list{max-height:none}}
+    @media (max-width:700px){.form-grid{grid-template-columns:1fr}.editor-image{width:100%;height:220px}.upload-row{flex-direction:column;align-items:stretch}}
   </style>
 </head>
 <body>
   <section id="loginScreen" class="login-wrap">
     <div class="card login-card">
       <h1>Shakaw Admin</h1>
-      <p>Painel web para editar o catálogo, subir imagens e publicar sem deixar token do GitHub no navegador.</p>
+      <p>Este painel usa o Apps Script como backend seguro e a planilha como base do catálogo.</p>
       <label for="passwordInput">Senha do administrador</label>
       <input id="passwordInput" type="password" placeholder="Digite sua senha" autocomplete="current-password" />
       <button id="loginBtn" class="btn-primary" style="width:100%;">Entrar</button>
       <div id="loginMsg" class="message"></div>
-      <p class="note">Substitua apenas a URL do Web App do Apps Script. O restante fica seguro no backend.</p>
+      <p class="note">O catálogo gerado mantém o botão de interesses, os modais do formulário e os links dos cards.</p>
     </div>
   </section>
 
   <div id="appScreen" class="hidden">
     <header class="app-header">
       <div class="container">
-        <div>
-          <h1 style="margin:0;">Shakaw Admin Web</h1>
-          <small>Catálogo, uploads e publicação integrados à planilha.</small>
-        </div>
-        <div class="toolbar-right">
-          <span id="sessionStatus" class="status-pill">Sessão ativa</span>
-          <button id="refreshBtn" class="btn-secondary">Recarregar</button>
-          <button id="publishBtn" class="btn-success">Publicar catálogo</button>
-          <button id="logoutBtn" class="btn-danger">Sair</button>
-        </div>
+        <div><h1>Painel Admin Seguro — Catálogo</h1><small style="color:#a8bfd3;">Editar nomes, preços, destaques da home, imagens e publicar o site.</small></div>
+        <div class="toolbar-right"><span class="status-pill" id="sessionStatus">Sessão ativa</span><button id="refreshBtn" class="btn-secondary">Recarregar</button><button id="publishBtn" class="btn-success">Publicar site</button><button id="logoutBtn" class="btn-danger">Sair</button></div>
       </div>
     </header>
 
     <main class="container">
       <div class="grid">
-        <aside class="card panel">
+        <aside class="card panel search-box">
           <h2>Produtos</h2>
-          <label for="searchInput">Buscar</label>
-          <input id="searchInput" type="text" placeholder="Ex: Gengar, Legolas, Modelo 01..." />
+          <label for="searchInput">Buscar produto</label>
+          <input id="searchInput" type="text" placeholder="Ex: Gengar, Modelo 01, Alexa..." />
           <label for="categoryFilter">Categoria</label>
-          <select id="categoryFilter"><option value="">Todas</option></select>
-          <div class="toolbar">
-            <button id="newProductBtn" class="btn-primary">Novo produto</button>
-            <span id="catalogInfo" class="status-pill">0 produtos</span>
-          </div>
+          <select id="categoryFilter"></select>
           <div id="productList" class="product-list"></div>
         </aside>
 
-        <section class="layout-right">
-          <section class="card panel">
-            <div id="emptyState">
-              <h2>Selecione ou crie um produto</h2>
-              <p>Você pode buscar um item à esquerda, editar os campos abaixo, subir imagem e depois publicar o catálogo.</p>
-            </div>
+        <section class="card panel">
+          <div class="toolbar">
+            <div class="toolbar-left"><button id="saveBtn" class="btn-accent" disabled>Salvar produto</button><button id="resetBtn" class="btn-secondary" disabled>Desfazer alterações do item</button></div>
+            <div class="toolbar-right"><span class="status-pill" id="catalogInfo">Catálogo não carregado</span></div>
+          </div>
 
-            <div id="editorWrap" class="hidden">
-              <div class="editor-header">
-                <div class="editor-image"><img id="previewImage" src="" alt="Prévia do produto" /></div>
-                <div>
-                  <h2 id="editorTitle">Editar produto</h2>
-                  <p class="note">Os uploads vão para o GitHub via Apps Script. A planilha continua como base oficial.</p>
-                </div>
-              </div>
+          <div id="emptyState"><h2>Selecione um produto</h2><p>Carregue a lista, escolha um item e edite as informações com segurança.</p></div>
 
-              <div class="form-grid">
-                <div><label for="productId">ID</label><input id="productId" type="text" /></div>
-                <div>
-                  <label for="productCategory">Categoria</label>
-                  <select id="productCategory"></select>
-                </div>
-
-                <div><label for="productPublish">Publicar</label><select id="productPublish"><option>SIM</option><option>NÃO</option></select></div>
-                <div><label for="productActive">Ativo</label><select id="productActive"><option>SIM</option><option>NÃO</option></select></div>
-
-                <div class="full"><label for="productName">Nome</label><input id="productName" type="text" /></div>
-                <div class="full"><label for="productAlt">Alt da imagem</label><input id="productAlt" type="text" /></div>
-                <div class="full"><label for="productDesc">Descrição</label><textarea id="productDesc"></textarea></div>
-
-                <div><label for="productPrice">Preço</label><input id="productPrice" type="text" placeholder="Ex: R$ 120,00 ou Sob consulta" /></div>
-                <div>
-                  <label for="productPriceColor">Cor do preço</label>
-                  <select id="productPriceColor">
-                    <option value="">Padrão</option>
-                    <option value="#ffc107">Amarelo destaque</option>
-                    <option value="#00c6ff">Azul Shakaw</option>
-                    <option value="#ffffff">Branco</option>
-                  </select>
-                </div>
-
-                <div><label for="productFeatured">Destaque na home</label><select id="productFeatured"><option>NÃO</option><option>SIM</option></select></div>
-                <div><label for="productFeaturedOrder">Ordem na home</label><input id="productFeaturedOrder" type="number" min="0" step="1" /></div>
-
-                <div class="full">
-                  <label for="productImageSrc">Imagem principal</label>
-                  <div class="upload-group">
-                    <input id="productImageSrc" type="text" placeholder="images/categoria/arquivo.webp" />
-                    <button id="uploadMainBtn" class="btn-upload" type="button">Upload imagem</button>
-                  </div>
-                  <input id="uploadMainInput" type="file" accept="image/*" class="hidden" />
-                </div>
-
-                <div class="full">
-                  <label>Galeria / thumbs</label>
-                  <div class="toolbar">
-                    <button id="uploadThumbBtn" class="btn-upload" type="button">Adicionar thumbs</button>
-                    <button id="clearThumbsBtn" class="btn-secondary" type="button">Limpar thumbs</button>
-                  </div>
-                  <input id="uploadThumbInput" type="file" accept="image/*" multiple class="hidden" />
-                  <div id="thumbsList" class="thumbs-list"></div>
-                </div>
-              </div>
-
-              <div class="toolbar" style="margin-top:16px;">
-                <div class="toolbar-left">
-                  <button id="saveProductBtn" class="btn-success">Salvar produto</button>
-                  <button id="resetProductBtn" class="btn-secondary">Desfazer</button>
-                </div>
-                <div class="toolbar-right">
-                  <span class="note">Salvar produto não publica o catálogo automaticamente.</span>
-                </div>
+          <div id="editorWrap" class="hidden">
+            <div class="editor-header">
+              <div class="editor-image"><img id="previewImage" src="" alt="Prévia do produto" /></div>
+              <div class="editor-meta">
+                <h2 id="editorTitle">Editar produto</h2>
+                <p>O preço será formatado automaticamente como moeda quando fizer sentido. Textos como <code> Sob consulta </code> continuam como texto.</p>
+                <div class="note">Os destaques da home são controlados por <b>Destaque na home</b> e <b>Ordem na home</b>.</div>
               </div>
             </div>
 
-            <div id="appMsg" class="message"></div>
-          </section>
+            <div class="form-grid">
+              <div><label for="productId">ID do card</label><input id="productId" type="text" readonly /></div>
+              <div><label for="productCategory">Categoria</label><select id="productCategory"></select></div>
+              <div class="full"><label for="productName">Nome do produto</label><input id="productName" type="text" /></div>
+              <div class="full"><label for="productAlt">Texto alternativo da imagem (alt)</label><input id="productAlt" type="text" /></div>
+              <div class="full"><label for="productDesc">Descrição</label><textarea id="productDesc"></textarea></div>
+              <div><label for="productPrice">Preço</label><input id="productPrice" type="text" placeholder="Ex: 699, 699,90, R$ 699,00 ou Sob consulta" /></div>
+              <div><label for="productPriceColor">Cor do preço</label><select id="productPriceColor"><option value="">Padrão</option><option value="#28a745">Verde promo</option><option value="#ffc107">Amarelo destaque</option><option value="#00c6ff">Azul Shakaw</option><option value="#ffffff">Branco</option></select></div>
+              <div><label for="productHighlightHome">Destaque na home</label><select id="productHighlightHome"><option value="NÃO">NÃO</option><option value="SIM">SIM</option></select></div>
+              <div><label for="productHomeOrder">Ordem na home</label><input id="productHomeOrder" type="number" min="0" step="1" /></div>
+              <div class="full">
+                <label for="productImageSrc">Imagem principal</label>
+                <div class="upload-row"><input id="productImageSrc" type="text" /><button id="uploadMainBtn" type="button" class="btn-accent">Upload imagem</button></div>
+                <input id="uploadMainInput" type="file" accept="image/*" class="hidden" />
+              </div>
+            </div>
 
-          <section class="card panel">
-            <h2>Logs recentes</h2>
-            <div id="logsWrap" class="note">Carregando logs...</div>
-          </section>
+            <div class="raw-box">
+              <details open>
+                <summary>Miniaturas extras do lightbox</summary>
+                <label for="thumbsArea">Um caminho por linha</label>
+                <textarea id="thumbsArea"></textarea>
+                <div class="upload-row"><button id="uploadThumbBtn" type="button" class="btn-secondary">Upload thumb</button><input id="uploadThumbInput" type="file" accept="image/*" class="hidden" /></div>
+              </details>
+            </div>
+          </div>
+
+          <div id="appMsg" class="message"></div>
+          <div class="logs-box"><h3>Últimos logs</h3><div id="logsWrap"></div></div>
         </section>
       </div>
     </main>
   </div>
 
   <script>
-    const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVvvqb89iRbb2R6XSjpFW4mtdYGZBVWXbRXaNedf-qw05z3OVmr908A97LvIfCRuaLFw/exec';
-
-    const state = {
-      sessionToken: sessionStorage.getItem('shakawAdminSession') || '',
-      user: null,
-      config: {},
-      categories: [],
-      products: [],
-      filteredProducts: [],
-      selectedId: '',
-      originalProduct: null,
-      currentProduct: null
-    };
-
+    const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlreyxQCzhhvZbOVCa6lUOWJwJA67A90KhAfS0A2poDwXO8XWn0oo7LVO0DKyayPgrRQ/exec';
+    const state = { sessionToken: sessionStorage.getItem('shakawAdminSession') || '', products: [], categories: [], selectedId: '', dirty: false };
     const el = {
-      loginScreen: document.getElementById('loginScreen'),
-      appScreen: document.getElementById('appScreen'),
-      passwordInput: document.getElementById('passwordInput'),
-      loginBtn: document.getElementById('loginBtn'),
-      loginMsg: document.getElementById('loginMsg'),
-      sessionStatus: document.getElementById('sessionStatus'),
-      refreshBtn: document.getElementById('refreshBtn'),
-      publishBtn: document.getElementById('publishBtn'),
-      logoutBtn: document.getElementById('logoutBtn'),
-      searchInput: document.getElementById('searchInput'),
-      categoryFilter: document.getElementById('categoryFilter'),
-      productList: document.getElementById('productList'),
-      catalogInfo: document.getElementById('catalogInfo'),
-      newProductBtn: document.getElementById('newProductBtn'),
-      emptyState: document.getElementById('emptyState'),
-      editorWrap: document.getElementById('editorWrap'),
-      editorTitle: document.getElementById('editorTitle'),
-      previewImage: document.getElementById('previewImage'),
-      appMsg: document.getElementById('appMsg'),
-      logsWrap: document.getElementById('logsWrap'),
-      productId: document.getElementById('productId'),
-      productCategory: document.getElementById('productCategory'),
-      productPublish: document.getElementById('productPublish'),
-      productActive: document.getElementById('productActive'),
-      productName: document.getElementById('productName'),
-      productAlt: document.getElementById('productAlt'),
-      productDesc: document.getElementById('productDesc'),
-      productPrice: document.getElementById('productPrice'),
-      productPriceColor: document.getElementById('productPriceColor'),
-      productFeatured: document.getElementById('productFeatured'),
-      productFeaturedOrder: document.getElementById('productFeaturedOrder'),
-      productImageSrc: document.getElementById('productImageSrc'),
-      uploadMainBtn: document.getElementById('uploadMainBtn'),
-      uploadMainInput: document.getElementById('uploadMainInput'),
-      uploadThumbBtn: document.getElementById('uploadThumbBtn'),
-      uploadThumbInput: document.getElementById('uploadThumbInput'),
-      clearThumbsBtn: document.getElementById('clearThumbsBtn'),
-      thumbsList: document.getElementById('thumbsList'),
-      saveProductBtn: document.getElementById('saveProductBtn'),
-      resetProductBtn: document.getElementById('resetProductBtn')
+      loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'),
+      passwordInput: document.getElementById('passwordInput'), loginBtn: document.getElementById('loginBtn'), loginMsg: document.getElementById('loginMsg'),
+      refreshBtn: document.getElementById('refreshBtn'), publishBtn: document.getElementById('publishBtn'), logoutBtn: document.getElementById('logoutBtn'),
+      saveBtn: document.getElementById('saveBtn'), resetBtn: document.getElementById('resetBtn'), searchInput: document.getElementById('searchInput'),
+      categoryFilter: document.getElementById('categoryFilter'), productList: document.getElementById('productList'), emptyState: document.getElementById('emptyState'),
+      editorWrap: document.getElementById('editorWrap'), catalogInfo: document.getElementById('catalogInfo'), appMsg: document.getElementById('appMsg'),
+      previewImage: document.getElementById('previewImage'), editorTitle: document.getElementById('editorTitle'), productId: document.getElementById('productId'),
+      productCategory: document.getElementById('productCategory'), productName: document.getElementById('productName'), productAlt: document.getElementById('productAlt'),
+      productDesc: document.getElementById('productDesc'), productPrice: document.getElementById('productPrice'), productPriceColor: document.getElementById('productPriceColor'),
+      productHighlightHome: document.getElementById('productHighlightHome'), productHomeOrder: document.getElementById('productHomeOrder'), productImageSrc: document.getElementById('productImageSrc'),
+      thumbsArea: document.getElementById('thumbsArea'), uploadMainBtn: document.getElementById('uploadMainBtn'), uploadMainInput: document.getElementById('uploadMainInput'),
+      uploadThumbBtn: document.getElementById('uploadThumbBtn'), uploadThumbInput: document.getElementById('uploadThumbInput'), logsWrap: document.getElementById('logsWrap')
     };
-
-    function showMessage(target, text, type = 'success') {
-      target.textContent = text;
-      target.className = `message show ${type}`;
-    }
-
-    function clearMessage(target) {
-      target.textContent = '';
-      target.className = 'message';
-    }
-
+    function showMessage(target, text, type = 'success') { target.textContent = text; target.className = `message show ${type}`; }
+    function clearMessage(target) { target.textContent = ''; target.className = 'message'; }
     async function api(action, payload = {}) {
-      const response = await fetch(APP_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action, sessionToken: state.sessionToken, ...payload })
-      });
-      const data = await response.json();
-      if (!data.ok) throw new Error(data.error || 'Erro desconhecido');
-      return data;
+      const response = await fetch(APP_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, sessionToken: state.sessionToken, ...payload }) });
+      const data = await response.json(); if (!data.ok) throw new Error(data.error || 'Erro desconhecido'); return data;
     }
-
-    function openApp() {
-      el.loginScreen.classList.add('hidden');
-      el.appScreen.classList.remove('hidden');
-    }
-
-    function goToLogin() {
-      sessionStorage.removeItem('shakawAdminSession');
-      state.sessionToken = '';
-      state.user = null;
-      state.products = [];
-      state.filteredProducts = [];
-      state.selectedId = '';
-      state.originalProduct = null;
-      state.currentProduct = null;
-      el.appScreen.classList.add('hidden');
-      el.loginScreen.classList.remove('hidden');
-      clearMessage(el.appMsg);
-    }
-
     async function login() {
-      clearMessage(el.loginMsg);
-      const password = el.passwordInput.value.trim();
+      clearMessage(el.loginMsg); const password = el.passwordInput.value.trim();
       if (!password) return showMessage(el.loginMsg, 'Digite a senha.', 'error');
-
       el.loginBtn.disabled = true;
-      try {
-        const data = await api('login', { password });
-        state.sessionToken = data.sessionToken;
-        state.user = data.user || null;
-        sessionStorage.setItem('shakawAdminSession', state.sessionToken);
-        el.passwordInput.value = '';
-        openApp();
-        await bootstrap();
-      } catch (error) {
-        showMessage(el.loginMsg, error.message, 'error');
-      } finally {
-        el.loginBtn.disabled = false;
-      }
+      try { const data = await api('login', { password }); state.sessionToken = data.sessionToken; sessionStorage.setItem('shakawAdminSession', state.sessionToken); el.passwordInput.value = ''; openApp(); await bootstrap(); }
+      catch (error) { showMessage(el.loginMsg, error.message, 'error'); }
+      finally { el.loginBtn.disabled = false; }
     }
-
-    async function bootstrap() {
-      clearMessage(el.appMsg);
-      const data = await api('bootstrap');
-      state.user = data.user;
-      state.categories = data.categories || [];
-      state.config = data.config || {};
-
-      el.sessionStatus.textContent = `${state.user?.role || 'ADMIN'}${state.user?.email ? ' • ' + state.user.email : ''}`;
-      el.publishBtn.disabled = !state.user?.canPublish;
-
-      buildCategoryOptions();
-      await refreshProducts();
-      await refreshLogs();
+    function openApp() { el.loginScreen.classList.add('hidden'); el.appScreen.classList.remove('hidden'); }
+    function goToLogin() { sessionStorage.removeItem('shakawAdminSession'); state.sessionToken=''; state.products=[]; state.categories=[]; state.selectedId=''; state.dirty=false; el.appScreen.classList.add('hidden'); el.loginScreen.classList.remove('hidden'); el.productList.innerHTML=''; el.editorWrap.classList.add('hidden'); el.emptyState.classList.remove('hidden'); el.catalogInfo.textContent='Catálogo não carregado'; clearMessage(el.appMsg); }
+    async function bootstrap() { clearMessage(el.appMsg); const data = await api('bootstrap'); state.products = data.products || []; state.categories = data.categories || []; renderCategoryOptions(); renderList(); await loadLogs(); el.catalogInfo.textContent = `${state.products.length} produtos carregados`; el.editorWrap.classList.add('hidden'); el.emptyState.classList.remove('hidden'); }
+    function renderCategoryOptions() {
+      const opts = ['<option value="">Todas</option>'].concat(state.categories.map(c => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`)).join('');
+      el.categoryFilter.innerHTML = opts;
+      el.productCategory.innerHTML = state.categories.map(c => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`).join('');
     }
-
-    function buildCategoryOptions() {
-      const options = ['<option value="">Todas</option>']
-        .concat(state.categories.map(c => `<option value="${escapeHtml(c.valorInterno)}">${escapeHtml(c.rotulo)}</option>`))
-        .join('');
-      el.categoryFilter.innerHTML = options;
-
-      const editorOptions = state.categories.map(c => `<option value="${escapeHtml(c.valorInterno)}">${escapeHtml(c.rotulo)}</option>`).join('');
-      el.productCategory.innerHTML = editorOptions;
-    }
-
-    async function refreshProducts() {
-      const data = await api('listProducts', {
-        search: el.searchInput.value.trim(),
-        category: el.categoryFilter.value
-      });
-      state.products = data.products || [];
-      state.filteredProducts = state.products;
-      renderProductList();
-      el.catalogInfo.textContent = `${state.products.length} produtos`;
-    }
-
-    function renderProductList() {
+    function renderList() {
+      const term = el.searchInput.value.trim().toLowerCase(), category = el.categoryFilter.value;
+      const filtered = state.products.filter(product => (!term || product.name.toLowerCase().includes(term) || product.id.toLowerCase().includes(term)) && (!category || product.category === category));
       el.productList.innerHTML = '';
-      if (!state.filteredProducts.length) {
-        el.productList.innerHTML = '<p class="note">Nenhum produto encontrado.</p>';
-        return;
-      }
-
-      state.filteredProducts.forEach(product => {
-        const item = document.createElement('div');
-        item.className = 'product-item' + (product.id === state.selectedId ? ' active' : '');
-        item.innerHTML = `<strong>${escapeHtml(product.nome)}</strong><small>${escapeHtml(product.id)} • ${escapeHtml(product.categoria)}</small>`;
-        item.addEventListener('click', () => loadProduct(product.id));
-        el.productList.appendChild(item);
-      });
+      if (!filtered.length) return el.productList.innerHTML = '<p style="color:#a8bfd3;">Nenhum produto encontrado.</p>';
+      filtered.forEach(product => { const item = document.createElement('div'); item.className = 'product-item' + (product.id === state.selectedId ? ' active' : ''); item.innerHTML = `<strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.id)} • ${escapeHtml(product.category)}</small>`; item.addEventListener('click', () => selectProduct(product.id)); el.productList.appendChild(item); });
     }
-
-    async function loadProduct(productId) {
-      clearMessage(el.appMsg);
-      const data = await api('getProduct', { productId });
-      state.selectedId = productId;
-      state.originalProduct = structuredClone(data.product);
-      state.currentProduct = structuredClone(data.product);
-      fillEditor();
-      renderProductList();
-      el.emptyState.classList.add('hidden');
-      el.editorWrap.classList.remove('hidden');
+    function selectProduct(id) {
+      if (state.dirty && state.selectedId && !confirm('Você tem alterações não salvas neste item. Deseja trocar mesmo assim?')) return;
+      const product = state.products.find(p => p.id === id); if (!product) return;
+      state.selectedId = id; state.dirty = false; fillEditor(product); renderList(); el.emptyState.classList.add('hidden'); el.editorWrap.classList.remove('hidden'); el.resetBtn.disabled = false; el.saveBtn.disabled = false;
     }
-
-    function buildNewProduct() {
-      const defaultCategory = state.categories[0]?.valorInterno || '';
-      const base = {
-        publicar: true,
-        ativo: true,
-        id: '',
-        categoria: defaultCategory,
-        nome: '',
-        alt: '',
-        descricao: '',
-        precoTexto: '',
-        precoCor: '',
-        imagemPrincipal: '',
-        destaqueHome: false,
-        ordemHome: 0,
-        thumbs: []
-      };
-      state.selectedId = '';
-      state.originalProduct = structuredClone(base);
-      state.currentProduct = structuredClone(base);
-      fillEditor();
-      el.emptyState.classList.add('hidden');
-      el.editorWrap.classList.remove('hidden');
-      renderProductList();
+    function fillEditor(product) {
+      el.editorTitle.textContent = product.name || 'Editar produto'; el.previewImage.src = product.imageSrc || ''; el.previewImage.alt = product.alt || product.name || 'Prévia do produto';
+      el.productId.value = product.id; el.productCategory.value = product.category; el.productName.value = product.name; el.productAlt.value = product.alt; el.productDesc.value = product.desc;
+      el.productPrice.value = product.price; el.productPriceColor.value = product.priceColor || ''; el.productHighlightHome.value = product.highlightHome ? 'SIM' : 'NÃO'; el.productHomeOrder.value = product.homeOrder || 0; el.productImageSrc.value = product.imageSrc; el.thumbsArea.value = (product.thumbs || []).join('\n');
     }
-
-    function fillEditor() {
-      const p = state.currentProduct;
-      el.editorTitle.textContent = p.nome || 'Novo produto';
-      el.previewImage.src = p.imagemPrincipal || '';
-      el.previewImage.alt = p.alt || p.nome || 'Prévia do produto';
-      el.productId.value = p.id || '';
-      el.productCategory.value = p.categoria || '';
-      el.productPublish.value = p.publicar ? 'SIM' : 'NÃO';
-      el.productActive.value = p.ativo ? 'SIM' : 'NÃO';
-      el.productName.value = p.nome || '';
-      el.productAlt.value = p.alt || '';
-      el.productDesc.value = p.descricao || '';
-      el.productPrice.value = p.precoTexto || '';
-      el.productPriceColor.value = p.precoCor || '';
-      el.productFeatured.value = p.destaqueHome ? 'SIM' : 'NÃO';
-      el.productFeaturedOrder.value = p.ordemHome || 0;
-      el.productImageSrc.value = p.imagemPrincipal || '';
-      renderThumbs();
+    function updateCurrentProductFromForm() {
+      const product = state.products.find(p => p.id === state.selectedId); if (!product) return;
+      product.category = el.productCategory.value; product.name = el.productName.value.trim(); product.alt = el.productAlt.value.trim(); product.desc = el.productDesc.value; product.price = el.productPrice.value.trim();
+      product.priceColor = el.productPriceColor.value; product.highlightHome = el.productHighlightHome.value === 'SIM'; product.homeOrder = Number(el.productHomeOrder.value || 0); product.imageSrc = el.productImageSrc.value.trim(); product.thumbs = el.thumbsArea.value.split('\n').map(v => v.trim()).filter(Boolean);
+      el.editorTitle.textContent = product.name || 'Editar produto'; el.previewImage.src = product.imageSrc || ''; el.previewImage.alt = product.alt || product.name || 'Prévia do produto'; state.dirty = true; renderList();
     }
-
-    function pullFormToState() {
-      const p = state.currentProduct;
-      p.id = el.productId.value.trim();
-      p.categoria = el.productCategory.value;
-      p.publicar = el.productPublish.value === 'SIM';
-      p.ativo = el.productActive.value === 'SIM';
-      p.nome = el.productName.value.trim();
-      p.alt = el.productAlt.value.trim();
-      p.descricao = el.productDesc.value;
-      p.precoTexto = el.productPrice.value.trim();
-      p.precoCor = el.productPriceColor.value;
-      p.destaqueHome = el.productFeatured.value === 'SIM';
-      p.ordemHome = Number(el.productFeaturedOrder.value || 0);
-      p.imagemPrincipal = el.productImageSrc.value.trim();
-      el.editorTitle.textContent = p.nome || 'Novo produto';
-      el.previewImage.src = p.imagemPrincipal || '';
-      el.previewImage.alt = p.alt || p.nome || 'Prévia do produto';
+    async function saveCurrentProduct() {
+      const product = state.products.find(p => p.id === state.selectedId); if (!product) return;
+      try { const data = await api('saveProduct', { product }); const idx = state.products.findIndex(p => p.id === product.id); state.products[idx] = data.product; state.dirty = false; fillEditor(data.product); renderList(); showMessage(el.appMsg, 'Produto salvo com sucesso.', 'success'); await loadLogs(); }
+      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
     }
-
-    function renderThumbs() {
-      const thumbs = state.currentProduct?.thumbs || [];
-      el.thumbsList.innerHTML = '';
-      if (!thumbs.length) {
-        el.thumbsList.innerHTML = '<span class="note">Nenhum thumb adicionado.</span>';
-        return;
-      }
-      thumbs.forEach((src, index) => {
-        const tag = document.createElement('span');
-        tag.className = 'thumb-tag';
-        tag.innerHTML = `<span>${escapeHtml(src)}</span>`;
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = 'x';
-        btn.addEventListener('click', () => {
-          state.currentProduct.thumbs.splice(index, 1);
-          renderThumbs();
-        });
-        tag.appendChild(btn);
-        el.thumbsList.appendChild(tag);
-      });
+    async function publishSite() {
+      if (!confirm('Deseja publicar catálogo e home agora?')) return;
+      try { el.publishBtn.disabled = true; const data = await api('publishCatalog'); showMessage(el.appMsg, `Publicado com sucesso. catálogo: ${data.catalogCommitSha || 'ok'} | home: ${data.indexCommitSha || 'ok'}`, 'success'); await loadLogs(); }
+      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
+      finally { el.publishBtn.disabled = false; }
     }
-
-    async function saveProduct() {
-      clearMessage(el.appMsg);
-      pullFormToState();
-
-      if (!state.currentProduct.id) return showMessage(el.appMsg, 'Informe o ID do produto.', 'error');
-      if (!state.currentProduct.nome) return showMessage(el.appMsg, 'Informe o nome do produto.', 'error');
-      if (!state.currentProduct.categoria) return showMessage(el.appMsg, 'Selecione a categoria.', 'error');
-
-      el.saveProductBtn.disabled = true;
-      try {
-        const data = await api('saveProduct', { product: state.currentProduct });
-        showMessage(el.appMsg, `Produto ${data.product.id} salvo com sucesso.`, 'success');
-        state.originalProduct = structuredClone(state.currentProduct);
-        state.selectedId = state.currentProduct.id;
-        await refreshProducts();
-      } catch (error) {
-        showMessage(el.appMsg, error.message, 'error');
-      } finally {
-        el.saveProductBtn.disabled = false;
-      }
+    async function loadLogs() {
+      try { const data = await api('listLogs'); const logs = data.logs || []; el.logsWrap.innerHTML = logs.length ? logs.map(log => `<div class="log-item"><strong>${escapeHtml(log.Acao || log['Ação'] || log.acao || '')}</strong><small>${escapeHtml(String(log.Referencia || log.ref || ''))}</small><small>${escapeHtml(String(log.Mensagem || log.mensagem || ''))}</small></div>`).join('') : '<p style="color:#9fb5cb;">Sem logs ainda.</p>'; }
+      catch { el.logsWrap.innerHTML = '<p style="color:#ffb2bb;">Não foi possível carregar os logs.</p>'; }
     }
-
-    function resetProduct() {
-      state.currentProduct = structuredClone(state.originalProduct);
-      fillEditor();
-      showMessage(el.appMsg, 'Alterações do item desfeitas.', 'success');
+    function resetCurrentItem() { const original = state.products.find(p => p.id === state.selectedId); if (!original) return; fillEditor(original); state.dirty = false; renderList(); showMessage(el.appMsg, 'Alterações locais desfeitas.', 'success'); }
+    async function uploadMainImage(file) {
+      if (!state.selectedId) return showMessage(el.appMsg, 'Selecione um produto antes do upload.', 'error');
+      const product = state.products.find(p => p.id === state.selectedId); if (!product || !file) return;
+      try { const data = await api('uploadImage', { category: product.category, filename: file.name, base64: await fileToDataUrl(file) }); el.productImageSrc.value = data.path; updateCurrentProductFromForm(); showMessage(el.appMsg, 'Imagem enviada com sucesso.', 'success'); }
+      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
     }
-
-    async function publishCatalog() {
-      clearMessage(el.appMsg);
-      if (!confirm('Deseja publicar o catálogo agora?')) return;
-
-      el.publishBtn.disabled = true;
-      try {
-        const data = await api('publishCatalog', {});
-        showMessage(el.appMsg, `Catálogo publicado com sucesso. Commit: ${data.commitSha || 'ok'}`, 'success');
-        await refreshLogs();
-      } catch (error) {
-        showMessage(el.appMsg, error.message, 'error');
-      } finally {
-        el.publishBtn.disabled = false;
-      }
+    async function uploadThumb(file) {
+      if (!state.selectedId) return showMessage(el.appMsg, 'Selecione um produto antes do upload.', 'error');
+      const product = state.products.find(p => p.id === state.selectedId); if (!product || !file) return;
+      try { const data = await api('uploadImage', { category: product.category, filename: file.name, base64: await fileToDataUrl(file) }); el.thumbsArea.value = (el.thumbsArea.value.trim() ? el.thumbsArea.value.trim() + '\n' : '') + data.path; updateCurrentProductFromForm(); showMessage(el.appMsg, 'Thumb enviada com sucesso.', 'success'); }
+      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
     }
-
-    async function uploadSingleImage(file, kind) {
-      if (!file) return;
-      clearMessage(el.appMsg);
-
-      try {
-        const base64Data = await fileToBase64(file);
-        const data = await api('uploadImage', {
-          fileName: file.name,
-          mimeType: file.type,
-          base64Data,
-          category: el.productCategory.value
-        });
-        if (kind === 'main') {
-          el.productImageSrc.value = data.path;
-          pullFormToState();
-        } else {
-          state.currentProduct.thumbs.push(data.path);
-          renderThumbs();
-        }
-        showMessage(el.appMsg, `Upload concluído: ${data.path}`, 'success');
-      } catch (error) {
-        showMessage(el.appMsg, error.message, 'error');
-      }
-    }
-
-    async function uploadMultipleThumbs(files) {
-      for (const file of files) {
-        await uploadSingleImage(file, 'thumb');
-      }
-    }
-
-    async function refreshLogs() {
-      try {
-        const data = await api('listLogs');
-        renderLogs(data.logs || []);
-      } catch (error) {
-        el.logsWrap.innerHTML = `<div class="note">${escapeHtml(error.message)}</div>`;
-      }
-    }
-
-    function renderLogs(logs) {
-      if (!logs.length) {
-        el.logsWrap.innerHTML = '<div class="note">Sem logs recentes.</div>';
-        return;
-      }
-      const rows = logs.slice(0, 20).map(log => `
-        <tr>
-          <td>${escapeHtml(formatDateValue(log.dataHora))}</td>
-          <td>${escapeHtml(log.usuario || '')}</td>
-          <td>${escapeHtml(log.acao || '')}</td>
-          <td>${escapeHtml(log.arquivo || '')}</td>
-          <td>${escapeHtml(log.commitSha || '')}</td>
-        </tr>
-      `).join('');
-      el.logsWrap.innerHTML = `
-        <table>
-          <thead><tr><th>Data</th><th>Usuário</th><th>Ação</th><th>Arquivo</th><th>Commit</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-    }
-
-    function formatDateValue(value) {
-      if (!value) return '';
-      const date = new Date(value);
-      if (isNaN(date.getTime())) return String(value);
-      return date.toLocaleString('pt-BR');
-    }
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = String(reader.result || '');
-          const base64 = result.includes(',') ? result.split(',')[1] : result;
-          resolve(base64);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function escapeHtml(str) {
-      return String(str ?? '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    el.loginBtn.addEventListener('click', login);
-    el.passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-    el.refreshBtn.addEventListener('click', async () => { await refreshProducts(); await refreshLogs(); });
-    el.publishBtn.addEventListener('click', publishCatalog);
-    el.logoutBtn.addEventListener('click', goToLogin);
-    el.searchInput.addEventListener('input', refreshProducts);
-    el.categoryFilter.addEventListener('change', refreshProducts);
-    el.newProductBtn.addEventListener('click', buildNewProduct);
-    el.saveProductBtn.addEventListener('click', saveProduct);
-    el.resetProductBtn.addEventListener('click', resetProduct);
-    el.uploadMainBtn.addEventListener('click', () => el.uploadMainInput.click());
-    el.uploadMainInput.addEventListener('change', async e => {
-      const file = e.target.files[0];
-      await uploadSingleImage(file, 'main');
-      e.target.value = '';
-    });
-    el.uploadThumbBtn.addEventListener('click', () => el.uploadThumbInput.click());
-    el.uploadThumbInput.addEventListener('change', async e => {
-      const files = [...e.target.files];
-      await uploadMultipleThumbs(files);
-      e.target.value = '';
-    });
-    el.clearThumbsBtn.addEventListener('click', () => {
-      if (!state.currentProduct) return;
-      state.currentProduct.thumbs = [];
-      renderThumbs();
-    });
-
-    [
-      el.productId, el.productCategory, el.productPublish, el.productActive, el.productName, el.productAlt,
-      el.productDesc, el.productPrice, el.productPriceColor, el.productFeatured, el.productFeaturedOrder,
-      el.productImageSrc
-    ].forEach(input => input.addEventListener('input', () => state.currentProduct && pullFormToState()));
-
-    (async function init() {
-      if (!state.sessionToken) return;
-      try {
-        openApp();
-        await api('checkSession');
-        await bootstrap();
-      } catch {
-        goToLogin();
-      }
-    })();
+    function fileToDataUrl(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
+    function escapeHtml(str) { return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;"); }
+    el.loginBtn.addEventListener('click', login); el.passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); }); el.refreshBtn.addEventListener('click', bootstrap); el.publishBtn.addEventListener('click', publishSite);
+    el.logoutBtn.addEventListener('click', goToLogin); el.saveBtn.addEventListener('click', saveCurrentProduct); el.resetBtn.addEventListener('click', resetCurrentItem); el.searchInput.addEventListener('input', renderList); el.categoryFilter.addEventListener('change', renderList);
+    el.uploadMainBtn.addEventListener('click', () => el.uploadMainInput.click()); el.uploadThumbBtn.addEventListener('click', () => el.uploadThumbInput.click()); el.uploadMainInput.addEventListener('change', e => uploadMainImage(e.target.files[0])); el.uploadThumbInput.addEventListener('change', e => uploadThumb(e.target.files[0]));
+    [el.productCategory,el.productName,el.productAlt,el.productDesc,el.productPrice,el.productPriceColor,el.productHighlightHome,el.productHomeOrder,el.productImageSrc,el.thumbsArea].forEach(field => field.addEventListener('input', updateCurrentProductFromForm));
+    (async function init(){ if (!state.sessionToken) return; try { openApp(); await api('checkSession'); await bootstrap(); } catch { goToLogin(); } })();
   </script>
 </body>
 </html>
