@@ -560,12 +560,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hiddenIframe) {
         hiddenIframe.addEventListener('load', () => {
-            if (!isSubmittingInterest) return;
+    if (!isSubmittingInterest) return;
 
-            isSubmittingInterest = false;
+    isSubmittingInterest = false;
 
-            showFormMessage('Interesse enviado com sucesso! Retornaremos em breve.', 'success');
-            showNotification('Interesse enviado com sucesso!', 'success');
+    // REDIRECIONA AQUI 👇
+    window.location.href = "obrigado.html";
+});
 
             if (contactForm) contactForm.reset();
             clearInterestList();
