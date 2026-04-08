@@ -1141,7 +1141,7 @@ main {
     .item-controls { gap: 6px; }
     .qty-btn, .remove-item-btn { width: 28px; height: 28px; }
     #viewInterestsBtn { bottom: 70px; right: 10px; padding: 8px 15px; font-size: 0.85rem; }
-    #backToTopBtn { bottom: 15px; right: 10px; width: 40px; height: 40px; font-size: 1rem; }
+    #backToTopBtn { bottom: 85px; right: 10px; width: 40px; height: 40px; font-size: 1rem; }
     #lightbox-prev { left: 5px; padding: 10px 12px; font-size: 1.1rem; }
     #lightbox-next { right: 5px; padding: 10px 12px; font-size: 1.1rem; }
     #lightbox-close { top: -30px; font-size: 1.8rem; }
