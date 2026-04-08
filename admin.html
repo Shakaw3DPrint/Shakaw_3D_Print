@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shakaw Admin Web v3</title>
+  <title>Shakaw Admin Web v3 + MFA</title>
   <style>
     *{box-sizing:border-box}
     body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(to bottom,#051131,#091127);color:#e0e0e0}
@@ -31,6 +31,8 @@
     .raw-box{margin-top:18px;border-top:1px solid #304662;padding-top:16px}.upload-row{display:flex;gap:12px;align-items:center}.upload-row input{margin-bottom:0;flex:1}.upload-row button{white-space:nowrap}
     .logs-box{margin-top:18px;max-height:260px;overflow:auto;border-top:1px solid #304662;padding-top:16px}.log-item{padding:10px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}.log-item small{display:block;color:#8eb0d1;margin-top:4px}
     code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px}
+    .step-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(138,92,255,.14);border:1px solid rgba(138,92,255,.35);color:#d6c5ff;font-size:.82rem;font-weight:700;margin-bottom:14px}
+    .login-actions{display:flex;gap:10px;flex-wrap:wrap}
     @media (max-width:980px){.grid{grid-template-columns:1fr}.search-box{position:static}.product-list{max-height:none}}
     @media (max-width:700px){.form-grid{grid-template-columns:1fr}.editor-image{width:100%;height:220px}.upload-row{flex-direction:column;align-items:stretch}}
   </style>
@@ -40,9 +42,27 @@
     <div class="card login-card">
       <h1>Shakaw Admin</h1>
       <p>Este painel usa o Apps Script como backend seguro e a planilha como base do catálogo.</p>
-      <label for="passwordInput">Senha do administrador</label>
-      <input id="passwordInput" type="password" placeholder="Digite sua senha" autocomplete="current-password" />
-      <button id="loginBtn" class="btn-primary" style="width:100%;">Entrar</button>
+
+      <div id="passwordStep">
+        <div class="step-badge">Etapa 1 de 2 — Senha</div>
+        <label for="passwordInput">Senha do administrador</label>
+        <input id="passwordInput" type="password" placeholder="Digite sua senha" autocomplete="current-password" />
+        <div class="login-actions">
+          <button id="loginBtn" class="btn-primary" style="width:100%;">Entrar</button>
+        </div>
+      </div>
+
+      <div id="mfaStep" class="hidden">
+        <div class="step-badge">Etapa 2 de 2 — Google Authenticator</div>
+        <p>Digite o código de 6 dígitos gerado no seu Authenticator para concluir o login.</p>
+        <label for="totpInput">Código MFA</label>
+        <input id="totpInput" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" />
+        <div class="login-actions">
+          <button id="verifyTotpBtn" class="btn-primary" style="flex:1;">Validar código</button>
+          <button id="backToPasswordBtn" class="btn-secondary" type="button">Voltar</button>
+        </div>
+      </div>
+
       <div id="loginMsg" class="message"></div>
       <p class="note">O catálogo gerado mantém o botão de interesses, os modais do formulário e os links dos cards.</p>
     </div>
@@ -121,10 +141,21 @@
 
   <script>
     const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlreyxQCzhhvZbOVCa6lUOWJwJA67A90KhAfS0A2poDwXO8XWn0oo7LVO0DKyayPgrRQ/exec';
-    const state = { sessionToken: sessionStorage.getItem('shakawAdminSession') || '', products: [], categories: [], selectedId: '', dirty: false };
+    const state = {
+      sessionToken: sessionStorage.getItem('shakawAdminSession') || '',
+      products: [],
+      categories: [],
+      selectedId: '',
+      dirty: false,
+      challengeToken: '',
+      mfaPending: false
+    };
     const el = {
       loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'),
-      passwordInput: document.getElementById('passwordInput'), loginBtn: document.getElementById('loginBtn'), loginMsg: document.getElementById('loginMsg'),
+      passwordStep: document.getElementById('passwordStep'), mfaStep: document.getElementById('mfaStep'),
+      passwordInput: document.getElementById('passwordInput'), totpInput: document.getElementById('totpInput'),
+      loginBtn: document.getElementById('loginBtn'), verifyTotpBtn: document.getElementById('verifyTotpBtn'),
+      backToPasswordBtn: document.getElementById('backToPasswordBtn'), loginMsg: document.getElementById('loginMsg'),
       refreshBtn: document.getElementById('refreshBtn'), publishBtn: document.getElementById('publishBtn'), logoutBtn: document.getElementById('logoutBtn'),
       saveBtn: document.getElementById('saveBtn'), resetBtn: document.getElementById('resetBtn'), searchInput: document.getElementById('searchInput'),
       categoryFilter: document.getElementById('categoryFilter'), productList: document.getElementById('productList'), emptyState: document.getElementById('emptyState'),
@@ -136,86 +167,335 @@
       thumbsArea: document.getElementById('thumbsArea'), uploadMainBtn: document.getElementById('uploadMainBtn'), uploadMainInput: document.getElementById('uploadMainInput'),
       uploadThumbBtn: document.getElementById('uploadThumbBtn'), uploadThumbInput: document.getElementById('uploadThumbInput'), logsWrap: document.getElementById('logsWrap')
     };
-    function showMessage(target, text, type = 'success') { target.textContent = text; target.className = `message show ${type}`; }
-    function clearMessage(target) { target.textContent = ''; target.className = 'message'; }
-    function escapeHtml(str) { return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+
+    function showMessage(target, text, type = 'success') {
+      target.textContent = text;
+      target.className = `message show ${type}`;
+    }
+    function clearMessage(target) {
+      target.textContent = '';
+      target.className = 'message';
+    }
+    function escapeHtml(str) {
+      return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+    }
     async function api(action, payload = {}) {
-      const response = await fetch(APP_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, sessionToken: state.sessionToken, ...payload }) });
-      const data = await response.json(); if (!data.ok) throw new Error(data.error || 'Erro desconhecido'); return data;
+      const response = await fetch(APP_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action, sessionToken: state.sessionToken, ...payload })
+      });
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || 'Erro desconhecido');
+      return data;
     }
+
+    function showPasswordStep() {
+      state.mfaPending = false;
+      state.challengeToken = '';
+      el.passwordStep.classList.remove('hidden');
+      el.mfaStep.classList.add('hidden');
+      el.totpInput.value = '';
+    }
+    function showMfaStep() {
+      state.mfaPending = true;
+      el.passwordStep.classList.add('hidden');
+      el.mfaStep.classList.remove('hidden');
+      el.totpInput.focus();
+    }
+
     async function login() {
-      clearMessage(el.loginMsg); const password = el.passwordInput.value.trim();
+      clearMessage(el.loginMsg);
+      const password = el.passwordInput.value.trim();
       if (!password) return showMessage(el.loginMsg, 'Digite a senha.', 'error');
+
       el.loginBtn.disabled = true;
-      try { const data = await api('login', { password }); state.sessionToken = data.sessionToken; sessionStorage.setItem('shakawAdminSession', state.sessionToken); el.passwordInput.value = ''; openApp(); await bootstrap(); }
-      catch (error) { showMessage(el.loginMsg, error.message, 'error'); }
-      finally { el.loginBtn.disabled = false; }
+      try {
+        const data = await api('login', { password });
+
+        if (data.mfaRequired) {
+          state.challengeToken = data.challengeToken || data.tempToken || '';
+          if (!state.challengeToken) throw new Error('Desafio MFA não retornado pelo backend.');
+          showMfaStep();
+          showMessage(el.loginMsg, 'Senha validada. Digite o código do Google Authenticator.', 'success');
+          return;
+        }
+
+        state.sessionToken = data.sessionToken || data.token || '';
+        if (!state.sessionToken) throw new Error('Sessão não retornada pelo backend.');
+        sessionStorage.setItem('shakawAdminSession', state.sessionToken);
+        el.passwordInput.value = '';
+        openApp();
+        await bootstrap();
+      } catch (error) {
+        showMessage(el.loginMsg, error.message, 'error');
+      } finally {
+        el.loginBtn.disabled = false;
+      }
     }
-    function openApp() { el.loginScreen.classList.add('hidden'); el.appScreen.classList.remove('hidden'); }
-    function goToLogin() { sessionStorage.removeItem('shakawAdminSession'); state.sessionToken=''; state.products=[]; state.categories=[]; state.selectedId=''; state.dirty=false; el.appScreen.classList.add('hidden'); el.loginScreen.classList.remove('hidden'); el.productList.innerHTML=''; el.editorWrap.classList.add('hidden'); el.emptyState.classList.remove('hidden'); el.catalogInfo.textContent='Catálogo não carregado'; clearMessage(el.appMsg); }
-    async function bootstrap() { clearMessage(el.appMsg); const data = await api('bootstrap'); state.products = data.products || []; state.categories = data.categories || []; renderCategoryOptions(); renderList(); await loadLogs(); el.catalogInfo.textContent = `${state.products.length} produtos carregados`; el.editorWrap.classList.add('hidden'); el.emptyState.classList.remove('hidden'); }
+
+    async function verifyTotp() {
+      clearMessage(el.loginMsg);
+      const code = el.totpInput.value.replace(/\D/g, '').slice(0, 6);
+      if (!code || code.length !== 6) return showMessage(el.loginMsg, 'Digite um código MFA válido de 6 dígitos.', 'error');
+      if (!state.challengeToken) return showMessage(el.loginMsg, 'Desafio MFA ausente. Faça login novamente.', 'error');
+
+      el.verifyTotpBtn.disabled = true;
+      try {
+        const data = await api('verifyTotp', {
+          challengeToken: state.challengeToken,
+          code,
+          totpCode: code
+        });
+
+        state.sessionToken = data.sessionToken || data.token || '';
+        if (!state.sessionToken) throw new Error('Sessão não retornada após MFA.');
+        sessionStorage.setItem('shakawAdminSession', state.sessionToken);
+
+        el.passwordInput.value = '';
+        el.totpInput.value = '';
+        openApp();
+        await bootstrap();
+      } catch (error) {
+        showMessage(el.loginMsg, error.message, 'error');
+      } finally {
+        el.verifyTotpBtn.disabled = false;
+      }
+    }
+
+    function openApp() {
+      el.loginScreen.classList.add('hidden');
+      el.appScreen.classList.remove('hidden');
+    }
+
+    function goToLogin() {
+      sessionStorage.removeItem('shakawAdminSession');
+      state.sessionToken = '';
+      state.products = [];
+      state.categories = [];
+      state.selectedId = '';
+      state.dirty = false;
+      state.challengeToken = '';
+      state.mfaPending = false;
+
+      el.appScreen.classList.add('hidden');
+      el.loginScreen.classList.remove('hidden');
+      el.productList.innerHTML = '';
+      el.editorWrap.classList.add('hidden');
+      el.emptyState.classList.remove('hidden');
+      el.catalogInfo.textContent = 'Catálogo não carregado';
+      clearMessage(el.appMsg);
+      clearMessage(el.loginMsg);
+      showPasswordStep();
+    }
+
+    async function bootstrap() {
+      clearMessage(el.appMsg);
+      const data = await api('bootstrap');
+      state.products = data.products || [];
+      state.categories = data.categories || [];
+      renderCategoryOptions();
+      renderList();
+      await loadLogs();
+      el.catalogInfo.textContent = `${state.products.length} produtos carregados`;
+      el.editorWrap.classList.add('hidden');
+      el.emptyState.classList.remove('hidden');
+    }
+
     function renderCategoryOptions() {
       const opts = ['<option value="">Todas</option>'].concat(state.categories.map(c => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`)).join('');
       el.categoryFilter.innerHTML = opts;
       el.productCategory.innerHTML = state.categories.map(c => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`).join('');
     }
+
     function renderList() {
-      const term = el.searchInput.value.trim().toLowerCase(), category = el.categoryFilter.value;
+      const term = el.searchInput.value.trim().toLowerCase();
+      const category = el.categoryFilter.value;
       const filtered = state.products.filter(product => (!term || product.name.toLowerCase().includes(term) || product.id.toLowerCase().includes(term)) && (!category || product.category === category));
       el.productList.innerHTML = '';
       if (!filtered.length) return el.productList.innerHTML = '<p style="color:#a8bfd3;">Nenhum produto encontrado.</p>';
-      filtered.forEach(product => { const item = document.createElement('div'); item.className = 'product-item' + (product.id === state.selectedId ? ' active' : ''); item.innerHTML = `<strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.id)} • ${escapeHtml(product.category)}</small>`; item.addEventListener('click', () => selectProduct(product.id)); el.productList.appendChild(item); });
+      filtered.forEach(product => {
+        const item = document.createElement('div');
+        item.className = 'product-item' + (product.id === state.selectedId ? ' active' : '');
+        item.innerHTML = `<strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.id)} • ${escapeHtml(product.category)}</small>`;
+        item.addEventListener('click', () => selectProduct(product.id));
+        el.productList.appendChild(item);
+      });
     }
+
     function selectProduct(id) {
       if (state.dirty && state.selectedId && !confirm('Você tem alterações não salvas neste item. Deseja trocar mesmo assim?')) return;
-      const product = state.products.find(p => p.id === id); if (!product) return;
-      state.selectedId = id; state.dirty = false; fillEditor(product); renderList(); el.emptyState.classList.add('hidden'); el.editorWrap.classList.remove('hidden'); el.resetBtn.disabled = false; el.saveBtn.disabled = false;
+      const product = state.products.find(p => p.id === id);
+      if (!product) return;
+      state.selectedId = id;
+      state.dirty = false;
+      fillEditor(product);
+      renderList();
+      el.emptyState.classList.add('hidden');
+      el.editorWrap.classList.remove('hidden');
+      el.resetBtn.disabled = false;
+      el.saveBtn.disabled = false;
     }
+
     function fillEditor(product) {
-      el.editorTitle.textContent = product.name || 'Editar produto'; el.previewImage.src = product.imageSrc || ''; el.previewImage.alt = product.alt || product.name || 'Prévia do produto';
-      el.productId.value = product.id; el.productCategory.value = product.category; el.productName.value = product.name; el.productAlt.value = product.alt; el.productDesc.value = product.desc;
-      el.productPrice.value = product.price; el.productPriceColor.value = product.priceColor || ''; el.productHighlightHome.value = product.highlightHome ? 'SIM' : 'NÃO'; el.productHomeOrder.value = product.homeOrder || 0; el.productImageSrc.value = product.imageSrc; el.thumbsArea.value = (product.thumbs || []).join('\n');
+      el.editorTitle.textContent = product.name || 'Editar produto';
+      el.previewImage.src = product.imageSrc || '';
+      el.previewImage.alt = product.alt || product.name || 'Prévia do produto';
+      el.productId.value = product.id;
+      el.productCategory.value = product.category;
+      el.productName.value = product.name;
+      el.productAlt.value = product.alt;
+      el.productDesc.value = product.desc;
+      el.productPrice.value = product.price;
+      el.productPriceColor.value = product.priceColor || '';
+      el.productHighlightHome.value = product.highlightHome ? 'SIM' : 'NÃO';
+      el.productHomeOrder.value = product.homeOrder || 0;
+      el.productImageSrc.value = product.imageSrc;
+      el.thumbsArea.value = (product.thumbs || []).join('\n');
     }
+
     function updateCurrentProductFromForm() {
-      const product = state.products.find(p => p.id === state.selectedId); if (!product) return;
-      product.category = el.productCategory.value; product.name = el.productName.value.trim(); product.alt = el.productAlt.value.trim(); product.desc = el.productDesc.value; product.price = el.productPrice.value.trim();
-      product.priceColor = el.productPriceColor.value; product.highlightHome = el.productHighlightHome.value === 'SIM'; product.homeOrder = Number(el.productHomeOrder.value || 0); product.imageSrc = el.productImageSrc.value.trim(); product.thumbs = el.thumbsArea.value.split('\n').map(v => v.trim()).filter(Boolean);
-      el.editorTitle.textContent = product.name || 'Editar produto'; el.previewImage.src = product.imageSrc || ''; el.previewImage.alt = product.alt || product.name || 'Prévia do produto'; state.dirty = true; renderList();
+      const product = state.products.find(p => p.id === state.selectedId);
+      if (!product) return;
+      product.category = el.productCategory.value;
+      product.name = el.productName.value.trim();
+      product.alt = el.productAlt.value.trim();
+      product.desc = el.productDesc.value;
+      product.price = el.productPrice.value.trim();
+      product.priceColor = el.productPriceColor.value;
+      product.highlightHome = el.productHighlightHome.value === 'SIM';
+      product.homeOrder = Number(el.productHomeOrder.value || 0);
+      product.imageSrc = el.productImageSrc.value.trim();
+      product.thumbs = el.thumbsArea.value.split('\n').map(v => v.trim()).filter(Boolean);
+      el.editorTitle.textContent = product.name || 'Editar produto';
+      el.previewImage.src = product.imageSrc || '';
+      el.previewImage.alt = product.alt || product.name || 'Prévia do produto';
+      state.dirty = true;
+      renderList();
     }
+
     async function saveCurrentProduct() {
-      const product = state.products.find(p => p.id === state.selectedId); if (!product) return;
-      try { const data = await api('saveProduct', { product }); const idx = state.products.findIndex(p => p.id === product.id); state.products[idx] = data.product; state.dirty = false; fillEditor(data.product); renderList(); showMessage(el.appMsg, 'Produto salvo com sucesso.', 'success'); await loadLogs(); }
-      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
+      const product = state.products.find(p => p.id === state.selectedId);
+      if (!product) return;
+      try {
+        const data = await api('saveProduct', { product });
+        const idx = state.products.findIndex(p => p.id === product.id);
+        state.products[idx] = data.product;
+        state.dirty = false;
+        fillEditor(data.product);
+        renderList();
+        showMessage(el.appMsg, 'Produto salvo com sucesso.', 'success');
+        await loadLogs();
+      } catch (error) {
+        showMessage(el.appMsg, error.message, 'error');
+      }
     }
+
     async function publishSite() {
-      if (!confirm('Deseja publicar catálogo, home e style agora?')) return;
-      try { el.publishBtn.disabled = true; const data = await api('publishCatalog'); showMessage(el.appMsg, `Publicado com sucesso. catálogo: ${data.catalogCommitSha || 'ok'} | home: ${data.indexCommitSha || 'ok'} | style: ${data.styleCommitSha || 'ok'}`, 'success'); await loadLogs(); }
-      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
-      finally { el.publishBtn.disabled = false; }
+      if (!confirm('Deseja publicar catálogo e home agora?')) return;
+      try {
+        el.publishBtn.disabled = true;
+        const data = await api('publishCatalog');
+        showMessage(el.appMsg, `Publicado com sucesso. catálogo: ${data.catalogCommitSha || 'ok'} | home: ${data.indexCommitSha || 'ok'}`, 'success');
+        await loadLogs();
+      } catch (error) {
+        showMessage(el.appMsg, error.message, 'error');
+      } finally {
+        el.publishBtn.disabled = false;
+      }
     }
+
     async function loadLogs() {
-      try { const data = await api('listLogs'); const logs = data.logs || []; el.logsWrap.innerHTML = logs.length ? logs.map(log => `<div class="log-item"><strong>${escapeHtml(log.acao || '')}</strong><small>${escapeHtml(String(log.arquivo || ''))}</small><small>${escapeHtml(String(log.mensagem || ''))}</small></div>`).join('') : '<p style="color:#9fb5cb;">Sem logs ainda.</p>'; }
-      catch { el.logsWrap.innerHTML = '<p style="color:#ffb2bb;">Não foi possível carregar os logs.</p>'; }
+      try {
+        const data = await api('listLogs');
+        const logs = data.logs || [];
+        el.logsWrap.innerHTML = logs.length
+          ? logs.map(log => `<div class="log-item"><strong>${escapeHtml(log.acao || '')}</strong><small>${escapeHtml(String(log.arquivo || ''))}</small><small>${escapeHtml(String(log.mensagem || ''))}</small></div>`).join('')
+          : '<p style="color:#9fb5cb;">Sem logs ainda.</p>';
+      } catch {
+        el.logsWrap.innerHTML = '<p style="color:#ffb2bb;">Não foi possível carregar os logs.</p>';
+      }
     }
-    function resetCurrentItem() { const original = state.products.find(p => p.id === state.selectedId); if (!original) return; fillEditor(original); state.dirty = false; renderList(); showMessage(el.appMsg, 'Alterações locais desfeitas.', 'success'); }
+
+    function resetCurrentItem() {
+      const original = state.products.find(p => p.id === state.selectedId);
+      if (!original) return;
+      fillEditor(original);
+      state.dirty = false;
+      renderList();
+      showMessage(el.appMsg, 'Alterações locais desfeitas.', 'success');
+    }
+
     async function uploadMainImage(file) {
       if (!state.selectedId) return showMessage(el.appMsg, 'Selecione um produto antes do upload.', 'error');
-      const product = state.products.find(p => p.id === state.selectedId); if (!product || !file) return;
-      try { const data = await api('uploadImage', { category: product.category, fileName: file.name, mimeType: file.type, base64Data: await fileToDataUrl(file) }); el.productImageSrc.value = data.path; updateCurrentProductFromForm(); showMessage(el.appMsg, 'Imagem enviada com sucesso.', 'success'); }
-      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
+      const product = state.products.find(p => p.id === state.selectedId);
+      if (!product || !file) return;
+      try {
+        const data = await api('uploadImage', { category: product.category, fileName: file.name, mimeType: file.type, base64Data: await fileToDataUrl(file) });
+        el.productImageSrc.value = data.path;
+        updateCurrentProductFromForm();
+        showMessage(el.appMsg, 'Imagem enviada com sucesso.', 'success');
+      } catch (error) {
+        showMessage(el.appMsg, error.message, 'error');
+      }
     }
+
     async function uploadThumb(file) {
       if (!state.selectedId) return showMessage(el.appMsg, 'Selecione um produto antes do upload.', 'error');
-      const product = state.products.find(p => p.id === state.selectedId); if (!product || !file) return;
-      try { const data = await api('uploadImage', { category: product.category, fileName: file.name, mimeType: file.type, base64Data: await fileToDataUrl(file) }); el.thumbsArea.value = (el.thumbsArea.value.trim() ? el.thumbsArea.value.trim() + '\n' : '') + data.path; updateCurrentProductFromForm(); showMessage(el.appMsg, 'Thumb enviada com sucesso.', 'success'); }
-      catch (error) { showMessage(el.appMsg, error.message, 'error'); }
+      const product = state.products.find(p => p.id === state.selectedId);
+      if (!product || !file) return;
+      try {
+        const data = await api('uploadImage', { category: product.category, fileName: file.name, mimeType: file.type, base64Data: await fileToDataUrl(file) });
+        el.thumbsArea.value = (el.thumbsArea.value.trim() ? el.thumbsArea.value.trim() + '\n' : '') + data.path;
+        updateCurrentProductFromForm();
+        showMessage(el.appMsg, 'Thumb enviada com sucesso.', 'success');
+      } catch (error) {
+        showMessage(el.appMsg, error.message, 'error');
+      }
     }
-    function fileToDataUrl(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
-    el.loginBtn.addEventListener('click', login); el.passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); }); el.refreshBtn.addEventListener('click', bootstrap); el.publishBtn.addEventListener('click', publishSite);
-    el.logoutBtn.addEventListener('click', goToLogin); el.saveBtn.addEventListener('click', saveCurrentProduct); el.resetBtn.addEventListener('click', resetCurrentItem); el.searchInput.addEventListener('input', renderList); el.categoryFilter.addEventListener('change', renderList);
-    el.uploadMainBtn.addEventListener('click', () => el.uploadMainInput.click()); el.uploadThumbBtn.addEventListener('click', () => el.uploadThumbInput.click()); el.uploadMainInput.addEventListener('change', e => uploadMainImage(e.target.files[0])); el.uploadThumbInput.addEventListener('change', e => uploadThumb(e.target.files[0]));
-    [el.productCategory,el.productName,el.productAlt,el.productDesc,el.productPrice,el.productPriceColor,el.productHighlightHome,el.productHomeOrder,el.productImageSrc,el.thumbsArea].forEach(field => field.addEventListener('input', updateCurrentProductFromForm));
-    (async function init(){ if (!state.sessionToken) return; try { openApp(); await api('checkSession'); await bootstrap(); } catch { goToLogin(); } })();
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    el.loginBtn.addEventListener('click', login);
+    el.passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+    el.verifyTotpBtn.addEventListener('click', verifyTotp);
+    el.totpInput.addEventListener('keydown', e => { if (e.key === 'Enter') verifyTotp(); });
+    el.backToPasswordBtn.addEventListener('click', () => {
+      clearMessage(el.loginMsg);
+      showPasswordStep();
+      el.passwordInput.focus();
+    });
+
+    el.refreshBtn.addEventListener('click', bootstrap);
+    el.publishBtn.addEventListener('click', publishSite);
+    el.logoutBtn.addEventListener('click', goToLogin);
+    el.saveBtn.addEventListener('click', saveCurrentProduct);
+    el.resetBtn.addEventListener('click', resetCurrentItem);
+    el.searchInput.addEventListener('input', renderList);
+    el.categoryFilter.addEventListener('change', renderList);
+    el.uploadMainBtn.addEventListener('click', () => el.uploadMainInput.click());
+    el.uploadThumbBtn.addEventListener('click', () => el.uploadThumbInput.click());
+    el.uploadMainInput.addEventListener('change', e => uploadMainImage(e.target.files[0]));
+    el.uploadThumbInput.addEventListener('change', e => uploadThumb(e.target.files[0]));
+    [el.productCategory, el.productName, el.productAlt, el.productDesc, el.productPrice, el.productPriceColor, el.productHighlightHome, el.productHomeOrder, el.productImageSrc, el.thumbsArea].forEach(field => field.addEventListener('input', updateCurrentProductFromForm));
+
+    (async function init() {
+      if (!state.sessionToken) return;
+      try {
+        openApp();
+        await api('checkSession');
+        await bootstrap();
+      } catch {
+        goToLogin();
+      }
+    })();
   </script>
 </body>
 </html>
