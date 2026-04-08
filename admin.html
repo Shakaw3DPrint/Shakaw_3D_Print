@@ -33,8 +33,18 @@
     code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px}
     .step-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(138,92,255,.14);border:1px solid rgba(138,92,255,.35);color:#d6c5ff;font-size:.82rem;font-weight:700;margin-bottom:14px}
     .login-actions{display:flex;gap:10px;flex-wrap:wrap}
+    
+    .btn-warning{background:linear-gradient(135deg,#ffc107,#ff9800);color:#222}
+    .status-pill.warning{background:rgba(255,193,7,.12);border-color:rgba(255,193,7,.3);color:#ffe08a}
+    .subcard{background:rgba(255,255,255,.035);border:1px solid #314764;border-radius:14px;padding:14px;margin-bottom:16px}
+    .subcard h3{font-size:1rem;margin-bottom:10px}
+    .toggle-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .toggle-row input[type="checkbox"]{width:auto;margin:0}
+    .mini-note{font-size:.82rem;color:#9fb5cb}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .watermark-badge{position:absolute;bottom:8px;right:8px;background:rgba(5,17,49,.75);border:1px solid rgba(255,255,255,.15);padding:4px 8px;border-radius:999px;color:#fff;font-size:.72rem;display:none}
     @media (max-width:980px){.grid{grid-template-columns:1fr}.search-box{position:static}.product-list{max-height:none}}
-    @media (max-width:700px){.form-grid{grid-template-columns:1fr}.editor-image{width:100%;height:220px}.upload-row{flex-direction:column;align-items:stretch}}
+    @media (max-width:700px){.form-grid,.two-col{grid-template-columns:1fr}.editor-image{width:100%;height:220px}.upload-row{flex-direction:column;align-items:stretch}}
   </style>
 </head>
 <body>
@@ -79,6 +89,14 @@
     <main class="container">
       <div class="grid">
         <aside class="card panel search-box">
+          <div class="subcard">
+            <h3>Operação</h3>
+            <div class="toggle-row">
+              <button id="newProductBtn" class="btn-warning" type="button">Novo produto</button>
+              <button id="cancelNewBtn" class="btn-secondary hidden" type="button">Cancelar novo</button>
+            </div>
+            <div class="mini-note" style="margin-top:10px;">Novo produto usa o mesmo salvar atual. Se o ID não existir, o backend cria o item.</div>
+          </div>
           <h2>Produtos</h2>
           <label for="searchInput">Buscar produto</label>
           <input id="searchInput" type="text" placeholder="Ex: Gengar, Modelo 01, Alexa..." />
@@ -90,23 +108,40 @@
         <section class="card panel">
           <div class="toolbar">
             <div class="toolbar-left"><button id="saveBtn" class="btn-accent" disabled>Salvar produto</button><button id="resetBtn" class="btn-secondary" disabled>Desfazer alterações do item</button></div>
-            <div class="toolbar-right"><span class="status-pill" id="catalogInfo">Catálogo não carregado</span></div>
+            <div class="toolbar-right"><span class="status-pill" id="catalogInfo">Catálogo não carregado</span><span class="status-pill warning hidden" id="modePill">Modo novo produto</span></div>
           </div>
 
-          <div id="emptyState"><h2>Selecione um produto</h2><p>Carregue a lista, escolha um item e edite as informações com segurança.</p></div>
+          <div id="emptyState"><h2>Selecione um produto</h2><p>Carregue a lista, escolha um item e edite as informações com segurança, ou clique em <b>Novo produto</b>.</p></div>
 
           <div id="editorWrap" class="hidden">
             <div class="editor-header">
-              <div class="editor-image"><img id="previewImage" src="" alt="Prévia do produto" /></div>
+              <div class="editor-image"><img id="previewImage" src="" alt="Prévia do produto" /><span class="watermark-badge" id="watermarkBadge">logo ativa</span></div>
               <div class="editor-meta">
                 <h2 id="editorTitle">Editar produto</h2>
                 <p>O preço será formatado automaticamente como moeda quando fizer sentido. Textos como <code>Sob consulta</code> continuam como texto.</p>
-                <div class="note">Os destaques da home são controlados por <b>Destaque na home</b> e <b>Ordem na home</b>.</div>
+                <div class="note">Os destaques da home são controlados por <b>Destaque na home</b> e <b>Ordem na home</b>. O upload pode aplicar a logomarca <code>images/Logo.png</code> antes de enviar.</div>
+              </div>
+            </div>
+
+            <div class="subcard">
+              <h3>Upload com logomarca</h3>
+              <div class="two-col">
+                <div>
+                  <label class="toggle-row" style="justify-content:flex-start;">
+                    <input id="applyWatermark" type="checkbox" checked />
+                    <span>Aplicar logo Shakaw no upload</span>
+                  </label>
+                  <div class="mini-note">Recurso feito no navegador, sem depender de backend extra.</div>
+                </div>
+                <div>
+                  <label for="watermarkScale">Tamanho da logo (%)</label>
+                  <input id="watermarkScale" type="number" min="8" max="40" step="1" value="18" />
+                </div>
               </div>
             </div>
 
             <div class="form-grid">
-              <div><label for="productId">ID do card</label><input id="productId" type="text" readonly /></div>
+              <div><label for="productId">ID do card</label><input id="productId" type="text" /></div>
               <div><label for="productCategory">Categoria</label><select id="productCategory"></select></div>
               <div class="full"><label for="productName">Nome do produto</label><input id="productName" type="text" /></div>
               <div class="full"><label for="productAlt">Texto alternativo da imagem (alt)</label><input id="productAlt" type="text" /></div>
@@ -148,7 +183,9 @@
       selectedId: '',
       dirty: false,
       challengeToken: '',
-      mfaPending: false
+      mfaPending: false,
+      isCreatingNew: false,
+      newDraft: null
     };
     const el = {
       loginScreen: document.getElementById('loginScreen'), appScreen: document.getElementById('appScreen'),
@@ -165,8 +202,11 @@
       productDesc: document.getElementById('productDesc'), productPrice: document.getElementById('productPrice'), productPriceColor: document.getElementById('productPriceColor'),
       productHighlightHome: document.getElementById('productHighlightHome'), productHomeOrder: document.getElementById('productHomeOrder'), productImageSrc: document.getElementById('productImageSrc'),
       thumbsArea: document.getElementById('thumbsArea'), uploadMainBtn: document.getElementById('uploadMainBtn'), uploadMainInput: document.getElementById('uploadMainInput'),
-      uploadThumbBtn: document.getElementById('uploadThumbBtn'), uploadThumbInput: document.getElementById('uploadThumbInput'), logsWrap: document.getElementById('logsWrap')
+      uploadThumbBtn: document.getElementById('uploadThumbBtn'), uploadThumbInput: document.getElementById('uploadThumbInput'), logsWrap: document.getElementById('logsWrap'),
+      newProductBtn: document.getElementById('newProductBtn'), cancelNewBtn: document.getElementById('cancelNewBtn'), modePill: document.getElementById('modePill'),
+      applyWatermark: document.getElementById('applyWatermark'), watermarkScale: document.getElementById('watermarkScale'), watermarkBadge: document.getElementById('watermarkBadge')
     };
+    const LOGO_URL = 'images/Logo.png';
 
     function showMessage(target, text, type = 'success') {
       target.textContent = text;
@@ -277,6 +317,8 @@
       state.dirty = false;
       state.challengeToken = '';
       state.mfaPending = false;
+      state.isCreatingNew = false;
+      state.newDraft = null;
 
       el.appScreen.classList.add('hidden');
       el.loginScreen.classList.remove('hidden');
@@ -286,6 +328,7 @@
       el.catalogInfo.textContent = 'Catálogo não carregado';
       clearMessage(el.appMsg);
       clearMessage(el.loginMsg);
+      updateModeUI();
       showPasswordStep();
     }
 
@@ -300,12 +343,92 @@
       el.catalogInfo.textContent = `${state.products.length} produtos carregados`;
       el.editorWrap.classList.add('hidden');
       el.emptyState.classList.remove('hidden');
+      state.isCreatingNew = false;
+      state.newDraft = null;
+      updateModeUI();
     }
 
     function renderCategoryOptions() {
       const opts = ['<option value="">Todas</option>'].concat(state.categories.map(c => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`)).join('');
       el.categoryFilter.innerHTML = opts;
       el.productCategory.innerHTML = state.categories.map(c => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`).join('');
+    }
+
+    
+
+    function inferPrefixFromCategory(category) {
+      if (!category) return 'np';
+      const sameCategory = state.products.filter(p => p.category === category && (p.id || '').includes('_'));
+      if (sameCategory.length) {
+        const prefixes = sameCategory.map(p => (p.id || '').split('_')[0]).filter(Boolean);
+        if (prefixes.length) return prefixes[0];
+      }
+      const parts = category.split(/[^a-z0-9]+/i).filter(Boolean);
+      if (!parts.length) return 'np';
+      if (parts.length === 1) return parts[0].slice(0, 2).toLowerCase();
+      return parts.map(p => p[0]).join('').slice(0, 3).toLowerCase();
+    }
+
+    function generateNextIdForCategory(category) {
+      const prefix = inferPrefixFromCategory(category);
+      const nums = state.products
+        .map(p => p.id || '')
+        .filter(id => id.startsWith(prefix + '_'))
+        .map(id => parseInt(id.split('_')[1], 10))
+        .filter(n => !isNaN(n));
+      return `${prefix}_${(nums.length ? Math.max(...nums) : 0) + 1}`;
+    }
+
+    function createBlankProduct(category = '') {
+      return {
+        id: generateNextIdForCategory(category),
+        category,
+        name: '',
+        alt: '',
+        desc: '',
+        price: '',
+        priceColor: '',
+        imageSrc: '',
+        highlightHome: false,
+        homeOrder: 0,
+        thumbs: []
+      };
+    }
+
+    function updateModeUI() {
+      el.modePill.classList.toggle('hidden', !state.isCreatingNew);
+      el.cancelNewBtn.classList.toggle('hidden', !state.isCreatingNew);
+      el.watermarkBadge.style.display = el.applyWatermark.checked ? 'inline-flex' : 'none';
+    }
+
+    function startNewProduct() {
+      if (state.dirty && state.selectedId && !confirm('Há alterações não salvas. Deseja iniciar um novo produto mesmo assim?')) return;
+      const category = el.categoryFilter.value || (state.categories[0]?.value || '');
+      const draft = createBlankProduct(category);
+      state.selectedId = draft.id;
+      state.dirty = false;
+      state.isCreatingNew = true;
+      state.newDraft = JSON.parse(JSON.stringify(draft));
+      fillEditor(draft);
+      el.emptyState.classList.add('hidden');
+      el.editorWrap.classList.remove('hidden');
+      el.resetBtn.disabled = false;
+      el.saveBtn.disabled = false;
+      updateModeUI();
+      updateModeUI();
+      showMessage(el.appMsg, 'Modo novo produto ativo. Preencha os campos e salve.', 'success');
+    }
+
+    function cancelNewProduct() {
+      state.isCreatingNew = false;
+      state.newDraft = null;
+      state.selectedId = '';
+      state.dirty = false;
+      el.editorWrap.classList.add('hidden');
+      el.emptyState.classList.remove('hidden');
+      updateModeUI();
+      clearMessage(el.appMsg);
+      renderList();
     }
 
     function renderList() {
@@ -329,7 +452,9 @@
       if (!product) return;
       state.selectedId = id;
       state.dirty = false;
-      fillEditor(product);
+      state.isCreatingNew = false;
+      state.newDraft = null;
+      fillEditor(JSON.parse(JSON.stringify(product)));
       renderList();
       el.emptyState.classList.add('hidden');
       el.editorWrap.classList.remove('hidden');
@@ -338,52 +463,73 @@
     }
 
     function fillEditor(product) {
-      el.editorTitle.textContent = product.name || 'Editar produto';
+      el.editorTitle.textContent = state.isCreatingNew ? 'Novo produto' : (product.name || 'Editar produto');
       el.previewImage.src = product.imageSrc || '';
       el.previewImage.alt = product.alt || product.name || 'Prévia do produto';
-      el.productId.value = product.id;
-      el.productCategory.value = product.category;
-      el.productName.value = product.name;
-      el.productAlt.value = product.alt;
-      el.productDesc.value = product.desc;
-      el.productPrice.value = product.price;
+      el.productId.value = product.id || '';
+      el.productCategory.value = product.category || '';
+      el.productName.value = product.name || '';
+      el.productAlt.value = product.alt || '';
+      el.productDesc.value = product.desc || '';
+      el.productPrice.value = product.price || '';
       el.productPriceColor.value = product.priceColor || '';
       el.productHighlightHome.value = product.highlightHome ? 'SIM' : 'NÃO';
       el.productHomeOrder.value = product.homeOrder || 0;
-      el.productImageSrc.value = product.imageSrc;
+      el.productImageSrc.value = product.imageSrc || '';
+      updateModeUI();
       el.thumbsArea.value = (product.thumbs || []).join('\n');
     }
 
+    function buildProductFromForm() {
+      return {
+        id: el.productId.value.trim(),
+        category: el.productCategory.value,
+        name: el.productName.value.trim(),
+        alt: el.productAlt.value.trim(),
+        desc: el.productDesc.value,
+        price: el.productPrice.value.trim(),
+        priceColor: el.productPriceColor.value,
+        highlightHome: el.productHighlightHome.value === 'SIM',
+        homeOrder: Number(el.productHomeOrder.value || 0),
+        imageSrc: el.productImageSrc.value.trim(),
+        thumbs: el.thumbsArea.value.split('\n').map(v => v.trim()).filter(Boolean)
+      };
+    }
+
     function updateCurrentProductFromForm() {
-      const product = state.products.find(p => p.id === state.selectedId);
-      if (!product) return;
-      product.category = el.productCategory.value;
-      product.name = el.productName.value.trim();
-      product.alt = el.productAlt.value.trim();
-      product.desc = el.productDesc.value;
-      product.price = el.productPrice.value.trim();
-      product.priceColor = el.productPriceColor.value;
-      product.highlightHome = el.productHighlightHome.value === 'SIM';
-      product.homeOrder = Number(el.productHomeOrder.value || 0);
-      product.imageSrc = el.productImageSrc.value.trim();
-      product.thumbs = el.thumbsArea.value.split('\n').map(v => v.trim()).filter(Boolean);
-      el.editorTitle.textContent = product.name || 'Editar produto';
-      el.previewImage.src = product.imageSrc || '';
-      el.previewImage.alt = product.alt || product.name || 'Prévia do produto';
+      const updated = buildProductFromForm();
+      if (state.isCreatingNew) {
+        state.newDraft = JSON.parse(JSON.stringify(updated));
+      } else {
+        const product = state.products.find(p => p.id === state.selectedId);
+        if (!product) return;
+        Object.assign(product, updated);
+      }
+      el.editorTitle.textContent = state.isCreatingNew ? 'Novo produto' : (updated.name || 'Editar produto');
+      el.previewImage.src = updated.imageSrc || '';
+      el.previewImage.alt = updated.alt || updated.name || 'Prévia do produto';
+      state.selectedId = updated.id;
       state.dirty = true;
       renderList();
     }
 
     async function saveCurrentProduct() {
-      const product = state.products.find(p => p.id === state.selectedId);
-      if (!product) return;
+      const product = buildProductFromForm();
+      if (!product.id) return showMessage(el.appMsg, 'Informe ou gere um ID do produto.', 'error');
+      if (!product.category) return showMessage(el.appMsg, 'Selecione a categoria do produto.', 'error');
+      if (!product.name) return showMessage(el.appMsg, 'Informe o nome do produto.', 'error');
       try {
         const data = await api('saveProduct', { product });
-        const idx = state.products.findIndex(p => p.id === product.id);
-        state.products[idx] = data.product;
+        const idx = state.products.findIndex(p => p.id === data.product.id);
+        if (idx >= 0) state.products[idx] = data.product;
+        else state.products.push(data.product);
+        state.selectedId = data.product.id;
         state.dirty = false;
+        state.isCreatingNew = false;
+        state.newDraft = null;
         fillEditor(data.product);
         renderList();
+        updateModeUI();
         showMessage(el.appMsg, 'Produto salvo com sucesso.', 'success');
         await loadLogs();
       } catch (error) {
@@ -418,37 +564,41 @@
     }
 
     function resetCurrentItem() {
-      const original = state.products.find(p => p.id === state.selectedId);
-      if (!original) return;
-      fillEditor(original);
+      if (state.isCreatingNew && state.newDraft) {
+        fillEditor(JSON.parse(JSON.stringify(state.newDraft)));
+      } else {
+        const original = state.products.find(p => p.id === state.selectedId);
+        if (!original) return;
+        fillEditor(JSON.parse(JSON.stringify(original)));
+      }
       state.dirty = false;
       renderList();
       showMessage(el.appMsg, 'Alterações locais desfeitas.', 'success');
     }
 
     async function uploadMainImage(file) {
-      if (!state.selectedId) return showMessage(el.appMsg, 'Selecione um produto antes do upload.', 'error');
-      const product = state.products.find(p => p.id === state.selectedId);
-      if (!product || !file) return;
+      const category = el.productCategory.value || el.categoryFilter.value;
+      if (!category) return showMessage(el.appMsg, 'Selecione a categoria antes do upload.', 'error');
+      if (!file) return;
       try {
-        const data = await api('uploadImage', { category: product.category, fileName: file.name, mimeType: file.type, base64Data: await fileToDataUrl(file) });
+        const data = await api('uploadImage', { category, fileName: file.name, mimeType: file.type, base64Data: await fileToPreparedBase64(file) });
         el.productImageSrc.value = data.path;
         updateCurrentProductFromForm();
-        showMessage(el.appMsg, 'Imagem enviada com sucesso.', 'success');
+        showMessage(el.appMsg, el.applyWatermark.checked ? 'Imagem enviada com logo.' : 'Imagem enviada com sucesso.', 'success');
       } catch (error) {
         showMessage(el.appMsg, error.message, 'error');
       }
     }
 
     async function uploadThumb(file) {
-      if (!state.selectedId) return showMessage(el.appMsg, 'Selecione um produto antes do upload.', 'error');
-      const product = state.products.find(p => p.id === state.selectedId);
-      if (!product || !file) return;
+      const category = el.productCategory.value || el.categoryFilter.value;
+      if (!category) return showMessage(el.appMsg, 'Selecione a categoria antes do upload.', 'error');
+      if (!file) return;
       try {
-        const data = await api('uploadImage', { category: product.category, fileName: file.name, mimeType: file.type, base64Data: await fileToDataUrl(file) });
+        const data = await api('uploadImage', { category, fileName: file.name, mimeType: file.type, base64Data: await fileToPreparedBase64(file) });
         el.thumbsArea.value = (el.thumbsArea.value.trim() ? el.thumbsArea.value.trim() + '\n' : '') + data.path;
         updateCurrentProductFromForm();
-        showMessage(el.appMsg, 'Thumb enviada com sucesso.', 'success');
+        showMessage(el.appMsg, el.applyWatermark.checked ? 'Thumb enviada com logo.' : 'Thumb enviada com sucesso.', 'success');
       } catch (error) {
         showMessage(el.appMsg, error.message, 'error');
       }
@@ -463,28 +613,77 @@
       });
     }
 
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    async function applyLogoWatermark(dataUrl) {
+      const base = await loadImage(dataUrl);
+      const canvas = document.createElement('canvas');
+      canvas.width = base.naturalWidth || base.width;
+      canvas.height = base.naturalHeight || base.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(base, 0, 0, canvas.width, canvas.height);
+      try {
+        const logo = await loadImage(LOGO_URL);
+        const scalePct = Math.min(40, Math.max(8, Number(el.watermarkScale.value || 18))) / 100;
+        const targetWidth = canvas.width * scalePct;
+        const ratio = logo.naturalWidth / logo.naturalHeight || 1;
+        const targetHeight = targetWidth / ratio;
+        const padding = Math.max(10, canvas.width * 0.015);
+        ctx.globalAlpha = 0.78;
+        ctx.drawImage(logo, canvas.width - targetWidth - padding, canvas.height - targetHeight - padding, targetWidth, targetHeight);
+        ctx.globalAlpha = 1;
+      } catch {}
+      return canvas.toDataURL('image/png');
+    }
+
+    async function fileToPreparedBase64(file) {
+      const dataUrl = await fileToDataUrl(file);
+      if (!el.applyWatermark.checked) return dataUrl;
+      return await applyLogoWatermark(dataUrl);
+    }
+
     el.loginBtn.addEventListener('click', login);
     el.passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
     el.verifyTotpBtn.addEventListener('click', verifyTotp);
     el.totpInput.addEventListener('keydown', e => { if (e.key === 'Enter') verifyTotp(); });
     el.backToPasswordBtn.addEventListener('click', () => {
       clearMessage(el.loginMsg);
+      updateModeUI();
       showPasswordStep();
       el.passwordInput.focus();
     });
 
     el.refreshBtn.addEventListener('click', bootstrap);
+    el.newProductBtn.addEventListener('click', startNewProduct);
+    el.cancelNewBtn.addEventListener('click', cancelNewProduct);
     el.publishBtn.addEventListener('click', publishSite);
     el.logoutBtn.addEventListener('click', goToLogin);
     el.saveBtn.addEventListener('click', saveCurrentProduct);
     el.resetBtn.addEventListener('click', resetCurrentItem);
     el.searchInput.addEventListener('input', renderList);
     el.categoryFilter.addEventListener('change', renderList);
+    el.productCategory.addEventListener('change', () => {
+      if (state.isCreatingNew) {
+        const newId = generateNextIdForCategory(el.productCategory.value);
+        el.productId.value = newId;
+        state.selectedId = newId;
+      }
+      updateCurrentProductFromForm();
+    });
     el.uploadMainBtn.addEventListener('click', () => el.uploadMainInput.click());
     el.uploadThumbBtn.addEventListener('click', () => el.uploadThumbInput.click());
     el.uploadMainInput.addEventListener('change', e => uploadMainImage(e.target.files[0]));
     el.uploadThumbInput.addEventListener('change', e => uploadThumb(e.target.files[0]));
-    [el.productCategory, el.productName, el.productAlt, el.productDesc, el.productPrice, el.productPriceColor, el.productHighlightHome, el.productHomeOrder, el.productImageSrc, el.thumbsArea].forEach(field => field.addEventListener('input', updateCurrentProductFromForm));
+    el.applyWatermark.addEventListener('change', updateModeUI);
+    [el.productId, el.productName, el.productAlt, el.productDesc, el.productPrice, el.productPriceColor, el.productHighlightHome, el.productHomeOrder, el.productImageSrc, el.thumbsArea].forEach(field => field.addEventListener('input', updateCurrentProductFromForm));
 
     (async function init() {
       if (!state.sessionToken) return;
