@@ -558,32 +558,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (hiddenIframe) {
-        hiddenIframe.addEventListener('load', () => {
-    if (!isSubmittingInterest) return;
+   if (hiddenIframe) {
+    hiddenIframe.addEventListener('load', () => {
+        if (!isSubmittingInterest) return;
 
-    isSubmittingInterest = false;
+        isSubmittingInterest = false;
 
-    // REDIRECIONA AQUI 👇
-    window.location.href = "obrigado.html";
-});
+        if (contactForm) contactForm.reset();
+        clearInterestList();
 
-            if (contactForm) contactForm.reset();
-            clearInterestList();
+        const submitBtn = contactForm?.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = submitBtn.dataset.originalText || '<i class="fas fa-paper-plane"></i> Enviar';
+        }
 
-            const submitBtn = contactForm?.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = submitBtn.dataset.originalText || '<i class="fas fa-paper-plane"></i> Enviar';
-            }
-
-            setTimeout(() => {
-                if (contactFormModal) contactFormModal.style.display = 'none';
-                clearFormMessage();
-            }, 1800);
-        });
-    }
-
+        window.location.href = "obrigado.html";
+    });
+}
+      
     // =============================================
     // FECHAR MODAIS / VOLTAR AO TOPO
     // =============================================
