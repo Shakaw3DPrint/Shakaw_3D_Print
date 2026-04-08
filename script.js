@@ -542,71 +542,108 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(INTERESSES_WEBAPP_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            document.addEventListener('DOMContentLoaded', () => {
 
-            const data = await response.json();
+    const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
 
-            if (!data.ok) {
-                throw new Error(data.error || 'Erro ao registrar interesse.');
-            }
+    const contactForm = document.getElementById('contactForm');
+    const itemsDataInput = document.getElementById('itemsData');
+    const contactFormModal = document.getElementById('contactFormModal');
+    const interestFormMsg = document.getElementById('interestFormMsg');
+    const registerInterestsBtn = document.getElementById('registerInterestsBtn');
 
-            showFormMessage('Interesse enviado com sucesso! Retornaremos em breve.', 'success');
-            showNotification('Interesse enviado com sucesso!', 'success');
+    const showFormMessage = (message, type = 'success') => {
+        if (!interestFormMsg) return;
 
-            contactForm.reset();
-            clearInterestList();
+        interestFormMsg.style.display = 'block';
+        interestFormMsg.style.padding = '12px';
+        interestFormMsg.style.borderRadius = '10px';
+        interestFormMsg.style.fontWeight = '600';
+        interestFormMsg.style.marginTop = '12px';
 
-            setTimeout(() => {
-                contactFormModal.style.display = 'none';
-                clearFormMessage();
-            }, 1800);
-
-        } catch (error) {
-            showFormMessage('Erro ao enviar interesse: ' + error.message, 'error');
-            showNotification('Erro ao enviar interesse.', 'error');
-        } finally {
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = submitBtn.dataset.originalText || '<i class="fas fa-paper-plane"></i> Enviar';
-            }
+        if (type === 'success') {
+            interestFormMsg.style.color = '#9ff0b3';
+            interestFormMsg.style.background = 'rgba(40,167,69,.15)';
+            interestFormMsg.style.border = '1px solid rgba(40,167,69,.4)';
+        } else {
+            interestFormMsg.style.color = '#ffb2bb';
+            interestFormMsg.style.background = 'rgba(220,53,69,.15)';
+            interestFormMsg.style.border = '1px solid rgba(220,53,69,.4)';
         }
+
+        interestFormMsg.textContent = message;
+    };
+
+    const clearFormMessage = () => {
+        if (!interestFormMsg) return;
+        interestFormMsg.style.display = 'none';
+        interestFormMsg.textContent = '';
+    };
+
+    const clearInterestList = () => {
+        localStorage.removeItem('shakawInterestList');
+        interestList.length = 0;
+    };
+
+    const buildItemsText = () => {
+        let itemsText = '';
+        let totalGeral = 0;
+
+        interestList.forEach((item, i) => {
+            const itemTotal = (item.price || 0) * (item.quantity || 0);
+            totalGeral += itemTotal;
+            itemsText += `${i + 1}. ${item.name}\n   Quantidade: ${item.quantity}\n   Total do item: R$ ${itemTotal.toFixed(2).replace('.', ',')}\n\n`;
+        });
+
+        itemsText += `================================\nVALOR TOTAL GERAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+        return itemsText;
+    };
+
+    if (registerInterestsBtn) {
+        registerInterestsBtn.addEventListener('click', () => {
+            if (itemsDataInput) itemsDataInput.value = buildItemsText();
+            const fonte = document.getElementById('fonte_url');
+            if (fonte) fonte.value = window.location.href;
+            clearFormMessage();
+        });
     }
 
     if (contactForm) {
-        contactForm.addEventListener('submit', enviarInteresseAppsScript);
-    }
+        contactForm.addEventListener('submit', (e) => {
+            if (!interestList.length) {
+                e.preventDefault();
+                showFormMessage('Sua lista de interesses está vazia.', 'error');
+                return;
+            }
 
-    // =============================================
-    // FECHAR MODAIS / VOLTAR AO TOPO
-    // =============================================
-    window.addEventListener('click', (e) => {
-        if (e.target === interestSummaryModal) interestSummaryModal.style.display = 'none';
-        if (e.target === contactFormModal) {
-            clearFormMessage();
-            contactFormModal.style.display = 'none';
-        }
-    });
+            const nome = document.getElementById('name')?.value.trim() || '';
+            const email = document.getElementById('email')?.value.trim() || '';
+            const whatsapp = document.getElementById('whatsapp')?.value.trim() || '';
 
-    if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
+            if (!nome) {
+                e.preventDefault();
+                showFormMessage('Informe seu nome.', 'error');
+                return;
+            }
+
+            if (!email && !whatsapp) {
+                e.preventDefault();
+                showFormMessage('Informe ao menos e-mail ou WhatsApp.', 'error');
+                return;
+            }
+
+            showFormMessage('Enviando interesse...', 'success');
+
+            setTimeout(() => {
+                contactForm.reset();
+                clearInterestList();
+                showFormMessage('Interesse enviado com sucesso! Retornaremos em breve.', 'success');
+
+                setTimeout(() => {
+                    if (contactFormModal) contactFormModal.style.display = 'none';
+                    clearFormMessage();
+                }, 1800);
+            }, 800);
         });
-
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
     }
-
-    setTimeout(createExpandableDescriptions, 200);
-
-    window.addEventListener('resize', () => {
-        clearTimeout(window.resizeTimer);
-        window.resizeTimer = setTimeout(createExpandableDescriptions, 250);
-    });
-
-    updateViewInterestsButton();
 });
