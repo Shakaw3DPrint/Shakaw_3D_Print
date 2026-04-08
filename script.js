@@ -413,3 +413,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateViewInterestsButton();
 });
+<script>
+  const INTERESSES_WEBAPP_URL = "COLE_AQUI_A_URL_DO_SEU_WEB_APP";
+
+  async function enviarInteresseAppsScript(event) {
+    event.preventDefault();
+
+    const form = document.getElementById("contactForm");
+    const msgBox = document.getElementById("interestFormMsg");
+
+    const payload = {
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      whatsapp: document.getElementById("whatsapp").value.trim(),
+      message: document.getElementById("message").value.trim(),
+      itens_de_interesse: document.getElementById("itemsData").value.trim(),
+      origem: "Catálogo",
+      fonte_url: window.location.href
+    };
+
+    msgBox.style.display = "none";
+    msgBox.innerHTML = "";
+
+    try {
+      const response = await fetch(INTERESSES_WEBAPP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error(data.error || "Erro ao registrar interesse.");
+      }
+
+      msgBox.style.display = "block";
+      msgBox.style.color = "#9ff0b3";
+      msgBox.innerHTML = "Interesse enviado com sucesso! Retornaremos em breve.";
+
+      form.reset();
+
+      if (typeof selectedItems !== "undefined") {
+        selectedItems.length = 0;
+      }
+
+      const selectedItemsList = document.getElementById("selectedItemsList");
+      if (selectedItemsList) selectedItemsList.innerHTML = "";
+
+      const viewBtn = document.getElementById("viewInterestsBtn");
+      if (viewBtn) viewBtn.innerHTML = '<i class="fas fa-list"></i> Ver Interesses (0)';
+
+      setTimeout(() => {
+        const modal = document.getElementById("contactFormModal");
+        if (modal) modal.style.display = "none";
+        msgBox.style.display = "none";
+      }, 1800);
+
+    } catch (error) {
+      msgBox.style.display = "block";
+      msgBox.style.color = "#ffb2bb";
+      msgBox.innerHTML = "Erro ao enviar interesse: " + error.message;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contactForm");
+    if (form) {
+      form.addEventListener("submit", enviarInteresseAppsScript);
+    }
+  });
+</script>
