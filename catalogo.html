@@ -54,6 +54,28 @@
                         </button>
                     </div>
                     
+                    <!-- Produto: Batman Who Laughs -->
+                    <div class="product-card" id="m3d_18" data-category="miniaturas3d">
+                        <img class="card-image" src="images/miniaturas3d/18126290788514080_20260408_204257.webp" alt="Batman Who Laughs">
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/18126280225496378_20260408_204745.webp" style="display:none;"></span>
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/18122272042555874_20260408_204753.webp" style="display:none;"></span>
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/18113952394604408_20260408_204758.webp" style="display:none;"></span>
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/18008054615815398_20260408_204804.webp" style="display:none;"></span>
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/17902585074326337_20260408_204809.webp" style="display:none;"></span>
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/17886846150383626_20260408_204817.webp" style="display:none;"></span>
+                        <span class="thumb-img-data" data-src="images/miniaturas3d/17854655109583010_20260408_204821.webp" style="display:none;"></span>
+                        <div class="card-body">
+                            <h3>Batman Who Laughs</h3>
+                            <p class="description">Produto artesanal produzido em resina 3D e pintado a mão. Altura aproximada 28cm.</p>
+                            <p class="price">R$ 330,00</p>
+                        </div>
+                        <button class="add-to-interest"
+                                data-product-id="m3d_18"
+                                data-product-name="Batman Who Laughs">
+                            <i class="fas fa-star"></i> Adicionar à Lista de Interesses
+                        </button>
+                    </div>
+                    
                     <!-- Produto: Deusa da Justiça Themis -->
                     <div class="product-card" id="m3d_9" data-category="miniaturas3d">
                         <img class="card-image" src="images/miniaturas3d/deusa_da_justica_themis_2.webp" alt="Deusa da Justiça Themis">
@@ -1640,60 +1662,71 @@
     </button>
 
     <div id="interestSummaryModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span class="close-modal" id="closeSummaryModal">&times;</span>
-        <h2><i class="fas fa-list"></i> Sua Lista de Interesses</h2>
-        <ul id="selectedItemsList" class="items-summary-list"></ul>
-        <button id="registerInterestsBtn" class="modal-action-btn">
-            <i class="fas fa-paper-plane"></i> Registrar Interesses
-        </button>
-    </div>
-</div>
-
-<!-- MODAL FORMULÁRIO DE INTERESSE -->
-<div id="contactFormModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span class="close-modal" id="closeContactFormModal">&times;</span>
-        <h2><i class="fas fa-envelope"></i> Enviar Interesses</h2>
-
-        <form id="contactForm"
-              action="https://script.google.com/macros/s/AKfycbyHqinFW1swYImJCj8UctEFCO7XfQMPSCKT8WlqvQqh73ptKJbj0BjbMpXisjDU0TFh/exec"
-              method="POST"
-              target="hidden_iframe">
-
-            <input type="hidden" name="itens_de_interesse" id="itemsData">
-            <input type="hidden" name="origem" value="Catálogo">
-            <input type="hidden" name="fonte_url" id="fonte_url">
-
-            <div class="form-section">
-                <label for="name">Nome Completo:</label>
-                <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
-            </div>
-
-            <div class="form-section">
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" placeholder="seu@email.com">
-            </div>
-
-            <div class="form-section">
-                <label for="whatsapp">WhatsApp:</label>
-                <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
-            </div>
-
-            <div class="form-section">
-                <label for="message">Mensagem Adicional:</label>
-                <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
-            </div>
-
-            <button type="submit">
-                <i class="fas fa-paper-plane"></i> Enviar
+        <div class="modal-content">
+            <span class="close-modal" id="closeSummaryModal">&times;</span>
+            <h2><i class="fas fa-list"></i> Sua Lista de Interesses</h2>
+            <ul id="selectedItemsList" class="items-summary-list"></ul>
+            <button id="registerInterestsBtn" class="modal-action-btn">
+                <i class="fas fa-paper-plane"></i> Registrar Interesses
             </button>
-        </form>
-
-        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-        <div id="interestFormMsg" style="margin-top:12px; display:none;"></div>
+        </div>
     </div>
-</div>
+
+    <div id="contactFormModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" id="closeContactFormModal">&times;</span>
+            <h2><i class="fas fa-envelope"></i> Enviar Interesses</h2>
+            <form id="contactForm"
+                  action="https://formsubmit.co/contato@shakaw3dprint.com.br"
+                  method="POST">
+                <input type="hidden" name="_subject" value="Novo interesse - Shakaw 3D Print">
+                <input type="hidden" name="_autoresponse" value="Recebemos seu interesse! Entraremos em contato em breve.">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="obrigado.html">
+                <input type="hidden" name="itens_de_interesse" id="itemsData">
+
+                <div class="form-section">
+                    <label for="name">Nome Completo:</label>
+                    <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-section">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-section">
+                    <label for="whatsapp">WhatsApp:</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
+                </div>
+                <div class="form-section">
+                    <label for="message">Mensagem Adicional:</label>
+                    <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
+                </div>
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i> Enviar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="lightbox" style="display:none;">
+        <div id="lightbox-overlay"></div>
+        <div id="lightbox-container">
+            <button id="lightbox-close">&times;</button>
+            <button id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+            <img id="lightbox-img" src="" alt="">
+            <button id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+            <div id="lightbox-zoom-controls">
+                <button id="zoom-out"><i class="fas fa-search-minus"></i></button>
+                <span id="zoom-level">100%</span>
+                <button id="zoom-in"><i class="fas fa-search-plus"></i></button>
+                <button id="zoom-reset"><i class="fas fa-expand"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/5511954846647" target="_blank" class="floating-whatsapp" aria-label="Chamar no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <script src="script.js"></script>
 </body>
