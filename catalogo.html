@@ -1640,53 +1640,60 @@
     </button>
 
     <div id="interestSummaryModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close-modal" id="closeSummaryModal">&times;</span>
-            <h2><i class="fas fa-list"></i> Sua Lista de Interesses</h2>
-            <ul id="selectedItemsList" class="items-summary-list"></ul>
-            <button id="registerInterestsBtn" class="modal-action-btn">
-                <i class="fas fa-paper-plane"></i> Registrar Interesses
-            </button>
-        </div>
+    <div class="modal-content">
+        <span class="close-modal" id="closeSummaryModal">&times;</span>
+        <h2><i class="fas fa-list"></i> Sua Lista de Interesses</h2>
+        <ul id="selectedItemsList" class="items-summary-list"></ul>
+        <button id="registerInterestsBtn" class="modal-action-btn">
+            <i class="fas fa-paper-plane"></i> Registrar Interesses
+        </button>
     </div>
+</div>
 
-    <!-- MODAL FORMULÁRIO DE INTERESSE -->
-<form id="contactForm"
-      action="https://script.google.com/macros/s/AKfycbyHqinFW1swYImJCj8UctEFCO7XfQMPSCKT8WlqvQqh73ptKJbj0BjbMpXisjDU0TFh/exec"
-      method="POST"
-      target="hidden_iframe">
-  <input type="hidden" name="itens_de_interesse" id="itemsData">
+<!-- MODAL FORMULÁRIO DE INTERESSE -->
+<div id="contactFormModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close-modal" id="closeContactFormModal">&times;</span>
+        <h2><i class="fas fa-envelope"></i> Enviar Interesses</h2>
 
-  <div class="form-section">
-    <label for="name">Nome Completo:</label>
-    <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
-  </div>
+        <form id="contactForm"
+              action="https://script.google.com/macros/s/AKfycbyHqinFW1swYImJCj8UctEFCO7XfQMPSCKT8WlqvQqh73ptKJbj0BjbMpXisjDU0TFh/exec"
+              method="POST"
+              target="hidden_iframe">
 
-  <div class="form-section">
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" name="email" placeholder="seu@email.com">
-  </div>
+            <input type="hidden" name="itens_de_interesse" id="itemsData">
+            <input type="hidden" name="origem" value="Catálogo">
+            <input type="hidden" name="fonte_url" id="fonte_url">
 
-  <div class="form-section">
-    <label for="whatsapp">WhatsApp:</label>
-    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
-  </div>
+            <div class="form-section">
+                <label for="name">Nome Completo:</label>
+                <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+            </div>
 
-  <div class="form-section">
-    <label for="message">Mensagem Adicional:</label>
-    <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
-  </div>
+            <div class="form-section">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com">
+            </div>
 
-  <input type="hidden" name="origem" value="Catálogo">
-  <input type="hidden" name="fonte_url" id="fonte_url">
+            <div class="form-section">
+                <label for="whatsapp">WhatsApp:</label>
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
+            </div>
 
-  <button type="submit">
-    <i class="fas fa-paper-plane"></i> Enviar
-  </button>
-</form>
+            <div class="form-section">
+                <label for="message">Mensagem Adicional:</label>
+                <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
+            </div>
 
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-<div id="interestFormMsg" style="margin-top:12px; display:none;"></div>
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+        </form>
+
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+        <div id="interestFormMsg" style="margin-top:12px; display:none;"></div>
+    </div>
+</div>
 
     <script src="script.js"></script>
 </body>
