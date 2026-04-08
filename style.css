@@ -998,7 +998,7 @@ main {
 #backToTopBtn {
     display: none;
     position: fixed;
-    bottom: 20px;
+    bottom: 90px;
     right: 15px;
     background: #007bff;
     color: #fff;
