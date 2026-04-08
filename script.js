@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ── Backend de interesses (Apps Script)
-    const INTERESSES_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyHqinFW1swYImJCj8UctEFCO7XfQMPSCKT8WlqvQqh73ptKJbj0BjbMpXisjDU0TFh/exec';
-
     // ── Estado
     const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
 
@@ -21,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBtns            = document.querySelectorAll('.filter-btn');
     const productCards          = document.querySelectorAll('.product-card');
     const interestFormMsg       = document.getElementById('interestFormMsg');
+    const fonteUrlInput         = document.getElementById('fonte_url');
+    const hiddenIframe          = document.getElementById('hidden_iframe');
 
     // ── Lightbox
     const lightbox        = document.getElementById('lightbox');
@@ -37,9 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let lightboxImages = [];
     let lightboxIndex  = 0;
     let currentZoom    = 1;
-    const ZOOM_STEP    = 0.25;
-    const ZOOM_MAX     = 4;
-    const ZOOM_MIN     = 0.5;
+    let isSubmittingInterest = false;
+
+    const ZOOM_STEP = 0.25;
+    const ZOOM_MAX  = 4;
+    const ZOOM_MIN  = 0.5;
 
     // =============================================
     // HELPERS
@@ -72,6 +73,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     };
 
+    const showFormMessage = (message, type = 'success') => {
+        if (!interestFormMsg) return;
+
+        interestFormMsg.style.display = 'block';
+        interestFormMsg.style.padding = '12px';
+        interestFormMsg.style.borderRadius = '10px';
+        interestFormMsg.style.fontWeight = '600';
+        interestFormMsg.style.marginTop = '12px';
+
+        if (type === 'success') {
+            interestFormMsg.style.color = '#9ff0b3';
+            interestFormMsg.style.background = 'rgba(40,167,69,.15)';
+            interestFormMsg.style.border = '1px solid rgba(40,167,69,.4)';
+        } else {
+            interestFormMsg.style.color = '#ffb2bb';
+            interestFormMsg.style.background = 'rgba(220,53,69,.15)';
+            interestFormMsg.style.border = '1px solid rgba(220,53,69,.4)';
+        }
+
+        interestFormMsg.textContent = message;
+    };
+
+    const clearFormMessage = () => {
+        if (!interestFormMsg) return;
+        interestFormMsg.style.display = 'none';
+        interestFormMsg.textContent = '';
+    };
+
     const getTotalItems = () => interestList.reduce((total, item) => total + (item.quantity || 0), 0);
     const getTotalValue = () => interestList.reduce((total, item) => total + ((item.price || 0) * (item.quantity || 0)), 0);
 
@@ -100,34 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         itemsText += `================================\nVALOR TOTAL GERAL: ${formatCurrency(totalGeral)}`;
         return itemsText;
-    };
-
-    const showFormMessage = (message, type = 'success') => {
-        if (!interestFormMsg) return;
-
-        interestFormMsg.style.display = 'block';
-        interestFormMsg.style.padding = '12px';
-        interestFormMsg.style.borderRadius = '10px';
-        interestFormMsg.style.fontWeight = '600';
-        interestFormMsg.style.marginTop = '12px';
-
-        if (type === 'success') {
-            interestFormMsg.style.color = '#9ff0b3';
-            interestFormMsg.style.background = 'rgba(40,167,69,.15)';
-            interestFormMsg.style.border = '1px solid rgba(40,167,69,.4)';
-        } else {
-            interestFormMsg.style.color = '#ffb2bb';
-            interestFormMsg.style.background = 'rgba(220,53,69,.15)';
-            interestFormMsg.style.border = '1px solid rgba(220,53,69,.4)';
-        }
-
-        interestFormMsg.textContent = message;
-    };
-
-    const clearFormMessage = () => {
-        if (!interestFormMsg) return;
-        interestFormMsg.style.display = 'none';
-        interestFormMsg.textContent = '';
     };
 
     // =============================================
@@ -426,12 +427,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemTotal = (item.price || 0) * (item.quantity || 0);
 
             li.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span class="item-name"><strong>${escapeHtml(item.name)}</strong></span>
                         <span class="item-price">${formatCurrency(item.price || 0)}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div class="item-controls">
                             <button class="qty-btn decrease-btn" data-product-id="${escapeHtml(item.id)}"><i class="fas fa-minus"></i></button>
                             <span class="item-quantity">${item.quantity}</span>
@@ -450,9 +451,9 @@ document.addEventListener('DOMContentLoaded', () => {
         totalLi.style.fontWeight = 'bold';
         totalLi.style.borderTop = '2px solid #00c6ff';
         totalLi.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0;">
-                <span style="color: #00c6ff;">VALOR TOTAL GERAL:</span>
-                <span style="color: #ffc107;">${formatCurrency(getTotalValue())}</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:10px 0;">
+                <span style="color:#00c6ff;">VALOR TOTAL GERAL:</span>
+                <span style="color:#ffc107;">${formatCurrency(getTotalValue())}</span>
             </div>
         `;
         selectedItemsList.appendChild(totalLi);
@@ -494,122 +495,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (registerInterestsBtn) {
         registerInterestsBtn.addEventListener('click', () => {
+            if (!interestList.length) {
+                showNotification('Sua lista está vazia.', 'error');
+                return;
+            }
+
             const itemsText = buildItemsText();
             if (itemsDataInput) itemsDataInput.value = itemsText;
+            if (fonteUrlInput) fonteUrlInput.value = window.location.href;
             clearFormMessage();
             interestSummaryModal.style.display = 'none';
-            contactFormModal.style.display = 'flex';
+            if (contactFormModal) contactFormModal.style.display = 'flex';
         });
     }
 
     // =============================================
-    // ENVIO PARA APPS SCRIPT
+    // ENVIO POR FORM + IFRAME
     // =============================================
-    async function enviarInteresseAppsScript(event) {
-        event.preventDefault();
-        clearFormMessage();
-
-        if (!interestList.length) {
-            showFormMessage('Sua lista de interesses está vazia.', 'error');
-            return;
-        }
-
-        const payload = {
-            name: document.getElementById('name')?.value.trim() || '',
-            email: document.getElementById('email')?.value.trim() || '',
-            whatsapp: document.getElementById('whatsapp')?.value.trim() || '',
-            message: document.getElementById('message')?.value.trim() || '',
-            itens_de_interesse: itemsDataInput?.value.trim() || buildItemsText(),
-            origem: 'Catálogo',
-            fonte_url: window.location.href
-        };
-
-        if (!payload.name) {
-            showFormMessage('Informe seu nome.', 'error');
-            return;
-        }
-
-        if (!payload.email && !payload.whatsapp) {
-            showFormMessage('Informe ao menos e-mail ou WhatsApp.', 'error');
-            return;
-        }
-
-        const submitBtn = contactForm?.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.dataset.originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-        }
-
-        try {
-            document.addEventListener('DOMContentLoaded', () => {
-
-    const interestList = JSON.parse(localStorage.getItem('shakawInterestList')) || [];
-
-    const contactForm = document.getElementById('contactForm');
-    const itemsDataInput = document.getElementById('itemsData');
-    const contactFormModal = document.getElementById('contactFormModal');
-    const interestFormMsg = document.getElementById('interestFormMsg');
-    const registerInterestsBtn = document.getElementById('registerInterestsBtn');
-
-    const showFormMessage = (message, type = 'success') => {
-        if (!interestFormMsg) return;
-
-        interestFormMsg.style.display = 'block';
-        interestFormMsg.style.padding = '12px';
-        interestFormMsg.style.borderRadius = '10px';
-        interestFormMsg.style.fontWeight = '600';
-        interestFormMsg.style.marginTop = '12px';
-
-        if (type === 'success') {
-            interestFormMsg.style.color = '#9ff0b3';
-            interestFormMsg.style.background = 'rgba(40,167,69,.15)';
-            interestFormMsg.style.border = '1px solid rgba(40,167,69,.4)';
-        } else {
-            interestFormMsg.style.color = '#ffb2bb';
-            interestFormMsg.style.background = 'rgba(220,53,69,.15)';
-            interestFormMsg.style.border = '1px solid rgba(220,53,69,.4)';
-        }
-
-        interestFormMsg.textContent = message;
-    };
-
-    const clearFormMessage = () => {
-        if (!interestFormMsg) return;
-        interestFormMsg.style.display = 'none';
-        interestFormMsg.textContent = '';
-    };
-
-    const clearInterestList = () => {
-        localStorage.removeItem('shakawInterestList');
-        interestList.length = 0;
-    };
-
-    const buildItemsText = () => {
-        let itemsText = '';
-        let totalGeral = 0;
-
-        interestList.forEach((item, i) => {
-            const itemTotal = (item.price || 0) * (item.quantity || 0);
-            totalGeral += itemTotal;
-            itemsText += `${i + 1}. ${item.name}\n   Quantidade: ${item.quantity}\n   Total do item: R$ ${itemTotal.toFixed(2).replace('.', ',')}\n\n`;
-        });
-
-        itemsText += `================================\nVALOR TOTAL GERAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-        return itemsText;
-    };
-
-    if (registerInterestsBtn) {
-        registerInterestsBtn.addEventListener('click', () => {
-            if (itemsDataInput) itemsDataInput.value = buildItemsText();
-            const fonte = document.getElementById('fonte_url');
-            if (fonte) fonte.value = window.location.href;
-            clearFormMessage();
-        });
-    }
-
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
+            clearFormMessage();
+
             if (!interestList.length) {
                 e.preventDefault();
                 showFormMessage('Sua lista de interesses está vazia.', 'error');
@@ -632,18 +538,81 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            if (itemsDataInput && !itemsDataInput.value.trim()) {
+                itemsDataInput.value = buildItemsText();
+            }
+
+            if (fonteUrlInput) {
+                fonteUrlInput.value = window.location.href;
+            }
+
+            isSubmittingInterest = true;
             showFormMessage('Enviando interesse...', 'success');
 
-            setTimeout(() => {
-                contactForm.reset();
-                clearInterestList();
-                showFormMessage('Interesse enviado com sucesso! Retornaremos em breve.', 'success');
-
-                setTimeout(() => {
-                    if (contactFormModal) contactFormModal.style.display = 'none';
-                    clearFormMessage();
-                }, 1800);
-            }, 800);
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.dataset.originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            }
         });
     }
+
+    if (hiddenIframe) {
+        hiddenIframe.addEventListener('load', () => {
+            if (!isSubmittingInterest) return;
+
+            isSubmittingInterest = false;
+
+            showFormMessage('Interesse enviado com sucesso! Retornaremos em breve.', 'success');
+            showNotification('Interesse enviado com sucesso!', 'success');
+
+            if (contactForm) contactForm.reset();
+            clearInterestList();
+
+            const submitBtn = contactForm?.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = submitBtn.dataset.originalText || '<i class="fas fa-paper-plane"></i> Enviar';
+            }
+
+            setTimeout(() => {
+                if (contactFormModal) contactFormModal.style.display = 'none';
+                clearFormMessage();
+            }, 1800);
+        });
+    }
+
+    // =============================================
+    // FECHAR MODAIS / VOLTAR AO TOPO
+    // =============================================
+    window.addEventListener('click', (e) => {
+        if (e.target === interestSummaryModal) {
+            interestSummaryModal.style.display = 'none';
+        }
+
+        if (e.target === contactFormModal) {
+            clearFormMessage();
+            contactFormModal.style.display = 'none';
+        }
+    });
+
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    setTimeout(createExpandableDescriptions, 200);
+
+    window.addEventListener('resize', () => {
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(createExpandableDescriptions, 250);
+    });
+
+    updateViewInterestsButton();
 });
