@@ -1651,63 +1651,42 @@
     </div>
 
     <!-- MODAL FORMULÁRIO DE INTERESSE -->
-<div id="contactFormModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close-modal" id="closeContactFormModal">&times;</span>
-    <h2><i class="fas fa-envelope"></i> Enviar Interesses</h2>
+<form id="contactForm"
+      action="https://script.google.com/macros/s/AKfycbyHqinFW1swYImJCj8UctEFCO7XfQMPSCKT8WlqvQqh73ptKJbj0BjbMpXisjDU0TFh/exec"
+      method="POST"
+      target="hidden_iframe">
+  <input type="hidden" name="itens_de_interesse" id="itemsData">
 
-    <form id="contactForm">
-      <input type="hidden" name="itens_de_interesse" id="itemsData">
-
-      <div class="form-section">
-        <label for="name">Nome Completo:</label>
-        <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
-      </div>
-
-      <div class="form-section">
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" placeholder="seu@email.com">
-      </div>
-
-      <div class="form-section">
-        <label for="whatsapp">WhatsApp:</label>
-        <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
-      </div>
-
-      <div class="form-section">
-        <label for="message">Mensagem Adicional:</label>
-        <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
-      </div>
-
-      <button type="submit">
-        <i class="fas fa-paper-plane"></i> Enviar
-      </button>
-    </form>
-
-    <div id="interestFormMsg" style="margin-top:12px; display:none;"></div>
+  <div class="form-section">
+    <label for="name">Nome Completo:</label>
+    <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
   </div>
-</div>
-    </div>
 
-    <div id="lightbox" style="display:none;">
-        <div id="lightbox-overlay"></div>
-        <div id="lightbox-container">
-            <button id="lightbox-close">&times;</button>
-            <button id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
-            <img id="lightbox-img" src="" alt="">
-            <button id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
-            <div id="lightbox-zoom-controls">
-                <button id="zoom-out"><i class="fas fa-search-minus"></i></button>
-                <span id="zoom-level">100%</span>
-                <button id="zoom-in"><i class="fas fa-search-plus"></i></button>
-                <button id="zoom-reset"><i class="fas fa-expand"></i></button>
-            </div>
-        </div>
-    </div>
+  <div class="form-section">
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" placeholder="seu@email.com">
+  </div>
 
-    <a href="https://wa.me/5511954846647" target="_blank" class="floating-whatsapp" aria-label="Chamar no WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+  <div class="form-section">
+    <label for="whatsapp">WhatsApp:</label>
+    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
+  </div>
+
+  <div class="form-section">
+    <label for="message">Mensagem Adicional:</label>
+    <textarea id="message" name="message" rows="3" placeholder="Alguma observação ou dúvida?"></textarea>
+  </div>
+
+  <input type="hidden" name="origem" value="Catálogo">
+  <input type="hidden" name="fonte_url" id="fonte_url">
+
+  <button type="submit">
+    <i class="fas fa-paper-plane"></i> Enviar
+  </button>
+</form>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+<div id="interestFormMsg" style="margin-top:12px; display:none;"></div>
 
     <script src="script.js"></script>
 </body>
