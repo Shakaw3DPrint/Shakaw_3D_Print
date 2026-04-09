@@ -162,7 +162,7 @@
                 <summary>Miniaturas extras do lightbox</summary>
                 <label for="thumbsArea">Um caminho por linha</label>
                 <textarea id="thumbsArea"></textarea>
-                <div class="upload-row"><button id="uploadThumbBtn" type="button" class="btn-secondary">Upload thumb</button><input id="uploadThumbInput" type="file" accept="image/*" class="hidden" /></div>
+                <div class="upload-row"><button id="uploadThumbBtn" type="button" class="btn-secondary">Upload thumbs</button><input id="uploadThumbInput" type="file" accept="image/*" multiple class="hidden" /></div>
               </details>
             </div>
           </div>
@@ -206,7 +206,7 @@
       newProductBtn: document.getElementById('newProductBtn'), cancelNewBtn: document.getElementById('cancelNewBtn'), modePill: document.getElementById('modePill'),
       applyWatermark: document.getElementById('applyWatermark'), watermarkScale: document.getElementById('watermarkScale'), watermarkBadge: document.getElementById('watermarkBadge')
     };
-    const LOGO_URL = 'images/Logo.png';
+    const LOGO_URL = 'images/logo_pb.png';
 
     function showMessage(target, text, type = 'success') {
       target.textContent = text;
@@ -590,15 +590,37 @@
       }
     }
 
-    async function uploadThumb(file) {
+    async function uploadThumbs(files) {
       const category = el.productCategory.value || el.categoryFilter.value;
       if (!category) return showMessage(el.appMsg, 'Selecione a categoria antes do upload.', 'error');
-      if (!file) return;
+      const selectedFiles = Array.from(files || []).filter(Boolean);
+      if (!selectedFiles.length) return;
       try {
-        const data = await api('uploadImage', { category, fileName: file.name, mimeType: file.type, base64Data: await fileToPreparedBase64(file) });
-        el.thumbsArea.value = (el.thumbsArea.value.trim() ? el.thumbsArea.value.trim() + '\n' : '') + data.path;
+        const uploadedPaths = [];
+        for (const file of selectedFiles) {
+          const data = await api('uploadImage', {
+            category,
+            fileName: file.name,
+            mimeType: file.type,
+            base64Data: await fileToPreparedBase64(file)
+          });
+          uploadedPaths.push(data.path);
+        }
+
+        const currentThumbs = el.thumbsArea.value
+          .split('\n')
+          .map(v => v.trim())
+          .filter(Boolean);
+
+        el.thumbsArea.value = [...currentThumbs, ...uploadedPaths].join('\n');
         updateCurrentProductFromForm();
-        showMessage(el.appMsg, el.applyWatermark.checked ? 'Thumb enviada com logo.' : 'Thumb enviada com sucesso.', 'success');
+        showMessage(
+          el.appMsg,
+          el.applyWatermark.checked
+            ? `${uploadedPaths.length} thumb(s) enviada(s) com logo.`
+            : `${uploadedPaths.length} thumb(s) enviada(s) com sucesso.`,
+          'success'
+        );
       } catch (error) {
         showMessage(el.appMsg, error.message, 'error');
       }
@@ -638,7 +660,7 @@
         const targetHeight = targetWidth / ratio;
         const padding = Math.max(10, canvas.width * 0.015);
         ctx.globalAlpha = 0.78;
-        ctx.drawImage(logo, canvas.width - targetWidth - padding, canvas.height - targetHeight - padding, targetWidth, targetHeight);
+        ctx.drawImage(logo, canvas.width - targetWidth - padding, padding, targetWidth, targetHeight);
         ctx.globalAlpha = 1;
       } catch {}
       return canvas.toDataURL('image/png');
@@ -680,8 +702,14 @@
     });
     el.uploadMainBtn.addEventListener('click', () => el.uploadMainInput.click());
     el.uploadThumbBtn.addEventListener('click', () => el.uploadThumbInput.click());
-    el.uploadMainInput.addEventListener('change', e => uploadMainImage(e.target.files[0]));
-    el.uploadThumbInput.addEventListener('change', e => uploadThumb(e.target.files[0]));
+    el.uploadMainInput.addEventListener('change', async e => {
+      await uploadMainImage(e.target.files[0]);
+      e.target.value = '';
+    });
+    el.uploadThumbInput.addEventListener('change', async e => {
+      await uploadThumbs(e.target.files);
+      e.target.value = '';
+    });
     el.applyWatermark.addEventListener('change', updateModeUI);
     [el.productId, el.productName, el.productAlt, el.productDesc, el.productPrice, el.productPriceColor, el.productHighlightHome, el.productHomeOrder, el.productImageSrc, el.thumbsArea].forEach(field => field.addEventListener('input', updateCurrentProductFromForm));
 
