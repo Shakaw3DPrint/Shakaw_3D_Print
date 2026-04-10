@@ -581,7 +581,8 @@
       if (!category) return showMessage(el.appMsg, 'Selecione a categoria antes do upload.', 'error');
       if (!file) return;
       try {
-        const data = await api('uploadImage', { category, fileName: file.name, mimeType: file.type, base64Data: await fileToPreparedBase64(file) });
+        const uploadPayload = await buildUploadPayload(file);
+        const data = await api('uploadImage', { category, ...uploadPayload });
         el.productImageSrc.value = data.path;
         updateCurrentProductFromForm();
         showMessage(el.appMsg, el.applyWatermark.checked ? 'Imagem enviada com logo.' : 'Imagem enviada com sucesso.', 'success');
@@ -598,11 +599,10 @@
       try {
         const uploadedPaths = [];
         for (const file of selectedFiles) {
+          const uploadPayload = await buildUploadPayload(file);
           const data = await api('uploadImage', {
             category,
-            fileName: file.name,
-            mimeType: file.type,
-            base64Data: await fileToPreparedBase64(file)
+            ...uploadPayload
           });
           uploadedPaths.push(data.path);
         }
@@ -645,6 +645,10 @@
       });
     }
 
+    function renameFileToWebp(fileName) {
+      return String(fileName || 'imagem.webp').replace(/\.[^.]+$/, '') + '.webp';
+    }
+
     async function applyLogoWatermark(dataUrl) {
       const base = await loadImage(dataUrl);
       const canvas = document.createElement('canvas');
@@ -663,13 +667,27 @@
         ctx.drawImage(logo, canvas.width - targetWidth - padding, padding, targetWidth, targetHeight);
         ctx.globalAlpha = 1;
       } catch {}
-      return canvas.toDataURL('image/png');
+      return canvas.toDataURL('image/webp', 0.85);
     }
 
     async function fileToPreparedBase64(file) {
       const dataUrl = await fileToDataUrl(file);
-      if (!el.applyWatermark.checked) return dataUrl;
-      return await applyLogoWatermark(dataUrl);
+      if (!el.applyWatermark.checked) {
+        return {
+          fileName: file.name,
+          mimeType: file.type || 'image/jpeg',
+          base64Data: dataUrl
+        };
+      }
+      return {
+        fileName: renameFileToWebp(file.name),
+        mimeType: 'image/webp',
+        base64Data: await applyLogoWatermark(dataUrl)
+      };
+    }
+
+    async function buildUploadPayload(file) {
+      return await fileToPreparedBase64(file);
     }
 
     el.loginBtn.addEventListener('click', login);
